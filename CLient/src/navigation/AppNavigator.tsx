@@ -13,34 +13,24 @@ import AuthNavigator from "./AuthNavigator";
 import TabNavigator from "./TabNavigator";
 import { RootStackParamList } from "../assets/types/NavigationType";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import useAuthStore from "../store/authStore";
+import MainNavigator from "./MainNavigator";
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AppNavigator = () => {
   const [isSplash, setIsSplash] = useState(true);
+  const {login,token,isAuth,isRemember,loadStoredToken}=useAuthStore()
   const { getItem } = useAsyncStorage("accessToken");
-  const checkLogin = async () => {
-    const token = await getItem();
-    console.log("gia tri token", token);
-    //luu vao zustand để dùng xem thử ngdung có lưu mật khẩu không, có thì vào thẳng home
-  };
   useEffect(() => {
-    // const timeout = setTimeout(() => {
-    //   setIsSplash(false);
-    // }, 1500);
-    // return () => clearTimeout(timeout);
-    checkLogin();
-  }, []);
+    loadStoredToken()
+  }, [loadStoredToken]);
 
-  
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Auth" component={AuthNavigator} />
-      <Stack.Screen name="Tab" component={TabNavigator} />
-      <Stack.Screen name="Detail" component={DetailScreen} />
-    </Stack.Navigator>
+    <>
+      {isAuth?<MainNavigator/>:<AuthNavigator/>}
+    </>
+      
+    
   );
 };
 

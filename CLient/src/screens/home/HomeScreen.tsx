@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { CardProduct, CategoryItem, InputComponent, SpaceComponent } from "../../components";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { appColor } from "../../constants/appColor";
@@ -22,7 +22,17 @@ import {
 import { appSize } from "../../constants/appSize";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
+import AsyncStorage, { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import useAuthStore from "../../store/authStore";
 const HomeScreen = () => {
+  const{login,logout} =useAuthStore()
+  const { getItem } = useAsyncStorage("authToken");
+  const getToken=async ()=>{
+     const tk=await getItem()
+     console.log('token Home',tk)
+  }
+  
+
   const navigation= useNavigation<NavigationProp<RootStackParamList>>()
   const categories: any = [
     {
@@ -57,7 +67,6 @@ const HomeScreen = () => {
       backColor: "#ECE2FF",
     },
   ];
-
   const products: any = [
     {
       id: 1,
@@ -116,6 +125,11 @@ const HomeScreen = () => {
   const handleDetail:(item:any)=>void=(item)=> {
     navigation.navigate('Detail',{item})
   }
+  const handleLogout =()=>{
+    logout()
+    //navigation.navigate("Login")
+  }
+  getToken()
   return (
     <SafeAreaView>
       <StatusBar></StatusBar>
@@ -125,17 +139,17 @@ const HomeScreen = () => {
           name="magnify"
           size={23}
           color={appColor.text} />}
-        rightIC={<TouchableOpacity onPress={()=>navigation.goBack()}>
+        rightIC={<TouchableOpacity onPress={()=>AsyncStorage.clear()}>
           <MaterialCommunityIcons
             name="video-input-component"
             size={23}
             color={appColor.text} />
-        </TouchableOpacity>} value={""} onChangeText={function (val: string): void {
+        </TouchableOpacity>} value={''} onChangeText={function (val: string): void {
           throw new Error("Function not implemented.");
         } }        />
 
         <Image source={require("../../assets/images/adv.png")}></Image>
-
+        <TouchableOpacity onPress={()=>handleLogout()}><Text>dang xuat</Text></TouchableOpacity>
         <View>
           <View
             style={{

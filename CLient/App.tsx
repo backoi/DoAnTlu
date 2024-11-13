@@ -25,12 +25,7 @@ export default function App() {
   //     </NavigationContainer>
   //   )
   // );
-
   // <OnBoardingScreen/>
-  
 //<AuthNavigator/>
-  
-  
-  
   )
 }

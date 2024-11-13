@@ -4,24 +4,23 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { DetailScreen, ForgetPassScreen, LoginScreen, OnBoardingScreen, OTPScreen, ResetPassScreen, SignUpScreen, WelcomeScreen } from '../screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../assets/types/NavigationType';
-import MainNavigator from './MainNavigator';
+import TabNavigator from './TabNavigator';
+import AuthNavigator from './AuthNavigator';
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const AuthNavigator = () => {
+const MainNavigator = () => {
   return (
       <Stack.Navigator screenOptions={{
         headerShown:false
       }}>
-        <Stack.Screen name="OnBoarding" component={OnBoardingScreen} /> 
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Forget" component={ForgetPassScreen} />
-        <Stack.Screen name="Otp" component={OTPScreen} />
-        <Stack.Screen name="ResetPass" component={ResetPassScreen} />
+        
+        <Stack.Screen name="Tab" component={TabNavigator} />
+        <Stack.Screen name="Detail" component={DetailScreen} />
+        
+        
         
         
       </Stack.Navigator>
   )
 }
 
-export default AuthNavigator
+export default MainNavigator

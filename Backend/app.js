@@ -12,14 +12,13 @@ import { Category } from './src/models/category.model.js';
 import { productRouter } from './src/route/product.router.js';
 import { Review } from './src/models/review.model.js';
 import { reviewRouter } from './src/route/review.router.js';
-
-
+import 'dotenv/config'
 const app = express();
 const port = 3000;
 AdminJS.registerAdapter(AdminJSMongoose)
 const start = async () => {
   //connect to db mongo
-  await mongoose.connect('mongodb+srv://leebac0802:backoi@doantlu.x5vxx.mongodb.net/ecomarket?retryWrites=true&w=majority&appName=DoAnTLU')
+  await mongoose.connect(process.env.MONGO_URL)
   //await mongoose.connect('mongodb://localhost/ecomarket')
   await app.listen(port, () => {
     console.log(`AdminJS panel is available at http://localhost:${port}/admin`);

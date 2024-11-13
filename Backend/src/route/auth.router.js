@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for port 465, false for other ports
   auth: {
-    user: "leebac0802@gmail.com",
-    pass: "oabo jpqx nwra xyls",
+    user: process.env.EMAIL,
+    pass: process.env.PASS_EMAIL,
   },
 });
 
@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 //dang ki
 authRouter.post('/register', async (req, res) => {
   try {
-    const {name, email, password } = req.body;
+    const {username, email, password } = req.body;
    // res.send('thanh cong roi')
     const existedUsers = await User.findOne({email});
     if(existedUsers){
@@ -29,11 +29,11 @@ authRouter.post('/register', async (req, res) => {
     }
     else{
         const hashPass= await bcrypt.hash(password,10)
-        const newUser= new User({name,email,password:hashPass})
+        const newUser= new User({username,email,password:hashPass})
         console.log(newUser)
         await newUser.save()
-        const token = jwt.sign({ userId: newUser._id, email},'backoi',{expiresIn:'1d'});//backoi hoặc dùng process.env.JWT_SECRET
-        res.status(201).json({message:'Sign up success', token }); 
+        const token = jwt.sign({ userId: newUser._id, email},process.env.SECRET_KEY,{expiresIn:'1d'});//backoi hoặc dùng process.env.JWT_SECRET
+        res.status(201).json({message:'Sign up success', accessToken:token }); 
     }
   } catch (error) {
     res.json({ message: error.message });
@@ -53,9 +53,8 @@ authRouter.post('/login',async(req,res)=>{
           return res.status(400).json({ message: "Incorect password" });
         }
         else{
-          const token = jwt.sign({ userId: existedUsers._id }, email,{expiresIn:'1d'});//hoặc dùng process.env.JWT_SECRET
-          res.status(200).json({message:'Login success', token });
-           
+          const token = jwt.sign({ userId: existedUsers._id },process.env.SECRET_KEY,{expiresIn:'1d'});//hoặc dùng process.env.JWT_SECRET
+          res.status(200).json({message:'Login success',username:existedUsers.username,email, accessToken:token });
         }
       } catch (error) {
         res.status(400).json({ error: error.message });
@@ -73,7 +72,7 @@ authRouter.post('/forgot-password',async(req,res)=>{
       }
       else{
         await transporter.sendMail({
-        from: '"Le Bac 👻" <leebac0802@gmail.com>', // sender address
+        from: `"Le Bac 👻" <${process.env.EMAIL}>`, // sender address
         to: email, // list of receivers
         subject: "Verify code ✔", // Subject line
         text: "This is verify code to reset password!!", // plain text body
