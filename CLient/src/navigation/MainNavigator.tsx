@@ -15,6 +15,9 @@ const MainNavigator = () => {
         
         <Stack.Screen name="Tab" component={TabNavigator} />
         <Stack.Screen name="Detail" component={DetailScreen} />
+        <Stack.Screen name="Auth" component={AuthNavigator} />
+        
+        
         
         
         

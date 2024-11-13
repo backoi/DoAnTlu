@@ -19,15 +19,16 @@ import MainNavigator from "./MainNavigator";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AppNavigator = () => {
   const [isSplash, setIsSplash] = useState(true);
-  const {login,token,isAuth,isRemember,loadStoredToken}=useAuthStore()
-  const { getItem } = useAsyncStorage("accessToken");
+  const {login,token,isRemember,loadStoredToken}=useAuthStore()
+  // const { getItem } = useAsyncStorage("accessToken");
   useEffect(() => {
+    console.log("co nho mat khau",isRemember)
     loadStoredToken()
   }, [loadStoredToken]);
 
   return (
     <>
-      {isAuth?<MainNavigator/>:<AuthNavigator/>}
+      {isRemember?<MainNavigator/>:<AuthNavigator/>}
     </>
       
     

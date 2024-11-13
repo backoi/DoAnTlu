@@ -19,12 +19,14 @@ import {
 } from "../../components";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { appColor } from "../../constants/appColor";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, StackActions, useNavigation } from "@react-navigation/native";
 import { authService } from "../../utils/authService";
 import { useToast } from "react-native-toast-notifications";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import useAuthStore from "../../store/authStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Screen } from "react-native-screens";
+import { replace } from "formik";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const toast = useToast();
@@ -40,14 +42,16 @@ const LoginScreen = () => {
       return;
     }
     try {
+      if(isEnabled){
+        setIsRemember(isEnabled);
+      }
       setIsLoading(true);
       const response = await authService.login(email, password);
       const { username, accessToken } = response;
-      setIsRemember(isEnabled);
       login({ username, email }, accessToken);
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
-      //navigation.navigate("Main");
+      navigation.dispatch(StackActions.replace('Tab'))
     } catch (error: any) {
       Alert.alert("Login Failed", error.message || "Invalid credentials !");
     }
@@ -62,7 +66,7 @@ const LoginScreen = () => {
         source={require("../../assets/images/welcome1.png")}
         style={{ width: "100%", height: "140%", flex: 1 }}
       >
-        <HeaderBar title="Login"></HeaderBar>
+        <HeaderBar onPress={()=>navigation.dispatch(StackActions.replace("Welcome"))} title="Login"></HeaderBar>
       </ImageBackground>
       <View style={styles.textContainer}>
         <SpaceComponent height={20} />

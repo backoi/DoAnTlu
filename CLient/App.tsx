@@ -15,7 +15,7 @@ export default function App() {
     <ToastProvider>
       <NavigationContainer>
         <AppNavigator/>     
-    </NavigationContainer>
+      </NavigationContainer>
     </ToastProvider>
   //   isSplash ? (
   //     <SplashScreen />

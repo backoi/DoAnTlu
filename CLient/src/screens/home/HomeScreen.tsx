@@ -20,7 +20,7 @@ import {
   Grocery,
 } from "../../assets/svg";
 import { appSize } from "../../constants/appSize";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, StackActions, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import AsyncStorage, { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import useAuthStore from "../../store/authStore";
@@ -121,13 +121,13 @@ const HomeScreen = () => {
 
     },
   ];
-  //const navigation= useNavigation()
   const handleDetail:(item:any)=>void=(item)=> {
     navigation.navigate('Detail',{item})
   }
   const handleLogout =()=>{
     logout()
-    //navigation.navigate("Login")
+    // navigation.replace("Login",{screen:'Login'})
+    navigation.dispatch(StackActions.replace('Auth',{screen:'Login'}))
   }
   getToken()
   return (

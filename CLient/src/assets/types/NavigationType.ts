@@ -10,5 +10,6 @@ export type RootStackParamList = {
     Forget:undefined,
     Otp:{code:any,email:any},
     ResetPass:undefined,
+    Product:undefined,
     
   };

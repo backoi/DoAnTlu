@@ -8,7 +8,7 @@ interface AuthState{
     }|null,
     token:string|null,
     isRemember:boolean,
-    isAuth:boolean,
+    //isAuth:boolean,
     login:(user:{username:string,email:string},token:string)=>void
     logout:()=>void,
     setIsRemember:(val:boolean)=>void,
@@ -18,7 +18,7 @@ const useAuthStore = create<AuthState>((set) => ({
   user:null,
   token:null,
   isRemember:false,
-  isAuth:false,
+  //isAuth:false,
   login:async (user, token) =>{
     const state=useAuthStore.getState()
     if(state.isRemember){
@@ -26,13 +26,13 @@ const useAuthStore = create<AuthState>((set) => ({
     }
     set({
         user,token,
-        isAuth:true,
+        //isAuth:true,
     })
   },
   logout:async()=> {
     await AsyncStorage.removeItem('authToken');
       set({user:null,token:null,
-        isAuth:false
+        //isAuth:false
       })
   },
   setIsRemember:(val)=>{
@@ -45,7 +45,7 @@ const useAuthStore = create<AuthState>((set) => ({
         set({
             token:storedToken,
             isRemember:true,
-            isAuth:true,
+            //isAuth:true,
     })
   }
 }))
