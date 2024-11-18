@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../assets/types/NavigationType';
 import MainNavigator from './MainNavigator';
 import ProductScreen from '../screens/home/ProductScreen';
+import TabNavigator from './TabNavigator';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthNavigator = () => {
   return (
@@ -18,7 +19,10 @@ const AuthNavigator = () => {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Forget" component={ForgetPassScreen} />
         <Stack.Screen name="Otp" component={OTPScreen} />
-        <Stack.Screen name="ResetPass" component={ResetPassScreen} />
+        <Stack.Screen name="ResetPass" component={ResetPassScreen} />    
+       
+        
+        
 
         
         

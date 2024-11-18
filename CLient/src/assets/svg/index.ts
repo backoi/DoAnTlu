@@ -8,7 +8,9 @@ import Cart from "./Cart.svg";
 import Heart from "./Heart.svg";
 import Minus from "./Minus.svg";
 import Plus from "./Plus.svg";
-
+import Back from "./Back.svg";
+import Search from "./Search.svg";
+import HeartFill from "./HeartFill.svg";
 
 
 
@@ -23,5 +25,7 @@ export {
     Cart,Heart,
     Minus,
     Plus,
-    
+    Back,
+    Search,
+    HeartFill,
 };

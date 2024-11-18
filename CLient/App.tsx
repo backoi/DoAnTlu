@@ -9,14 +9,23 @@ import { HomeScreen, OnBoardingScreen, SplashScreen } from "./src/screens";
 import AppNavigator from "./src/navigation/AppNavigator";
 import { ToastProvider } from 'react-native-toast-notifications'
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import MainNavigator from "./src/navigation/MainNavigator";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <ToastProvider>
       <NavigationContainer>
-        <AppNavigator/>     
+         
+         <MainNavigator/>
+         {/* <Stack.Navigator screenOptions={{headerShown:false}}>
+
+        <Stack.Screen name="home" component={HomeScreen} /> 
+        </Stack.Navigator>  */}
+       
       </NavigationContainer>
     </ToastProvider>
+    
+
   //   isSplash ? (
   //     <SplashScreen />
   //   ) : (

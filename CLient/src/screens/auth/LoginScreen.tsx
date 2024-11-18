@@ -47,11 +47,12 @@ const LoginScreen = () => {
       }
       setIsLoading(true);
       const response = await authService.login(email, password);
-      const { username, accessToken } = response;
+      const { username, accessToken } = response.data;
+      console.log(response)
       login({ username, email }, accessToken);
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
-      navigation.dispatch(StackActions.replace('Tab'))
+      
     } catch (error: any) {
       Alert.alert("Login Failed", error.message || "Invalid credentials !");
     }

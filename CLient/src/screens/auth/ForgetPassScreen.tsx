@@ -12,7 +12,7 @@ const ForgetPassScreen = () => {
   const handleSentOTP=async()=>{
     try {
       const res=await authService.forgotPass(email)
-    const code=res.data.code
+    const {code}=res.data
     navigation.navigate("Otp",{code,email})
     } catch (error:any) {
       Alert.alert('loi',error.message)

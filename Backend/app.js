@@ -44,6 +44,7 @@ const adminJs = new AdminJS({
   },
   {
     resource: Category,
+    
   },
   {
     resource: Product,

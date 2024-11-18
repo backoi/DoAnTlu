@@ -33,7 +33,7 @@ authRouter.post('/register', async (req, res) => {
         console.log(newUser)
         await newUser.save()
         const token = jwt.sign({ userId: newUser._id, email},process.env.SECRET_KEY,{expiresIn:'1d'});//backoi hoặc dùng process.env.JWT_SECRET
-        res.status(201).json({message:'Sign up success', accessToken:token }); 
+        res.status(201).json({message:'Sign up success',data:{accessToken:token} }); 
     }
   } catch (error) {
     res.json({ message: error.message });
@@ -54,7 +54,7 @@ authRouter.post('/login',async(req,res)=>{
         }
         else{
           const token = jwt.sign({ userId: existedUsers._id },process.env.SECRET_KEY,{expiresIn:'1d'});//hoặc dùng process.env.JWT_SECRET
-          res.status(200).json({message:'Login success',username:existedUsers.username,email, accessToken:token });
+          res.status(200).json({message:'Login success',data:{username:existedUsers.username,email, accessToken:token} });
         }
       } catch (error) {
         res.status(400).json({ error: error.message });

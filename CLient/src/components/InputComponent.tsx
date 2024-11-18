@@ -8,8 +8,8 @@ interface Props{
   leftIC?:ReactNode,
   password?:boolean,
   rightIC?:ReactNode,
-  value:string,
-  onChangeText:(val:string)=>void
+  value?:string,
+  onChangeText:(val:string)=>void|undefined
   onBlur?:(e:any)=>void
   //onblur
 }
@@ -36,8 +36,8 @@ const InputComponent = (props:Props) => {
   )
 }
 const styles = StyleSheet.create({
-  inputContainer:{backgroundColor:'white',flexDirection:'row',height:50,alignItems:'center',borderRadius:5,paddingHorizontal:10},
-  textInput:{flex:1,marginLeft:10,fontSize:17}
+  inputContainer:{flex:1,backgroundColor:'white',flexDirection:'row',height:50,alignItems:'center',borderRadius:5,paddingHorizontal:10,marginVertical:10},
+  textInput:{marginLeft:10,fontSize:17,flex:1}
   
 })
 export default InputComponent

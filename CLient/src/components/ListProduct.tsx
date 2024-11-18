@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { FlatList } from 'react-native'
-import CardProductComponent from './CardProduct'
+import CardProduct from './CardProduct'
 
 interface Props{
     data:any,
@@ -10,7 +10,7 @@ interface Props{
 
 const ListProduct = ({data,onPress}:Props) => {
   return (
-    <FlatList scrollEnabled={false} numColumns={2} keyExtractor={item=>item.id} data={data} renderItem={({item})=><CardProductComponent onPress={onPress} item={item}/>}></FlatList>
+    <FlatList scrollEnabled={false} numColumns={2} keyExtractor={item=>item.id} data={data} renderItem={({item})=><CardProduct onPress={onPress} item={item}/>}></FlatList>
 
   )
 }

@@ -7,7 +7,7 @@ import {  useToast } from 'react-native-toast-notifications';
 import { useNavigation } from '@react-navigation/native';
 import { authService } from '../../utils/authService';
 const ResetPassScreen = ({route}:any) => {
-  const {email}=route.params
+  //const {email}=route.params
   const toast=useToast()
   const navigation=useNavigation()
   const [errorMessage,setErrorMessage]= useState('')

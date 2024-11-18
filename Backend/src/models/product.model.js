@@ -10,6 +10,7 @@ const ProductSchema = new Schema(
     isFeatures: { type: Boolean, default: false },
     unit:{type:String,enum: ['Kg', 'Piece', 'Bottle']},
     imgUrl: { type: String },
+    backColor:{type:String},
     category:{ type: mongoose.Schema.Types.ObjectId, require:true,ref:'Category'},
   },  
 )

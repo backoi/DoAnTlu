@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User } from '../assets/types/UserType';
 
-const API_URL = 'http://192.168.1.13:3000/api/auth';
+const API_URL = 'http://192.168.1.9:3000/api/auth';
 
 
 const register = async (user: User) => {

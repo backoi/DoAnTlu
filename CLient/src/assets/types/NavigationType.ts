@@ -11,5 +11,6 @@ export type RootStackParamList = {
     Otp:{code:any,email:any},
     ResetPass:undefined,
     Product:undefined,
-    
+    Search?:{text?:any,category?:any},
+    Category:undefined,
   };
