@@ -11,6 +11,8 @@ import Plus from "./Plus.svg";
 import Back from "./Back.svg";
 import Search from "./Search.svg";
 import HeartFill from "./HeartFill.svg";
+import Trash from "./Trash.svg";
+import Add from "./Add.svg";
 
 
 
@@ -28,4 +30,7 @@ export {
     Back,
     Search,
     HeartFill,
+    Trash,
+    Add,
+    
 };

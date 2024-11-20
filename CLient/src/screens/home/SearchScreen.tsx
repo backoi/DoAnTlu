@@ -16,11 +16,11 @@ const SearchScreen = ({route}:any,props:Props) => {
   const [searchText,setSearchText]=useState('')
   
   const getProducts=async(search:any,category:any)=>{
-    console.log('gia tri category',category)
+    //console.log('gia tri category',category)
     
     {
       const res=await productService.getProducts(search,category)
-      console.log('du lieu',res?.data)
+      //console.log('du lieu',res?.data)
       setData(res?.data)
       return res
     }

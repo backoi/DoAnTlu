@@ -1,3 +1,4 @@
+//slide itemproduct
 import {
   View,
   Text,
@@ -32,7 +33,7 @@ import useAuthStore from "../../store/authStore";
 import { categoryService } from "../../utils/categoryService";
 import { productService } from "../../utils/productService";
 const HomeScreen = () => {
-  const { login, logout } = useAuthStore();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
   const [features, setFeatures] = useState<any | undefined>();
@@ -43,13 +44,9 @@ const HomeScreen = () => {
     console.log("token Home", tk);
   };
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleSearch = () => {
     navigation.navigate("Search", { text: searchText });
-  };
-  const handleDetail = (item: any) => {
-    navigation.navigate("Detail", { item });
   };
   //getToken()
   const getCategories = async () => {
@@ -149,7 +146,7 @@ const HomeScreen = () => {
             keyExtractor={(item) => item._id}
             data={features}
             renderItem={({ item }) => (
-              <CardProduct onPress={() => handleDetail(item)} item={item} />
+              <CardProduct item={item} />
             )}
           />
           <SpaceComponent height={20} />

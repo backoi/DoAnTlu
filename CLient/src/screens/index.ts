@@ -10,7 +10,9 @@ import CartScreen from "./cart/CartScreen";
 import CategoryScreen from "./home/CategoryScreen";
 import DetailScreen from "./home/DetailScreen";
 import HomeScreen from "./home/HomeScreen";
+import ReviewScreen from "./home/ReviewScreen";
 import SearchScreen from "./home/SearchScreen";
+import WriteReviewScreen from "./home/WriteReviewScreen";
 import SplashScreen from "./SplashScreen";
 
 export{
@@ -28,4 +30,6 @@ export{
     OTPScreen,
     ResetPassScreen,
     SearchScreen,
+    ReviewScreen,
+    WriteReviewScreen,
 }

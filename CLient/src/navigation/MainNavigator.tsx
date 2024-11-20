@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CategoryScreen, DetailScreen, ForgetPassScreen, LoginScreen, OnBoardingScreen, OTPScreen, ResetPassScreen, SearchScreen, SignUpScreen, WelcomeScreen } from '../screens';
+import { CategoryScreen, DetailScreen, ForgetPassScreen, LoginScreen, OnBoardingScreen, OTPScreen, ResetPassScreen, ReviewScreen, SearchScreen, SignUpScreen, WelcomeScreen, WriteReviewScreen } from '../screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../assets/types/NavigationType';
 import TabNavigator from './TabNavigator';
@@ -17,6 +17,8 @@ const MainNavigator = () => {
         <Stack.Screen name="Detail" component={DetailScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
         <Stack.Screen name="Category" component={CategoryScreen} />
+        <Stack.Screen name="Review" component={ReviewScreen} />
+        <Stack.Screen name="WriteReview" component={WriteReviewScreen} />
         
         
       </Stack.Navigator>

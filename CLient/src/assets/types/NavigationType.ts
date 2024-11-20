@@ -2,7 +2,7 @@ export type RootStackParamList = {
     Auth:undefined,
     Tab:undefined,
     Main:undefined,
-    Detail: { item: any },
+    Detail: { id: any },
     Welcome:undefined,
     Login:undefined,
     OnBoarding:undefined,
@@ -13,4 +13,6 @@ export type RootStackParamList = {
     Product:undefined,
     Search?:{text?:any,category?:any},
     Category:undefined,
+    Review:undefined,
+    WriteReview:undefined,
   };

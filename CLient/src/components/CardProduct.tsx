@@ -2,10 +2,12 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { Cart, Heart, HeartFill } from "../assets/svg";
 import { appColor } from "../constants/appColor";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../assets/types/NavigationType";
 
 interface Props {
   item: {
-    id: number;
+    _id: number;
     name: string;
     imgUrl: string;
     price: string;
@@ -15,22 +17,26 @@ interface Props {
   onPress?: (id: any) => void;
 }
 const CardProductComponent = ({ item, onPress }: Props) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [isLike, setIsLike] = useState(false);
   return (
-    <TouchableOpacity
-      onPress={onPress}
+    <View
       style={{
-        alignItems: "center",
-        marginHorizontal: 10,
+       // alignItems: "center",
+        margin:10,
         backgroundColor: "white",
         height: 240,
         width: 170,
+        
       }}
     >
+      <TouchableOpacity style={{}} onPress={()=>navigation.navigate("Detail",{id:item._id})}>
+
       <TouchableOpacity
         onPress={() => setIsLike(!isLike)}
         style={{ alignSelf: "flex-end", marginTop: 10, marginRight: 10 }}
-      >
+        >
         {isLike ? (
           <HeartFill height={20}></HeartFill>
         ) : (
@@ -45,26 +51,31 @@ const CardProductComponent = ({ item, onPress }: Props) => {
           backgroundColor: item.backColor,
           justifyContent: "center",
           alignItems: "center",
+          alignSelf:'center',
           marginBottom: 15,
         }}
-      >
+        >
         <View style={{ top: 15 }}>
           <Image
-            resizeMode="cover"
+            resizeMode="contain"
             source={{ uri: item?.imgUrl }}
-            style={{ height: 90, width: 90 }}
-          ></Image>
+            style={{ height:100,aspectRatio:1 }}
+            ></Image>
         </View>
       </View>
-      <Text style={{ color: appColor.primary_dark, fontWeight: "500" }}>
+      <Text style={{ color: appColor.primary_dark, fontWeight: "500",alignSelf:'center', }}>
         ${item.price}
       </Text>
-      <Text style={{ fontSize: 18, fontWeight: "500" }}>{item.name} </Text>
+          
+      <Text style={{ fontSize: 18, fontWeight: "500", alignSelf:'center',}}>{item.name} </Text>
 
       <Text style={{ color: appColor.text }}>{item.origin}</Text>
-      <View
+
+      </TouchableOpacity>
+
+      <TouchableOpacity 
         style={{
-          flex: 1,
+          paddingVertical:10,
           flexDirection: "row",
           width: "100%",
           borderTopWidth: 1,
@@ -76,8 +87,8 @@ const CardProductComponent = ({ item, onPress }: Props) => {
       >
         <Cart height={20} width={20} />
         <Text style={{ marginHorizontal: 5 }}>Add to cart</Text>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 //contentcontainerclassname gap-2

@@ -36,7 +36,7 @@ const InputComponent = (props:Props) => {
   )
 }
 const styles = StyleSheet.create({
-  inputContainer:{flex:1,backgroundColor:'white',flexDirection:'row',height:50,alignItems:'center',borderRadius:5,paddingHorizontal:10,marginVertical:10},
+  inputContainer:{flex:1,backgroundColor:'white',flexDirection:'row',height:50,alignItems:'center',borderRadius:5,paddingHorizontal:10,},
   textInput:{marginLeft:10,fontSize:17,flex:1}
   
 })

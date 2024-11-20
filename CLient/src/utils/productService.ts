@@ -10,6 +10,15 @@ const getAll=async()=>{
         
     }
 }
+const getProductWithID= async(id:any)=>{
+    try {
+        const response = await axios.get(`${API_URL}/${id}`);
+        return response
+    } catch (error) {
+        
+    }
+}
+
 const getProducts=async(search='',category='')=>{
     try {
         const response = await axios.get(`${API_URL}/`,{
@@ -35,4 +44,5 @@ export const productService= {
     getAll,
     getProducts,
     getFeatures,
+    getProductWithID,
 }
