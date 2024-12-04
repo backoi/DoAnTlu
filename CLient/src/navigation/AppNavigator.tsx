@@ -22,7 +22,7 @@ const AppNavigator = () => {
   const {login,token,isRemember,isAuth,loadStoredToken}=useAuthStore()
   // const { getItem } = useAsyncStorage("accessToken");
   useEffect(() => {
-    console.log("co nho mat khau",isRemember)
+    // console.log("co nho mat khau",isRemember)
     loadStoredToken()
   }, [loadStoredToken]);
 

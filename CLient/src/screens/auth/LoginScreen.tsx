@@ -25,7 +25,6 @@ import { useToast } from "react-native-toast-notifications";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import useAuthStore from "../../store/authStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Screen } from "react-native-screens";
 import { replace } from "formik";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -47,9 +46,10 @@ const LoginScreen = () => {
       }
       setIsLoading(true);
       const response = await authService.login(email, password);
-      const { username, accessToken } = response.data;
+      const { username,address, accessToken } = response.data;
+      const user={ username,email,address}
       console.log(response)
-      login({ username, email }, accessToken);
+      login( user, accessToken);
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
       
@@ -73,7 +73,6 @@ const LoginScreen = () => {
         <SpaceComponent height={20} />
         <TextComponent text="Welcome back !" title />
         <TextComponent text="Sign in to your account" />
-        <SpaceComponent height={20} />
         <InputComponent
           value={email}
           onChangeText={(text) => setEmail(text)}
@@ -86,14 +85,12 @@ const LoginScreen = () => {
             />
           }
         />
-        <SpaceComponent height={10} />
         <InputComponent
           value={password}
           password
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
         />
-        <SpaceComponent height={10} />
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Switch

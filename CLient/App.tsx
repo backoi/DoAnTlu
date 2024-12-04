@@ -12,11 +12,15 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 import MainNavigator from "./src/navigation/MainNavigator";
+import { StripeProvider } from "@stripe/stripe-react-native";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
-    <GestureHandlerRootView>
+    <StripeProvider  urlScheme="your-url-scheme"
+    merchantIdentifier="merchant.identifier"
+    publishableKey="pk_test_51QRxCpFWO9StdPGrHUJoiIrseSZeNsHxfzILLiGXPZQ1F05bm8Kvz5NzhBTtKvH83BRk37t3GhebOsVddX4jWkvq002GrA5Blx">
 
+        <GestureHandlerRootView>
     <ToastProvider>
       <NavigationContainer>
          
@@ -25,8 +29,9 @@ export default function App() {
        
       </NavigationContainer>
     </ToastProvider>
-    
     </GestureHandlerRootView>
+      </StripeProvider>
+    
 
   //   isSplash ? (
   //     <SplashScreen />

@@ -32,20 +32,24 @@ import AsyncStorage, {
 import useAuthStore from "../../store/authStore";
 import { categoryService } from "../../utils/categoryService";
 import { productService } from "../../utils/productService";
+import useCartStore from "../../store/cartStore";
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
   const [features, setFeatures] = useState<any | undefined>();
-
+  const {items,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
+  const {user}= useAuthStore()
+  //console.log("gia tri user trong store",user)
   const { getItem } = useAsyncStorage("authToken");
-  const getToken = async () => {
-    const tk = await getItem();
-    console.log("token Home", tk);
-  };
+  // const getToken = async () => {
+  //   const tk = await getItem();
+  //   console.log("token Home", tk);
+  // };
 
 
   const handleSearch = () => {
+    setSearchText('')
     navigation.navigate("Search", { text: searchText });
   };
   //getToken()

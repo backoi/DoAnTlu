@@ -54,7 +54,7 @@ authRouter.post('/login',async(req,res)=>{
         }
         else{
           const token = jwt.sign({ userId: existedUsers._id },process.env.SECRET_KEY,{expiresIn:'1d'});//hoặc dùng process.env.JWT_SECRET
-          res.status(200).json({message:'Login success',data:{username:existedUsers.username,email, accessToken:token} });
+          res.status(200).json({message:'Login success',data:{username:existedUsers.username,email,address:existedUsers.address, accessToken:token} });
         }
       } catch (error) {
         res.status(400).json({ error: error.message });

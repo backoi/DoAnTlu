@@ -13,6 +13,8 @@ import Search from "./Search.svg";
 import HeartFill from "./HeartFill.svg";
 import Trash from "./Trash.svg";
 import Add from "./Add.svg";
+import Filter from "./Filter.svg";
+import Reload from "./Reload.svg";
 
 
 
@@ -32,5 +34,7 @@ export {
     HeartFill,
     Trash,
     Add,
+    Filter,
+    Reload,
     
 };

@@ -13,6 +13,8 @@ import { productRouter } from './src/route/product.router.js';
 import { Review } from './src/models/review.model.js';
 import { reviewRouter } from './src/route/review.router.js';
 import 'dotenv/config'
+import { paymentRouter } from './src/route/payment.router.js';
+import { Order } from './src/models/oder.model.js';
 const app = express();
 const port = 3000;
 AdminJS.registerAdapter(AdminJSMongoose)
@@ -20,7 +22,7 @@ const start = async () => {
   //connect to db mongo
   await mongoose.connect(process.env.MONGO_URL)
   //await mongoose.connect('mongodb://localhost/ecomarket')
-  await app.listen(port, () => {
+  app.listen(port, () => {
     console.log(`AdminJS panel is available at http://localhost:${port}/admin`);
   });
 }
@@ -52,6 +54,10 @@ const adminJs = new AdminJS({
   {
     resource: Review,
 
+  },
+  {
+    resource: Order,
+
   }
 ],
   rootPath: '/admin',
@@ -69,6 +75,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/category',categoryRouter)
 app.use('/api/product',productRouter)
 app.use('/api/review',reviewRouter)
+app.use('/payment/',paymentRouter)
 
 app.get('/', (req, res) => {
   res.send('Welcome to AdminJS with Express!');

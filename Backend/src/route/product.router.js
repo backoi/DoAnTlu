@@ -6,7 +6,7 @@ import { Review } from '../models/review.model.js';
 const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const {search,category}=req.query //truyền từ params của endpoint //query là ?=
+  const {search,category,minPrice,maxPrice,minRate}=req.query //truyền từ params của axios //query là ?=
   const query={}
   if(search){
     query.name={$regex:search,$options:'i'} //tim kiem tuong doi, khong phan biet hoa thuong
@@ -14,8 +14,27 @@ productRouter.get('/', async (req, res) => {
   if(category){
     query.category=category
   }
+  //min max rate
+  if (minPrice || maxPrice) {
+    query.price = {};
+    console.log('gia tri min price: ' + minPrice)
+    console.log('gia tri max price: ' + maxPrice)
+    if (minPrice) {
+        query.price.$gte = parseFloat(minPrice); // Giá >= minPrice
+    }
+    if (maxPrice) {
+        query.price.$lte = parseFloat(maxPrice); // Giá <= maxPrice
+    }
+}
+
+// Lọc theo đánh giá
+  if (minRate) {
+      query.averageRating = { $gte: parseFloat(minRate) }; // Đánh giá >= minRate
+  }
   try {
-    const products = await Product.find(query);
+    console.log('gia trị query',query);
+    const products = await Product.find(query);//.polulate(category)
+    console.log('tat ca san pham', products)
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });

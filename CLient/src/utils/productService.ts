@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.9:3000/api/product';
+const API_URL = 'http://192.168.1.13:3000/api/product';
 
 const getAll=async()=>{
     try {
@@ -19,12 +19,15 @@ const getProductWithID= async(id:any)=>{
     }
 }
 
-const getProducts=async(search='',category='')=>{
+const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,minRate?:number)=>{
     try {
         const response = await axios.get(`${API_URL}/`,{
             params:{
                 search,
                 category,
+                minPrice,
+                maxPrice,
+                minRate,
             }
         });
         return response

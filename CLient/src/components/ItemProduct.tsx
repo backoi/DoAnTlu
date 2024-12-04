@@ -2,17 +2,27 @@
  import React from 'react'
  import { Minus, Plus, Trash } from '../assets/svg'
  import { appColor } from '../constants/appColor'
- //import { Swipeable } from 'react-native-gesture-handler';
  import Swipeable from 'react-native-gesture-handler/Swipeable';
+import useCartStore from '../store/cartStore';
 type Props = {
+  item:{
+    id:number,
+    name:string,
+    price:number,
+    urlImg:string,
+    quantity:number,
+    unit:string,
+  }
     counter?:boolean,
     onPress?:()=>void
 }
 
- const ItemProduct = ({counter,onPress}: Props) => {
+ const ItemProduct = ({counter,onPress,item}: Props) => {
+  const {items,decreaseQuantity,increaseQuantity,totalPrice,removeItem}=useCartStore()
+
     const deleteAction=()=>{
         return(
-            <TouchableOpacity onPress={onPress} style={{backgroundColor:'red',justifyContent:"center",alignItems:'center',width:50}}>
+            <TouchableOpacity onPress={()=>removeItem(item.id)} style={{backgroundColor:'red',justifyContent:"center",alignItems:'center',width:50}}>
                 <Trash height={23}></Trash>
             </TouchableOpacity>
             
@@ -25,21 +35,27 @@ type Props = {
      <View style={{flexDirection:'row',backgroundColor:appColor.primary_light,alignItems:'center',justifyContent:'space-between',padding:10}}>
          <View style={{flexDirection:'row'}}>
 
-       <View style={{backgroundColor:appColor.border,borderRadius:100,width:50,height:50}}>
-         <Image source={require('../assets/images/products/lemon.png')} style={{width:'100%',height:'100%',marginTop:5}}></Image>
+       <View style={{backgroundColor:appColor.border,borderRadius:100,width:50,height:50,marginRight:10}}>
+         <Image source={{uri:item.urlImg}} style={{width:'100%',height:'100%',marginTop:5}}></Image>
        </View>
        <View>
-         <Text style={{color:appColor.primary_dark}}>$2.00</Text>
-         <Text style={{fontSize:16,fontWeight:500}}>Fresh daimon li</Text>
-         <Text >1kg</Text>
+         <Text style={{color:appColor.primary_dark}}>${item.price}x{item.quantity}</Text>
+         <Text style={{fontSize:16,fontWeight:500}}>{item.name}</Text>
+         <Text >{item.unit}</Text>
        </View>
 
          </View>
          {
              !counter?<View style={{alignItems:'center'}}>
+              <TouchableOpacity onPress={()=>increaseQuantity(item.id)}>
+
              <Plus height={16} width={16}></Plus>
-             <Text style={{fontSize:20}}>3</Text>
+              </TouchableOpacity>
+             <Text style={{fontSize:20}}>{item.quantity}</Text>
+             <TouchableOpacity onPress={()=>decreaseQuantity(item.id)}>
+
              <Minus height={16} width={16}></Minus>
+             </TouchableOpacity>
            </View>:<></>
          }
       

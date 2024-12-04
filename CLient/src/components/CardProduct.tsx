@@ -4,21 +4,24 @@ import { Cart, Heart, HeartFill } from "../assets/svg";
 import { appColor } from "../constants/appColor";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../assets/types/NavigationType";
+import useCartStore from "../store/cartStore";
 
 interface Props {
   item: {
     _id: number;
     name: string;
     imgUrl: string;
-    price: string;
+    price: number;
     backColor: string;
-    origin: string;
+    unit: string;
+    stock:number;
   };
   onPress?: (id: any) => void;
 }
 const CardProductComponent = ({ item, onPress }: Props) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const {items,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
+  //const add={id:item._id,name:item.name,urlImg:item.imgUrl,price:item.price,quantity:}
   const [isLike, setIsLike] = useState(false);
   return (
     <View
@@ -69,7 +72,7 @@ const CardProductComponent = ({ item, onPress }: Props) => {
           
       <Text style={{ fontSize: 18, fontWeight: "500", alignSelf:'center',}}>{item.name} </Text>
 
-      <Text style={{ color: appColor.text }}>{item.origin}</Text>
+      <Text style={{ color: appColor.text, alignSelf:'center' }}>{item.unit}</Text>
 
       </TouchableOpacity>
 
@@ -83,7 +86,10 @@ const CardProductComponent = ({ item, onPress }: Props) => {
           backgroundColor: "white",
           justifyContent: "center",
           alignItems: "center",
-        }}
+        }} onPress={()=>addItem({
+          id: item._id, name: item.name, price: item.price, stock: item.stock, urlImg: item.imgUrl,
+          quantity: 1,unit:item.unit
+        },1)}
       >
         <Cart height={20} width={20} />
         <Text style={{ marginHorizontal: 5 }}>Add to cart</Text>

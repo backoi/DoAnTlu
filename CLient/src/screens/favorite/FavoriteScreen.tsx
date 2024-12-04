@@ -6,7 +6,7 @@ import { ItemProduct } from '../../components'
 const FavoriteScreen = () => {
   return (
    
-    <ItemProduct></ItemProduct>
+    <View></View>
   )
 }
 

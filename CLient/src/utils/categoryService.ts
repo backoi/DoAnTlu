@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.9:3000/api/category';
+const API_URL = 'http://192.168.1.13:3000/api/category';
 
 const getAll=async()=>{
     try {

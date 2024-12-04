@@ -26,12 +26,12 @@ const WriteReviewScreen = (props: Props) => {
         <Rating tintColor={'#D1D5DB'} startingValue={3} jumpValue={1} style={{}} onFinishRating={(rate:any)=>setRate(rate)}/>
         </View>
         <View style={{margin:20,position:'absolute',width:width*0.8,alignSelf:'center',bottom:0}}>
-            <TextInput value={comment} multiline numberOfLines={10} style={{
+            <TextInput multiline numberOfLines={10} style={{
                 backgroundColor:'white',textAlignVertical:'top',padding:5,borderRadius:5
                 
             }} placeholder='Tell us about your experience' onChangeText={(text)=>commentRef.current=text}></TextInput>
             <SpaceComponent height={10}/>
-            <ButtonComponent onPress={()=>console.log('giá trị comment',commentRef.current)} title='Post Review'></ButtonComponent>
+            <ButtonComponent onPress={()=>console.log('giá trị comment',commentRef.current,'đánh giá',rate)} title='Post Review'></ButtonComponent>
         </View>
       </View>
     </View>

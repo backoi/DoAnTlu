@@ -15,4 +15,6 @@ export type RootStackParamList = {
     Category:undefined,
     Review:undefined,
     WriteReview:undefined,
+    Payment:undefined,
+    AddAddress:undefined,
   };
