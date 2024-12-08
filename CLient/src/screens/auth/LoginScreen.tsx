@@ -34,7 +34,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toggleSwitch = () => setIsEnabled(!isEnabled);
-  const { user, login, setIsRemember } = useAuthStore();
+  const { user, login, setIsRemember,setDeliveryAddress } = useAuthStore();
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Login failed", "Please enter your email and password !!!");
@@ -50,6 +50,7 @@ const LoginScreen = () => {
       const user={ username,email,address}
       console.log(response)
       login( user, accessToken);
+      //setDeliveryAddress(response)
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
       

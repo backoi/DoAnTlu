@@ -13,7 +13,7 @@ interface CartItem{
    unit:string,
 }
 interface CartState{
-  items:CartItem[],
+  cartItems:CartItem[],
   totalPrice:number,
   totalQuantity:number,
   addItem:(item:CartItem,quantity:number)=>void,
@@ -23,19 +23,19 @@ interface CartState{
   clearCart:()=>void
 }
 const useCartStore = create<CartState>((set,get) => ({
-  items:[],
+  cartItems:[],
   totalPrice:0,
   totalQuantity:0,
-  addItem:(product:CartItem,quantity=1)=>{
+  addItem:(product:CartItem,quantity:number)=>{
     set((state)=>{
-      const existItem=state.items.find((it)=>it.id===product.id);
+      const existItem=state.cartItems.find((it)=>it.id===product.id);
       if(existItem){
         if(existItem.quantity+1>existItem.stock){
           Alert.alert('qua so luong')
           return state
         }
         return{
-          items:state.items.map((item)=>
+          cartItems:state.cartItems.map((item)=>
             item.id==product.id?{...item,quantity:item.quantity+quantity}:item
           ),
           totalPrice:state.totalPrice + product.price,
@@ -47,7 +47,7 @@ const useCartStore = create<CartState>((set,get) => ({
         return state
       }
       return{
-        items:[...state.items,{...product,quantity:1}],
+        cartItems:[...state.cartItems,{...product,quantity:quantity}],
         totalPrice:state.totalPrice + product.price,
         totalQuantity:state.totalQuantity + product.quantity,
       }
@@ -59,7 +59,7 @@ const useCartStore = create<CartState>((set,get) => ({
 
   increaseQuantity:(id:number)=>{
     set((state) => {
-      const updateProduct=state.items.map((item) =>
+      const updateProduct=state.cartItems.map((item) =>
         item.id===id
             ? item.stock<item.quantity+1
                 ? (Alert.alert("đã hết hàng"),item)
@@ -68,7 +68,7 @@ const useCartStore = create<CartState>((set,get) => ({
       )
       
       return{
-        items: updateProduct,
+        cartItems: updateProduct,
         totalPrice: updateProduct.reduce((sum,item)=>sum+item.price*item.quantity,0),
         totalQuantity: updateProduct.reduce((sum,item)=>sum+item.quantity,0)
       }
@@ -76,13 +76,13 @@ const useCartStore = create<CartState>((set,get) => ({
   },
   decreaseQuantity:(id:number)=>{
     set((state) => {
-      const updateItem=state.items.map((item) =>
+      const updateItem=state.cartItems.map((item) =>
         item.id === id ?{ ...item, quantity: item.quantity - 1 }: item)
       
       .filter(item=>item.quantity>0)
       
       return{
-        items: updateItem,
+        cartItems: updateItem,
         totalPrice: updateItem.reduce((sum,item)=>sum+item.price*item.quantity,0),
         totalQuantity: updateItem.reduce((sum,item)=>sum+item.quantity,0)
       }
@@ -93,13 +93,13 @@ const useCartStore = create<CartState>((set,get) => ({
 
   removeItem:(id:number)=>{
     set((state)=>{
-      const updateItem=state.items.filter(item=>item.id!=id)
+      const updateItem=state.cartItems.filter(item=>item.id!=id)
       return{
-        items:updateItem,
+        cartItems:updateItem,
         totalPrice:updateItem.reduce((sum,item)=>sum+item.price*item.quantity,0)
       }
     })
   },
-  clearCart: () => set({ items: [], totalPrice: 0 }),
+  clearCart: () => set({ cartItems: [], totalPrice: 0 }),
 }))
 export default useCartStore;

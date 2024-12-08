@@ -8,10 +8,12 @@ import {
 } from "../../components";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { appColor } from "../../constants/appColor";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../assets/types/NavigationType";
 
 const WelcomeScreen = () => {
-  const navigation=useNavigation()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   return (
     <View style={{ flex: 1, }}>
       <StatusBar></StatusBar>
@@ -33,12 +35,12 @@ sadipscing elitr, sed diam nonumy"
         <SpaceComponent height={10}/>
         <ButtonComponent icon={<MaterialCommunityIcons name='google' size={23} color={'gray'}></MaterialCommunityIcons>} color={['white','white']} title="Continue with google" textColor="black"/>
         <SpaceComponent height={10}/>
-        <ButtonComponent title="Create an account" onPress={()=>navigation.navigate('SignUp' as never)} icon={<MaterialCommunityIcons name="account-circle-outline" size={23} color={'white'}></MaterialCommunityIcons>} />
+        <ButtonComponent title="Login with Email" onPress={()=>navigation.navigate('Login')} icon={<MaterialCommunityIcons name="account-circle-outline" size={23} color={'white'}></MaterialCommunityIcons>} />
         <SpaceComponent height={10}/>
         <View style={styles.viewTextLogin}>
-        <Text style={{opacity:0.5}}>Already have an account? </Text>
-        <TouchableOpacity onPress={()=>navigation.navigate('Login' as never)}>
-          <Text style={{fontWeight:600}}>Login</Text>
+        <Text style={{opacity:0.5}}>Don't have an account? </Text>
+        <TouchableOpacity onPress={()=>navigation.navigate('SignUp')}>
+          <Text style={{fontWeight:600}}>Sign up</Text>
         </TouchableOpacity>
         </View>
       </View>

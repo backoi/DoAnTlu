@@ -1,19 +1,49 @@
-import { StyleSheet, Switch, Text, View } from 'react-native'
-import React, { useState } from 'react'
-import { ButtonComponent, HeaderBar, InputComponent, SpaceComponent } from '../../components'
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { appColor } from '../../constants/appColor';
-import { addAddresses, getAddresses, removeValue,  } from '../../utils/addressStore';
+
+// //neu save thi update thong tin len server, lam profile,favorites
+// //khi nao set default thì mới truyền lên api
+
+
+
+
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
+import MapView,{ Marker } from 'react-native-maps';
+import Geocoder from 'react-native-geocoding';
+import { ButtonComponent, HeaderBar } from '../../components';
 import useAuthStore from '../../store/authStore';
-
-type Props = {}
-
-const AddAddressScreen = (props: Props) => {
-  const {addAddress}= useAuthStore()
-  const [name,setName]=useState('')
-  const [phone,setPhone]=useState('')
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../assets/types/NavigationType';
+// Geocoder.init('AIzaSyAm4HeVm0wc69vvkBbHkNFb2BYuKjhD3hE')
+const AddAddressScreen = () => {
+  const [region, setRegion] = useState({
+    latitude: 21.007396659327345, // Vị trí giả định (Đại học Thuỷ Lợi)
+    longitude: 105.82473039547797,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  });
+   const [name,setName]=useState('')
+   const [phone,setPhone]=useState('')
   const [address,setAddress]=useState('')
-  const [city,setCity]=useState('')
+   const [city,setCity]=useState('')
+   const {addAddress}= useAuthStore()
+   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  // const handleRegionChange = (newRegion:any) => {
+  //   setRegion(newRegion);
+  //   Geocoder.from(newRegion.latitude, newRegion.longitude)
+  //     .then((json) => {
+  //       const formattedAddress = json.results[0].formatted_address;
+  //       const addressComponents = json.results[0].address_components;
+  //       console.log(addressComponents)
+  //       // streetName = addressComponents.find((c) => c.types.includes('route'))?.long_name || '';
+  //       //const postalCode = addressComponents.find((c) => c.types.includes('postal_code'))?.long_name || '';
+
+  //       //setAddress(formattedAddress);
+  //      // setStreet(streetName);
+  //       //setPostCode(postalCode);
+  //     })
+  //     .catch((error) => console.warn(error));
+  // };
+
   const handleAddAddress = async() => {
     const newAddress ={
         name,
@@ -22,53 +52,58 @@ const AddAddressScreen = (props: Props) => {
         city
     }
     await addAddress(newAddress)
+    navigation.goBack()
     //await addAddresses(newAddress)
     
   };
-  const handleSee = () => {
-    getAddresses()
-  };
-    
+  
 
   return (
-    <View style={{flex:1,backgroundColor:'#C4C4C4'}}>
-      <HeaderBar color='black' title='Add Address'/>
-      <SpaceComponent height={23}/>
-      <View style={{flex:1,justifyContent:'space-between',marginHorizontal:10,marginBottom:20}}>
-        <View>
-
-        <InputComponent value={name} onChangeText={setName} placeholder='Name' leftIC={<MaterialCommunityIcons
-                  name="account-circle-outline"
-                  size={23}
-                  color={appColor.text}
-                  />} ></InputComponent>
-        <InputComponent value={phone} placeholder='Phone' leftIC={<MaterialCommunityIcons
-                  name="phone-outline"
-                  size={23}
-                  color={appColor.text}
-                  />} onChangeText={setPhone}></InputComponent>
-        <InputComponent value={address}placeholder='Address' leftIC={<MaterialCommunityIcons
-                  name="home-map-marker"
-                  size={23}
-                  color={appColor.text}
-                  />} onChangeText={setAddress}></InputComponent>
-        <InputComponent value={city} placeholder='City' leftIC={<MaterialCommunityIcons
-                  name="map-outline"
-                  size={23}
-                  color={appColor.text}
-                  />} onChangeText={setCity}></InputComponent>
-                  <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Switch></Switch>
-                    <Text>Save this address</Text>
-                  </View>
+    <View style={styles.container}>
+      <HeaderBar color='black' title='Add new address'></HeaderBar>
+      <MapView
+        style={styles.map}
+        initialRegion={region}
+        //onRegionChangeComplete={handleRegionChange}
+      >
+        <Marker coordinate={region} draggable />
+      </MapView>
+      <View style={styles.form}>
+        <TextInput onChangeText={setName} style={styles.input} value={name} placeholder="Name" />
+        <TextInput onChangeText={setPhone} style={styles.input} value={phone}  placeholder="Phone" />
+        
+          <TextInput onChangeText={setAddress} style={styles.input} value={address} placeholder="Address" />
+        
+        <TextInput
+          style={styles.input}
+          value={city}
+          onChangeText={setCity}
+          placeholder="City"
+        />
+        <View style={styles.saveSwitch}>
+        <Switch style={{}}>
+        </Switch>
+        <Text>Set default</Text>
         </View>
-            <ButtonComponent onPress={handleAddAddress} title='Add address'></ButtonComponent>
+        
+        <ButtonComponent onPress={handleAddAddress} title='Save Address'></ButtonComponent>
       </View>
     </View>
-  )
-}
+  );
+};
 
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#fff' },
+  header: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', margin: 10 },
+  map: { flex: 1 },
+  form: { padding: 20, backgroundColor: '#fff' },
+  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 },
+  saveSwitch:{flexDirection:'row',alignItems:'center'}
+  
+ 
+  
+  
+  
+});
 
-export default AddAddressScreen
-//khi nao set default thì mới truyền lên api
-const styles = StyleSheet.create({})
+export default AddAddressScreen;

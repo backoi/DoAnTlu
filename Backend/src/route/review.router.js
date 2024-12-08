@@ -1,13 +1,15 @@
 import express from 'express';
 import { Review } from '../models/review.model.js';
 import { Product } from '../models/product.model.js';
+import { authenticateUser } from '../middleware/authenticateUser.js';
 // http://localhost:3000/api/review
 const reviewRouter = express.Router();
 
 reviewRouter.get('/', async (req, res) => {
   try {
     const reviews = await Review.find();
-    res.json(reviews);
+    res.status(200).json({message:'get reviews success',data:{reviews}});
+
   } catch (error) {
     res.status(500).json({ message: 'Error fetching review', error });
   }
@@ -15,10 +17,10 @@ reviewRouter.get('/', async (req, res) => {
 
 
 // Thêm một review mới cho sản phẩm
-reviewRouter.post('/products/:productId/reviews', async (req, res) => {
+reviewRouter.post('/products/:productId/reviews',authenticateUser, async (req, res) => {
   const { productId } = req.params;
-  const { userId, rating, comment } = req.body;
-
+  const { rating, comment } = req.body;
+  const userId=req.user.userId;
   try {
     // Tạo review mới
     const review = await Review.create({ userId,productId, rating, comment });
@@ -36,7 +38,7 @@ reviewRouter.post('/products/:productId/reviews', async (req, res) => {
       reviewsCount,
     });
 
-    res.status(201).json({ message: 'Review added successfully', review });
+    res.status(201).json({ message: 'Review added successfully', data:{review} });
   } catch (error) {
     res.status(500).json({ error: 'Failed to add review' });
   }

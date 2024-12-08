@@ -4,13 +4,14 @@ import {
   TouchableOpacity,
   Button,
   ScrollView,
+  Alert,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useAuthStore from "../../store/authStore";
 import useCartStore from "../../store/cartStore";
-import { ButtonComponent, HeaderBar, ItemProduct } from "../../components";
+import { ButtonComponent, HeaderBar, ItemProduct, SpaceComponent } from "../../components";
 import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import BottomSheet, {
@@ -20,30 +21,40 @@ import BottomSheet, {
 import { FlatList } from "react-native-gesture-handler";
 import { getAddresses } from "../../utils/addressStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BigCart, Cart } from "../../assets/svg";
+import { appColor } from "../../constants/appColor";
 
 const CartScreen = () => {
+  const { logout,user,deliveryAddress } = useAuthStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const snapPoints = useMemo(() => ['25%', '50%',], []);
+  const snapPoints = useMemo(() => ['25%', '40%',], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [deliveryAddress,setDeliveryAddress]=useState<any>('Home')
+  const [address,setAddress]=useState<any>(deliveryAddress)
   const [listAddress,setListAddress]=useState<any>([])
-  const { logout,user } = useAuthStore();
+  
   const {
-    items,
+    cartItems,
     totalQuantity,
     decreaseQuantity,
     increaseQuantity,
     totalPrice,
     clearCart,
   } = useCartStore();
+  const listItemsCart=cartItems.map((item)=>({product:item.id,quantityPurchased:item.quantity,amountPrice:(item.price*item.quantity)}))
   const handleOder = () => {
-    navigation.navigate("Payment");
+    
+    if(!address){
+      Alert.alert('Vui lòng chọn đia chỉ giao hàng!')
+      return;
+    }
+    navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:address});
   };
   const handleOpenChangeLocation = () => {
     bottomSheetRef.current?.expand();
   };
   const handleChangeLocation = (item:any) => {
-    setDeliveryAddress(item.address)
+    setAddress(item.address)
+    //thay doi o trong store nua
     bottomSheetRef.current?.close();
   };
   const fetchAddress = async() => {
@@ -80,28 +91,32 @@ const CartScreen = () => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View>
           <Text>Delivery location</Text>
-          <Text style={{ fontWeight: 500 }}>{deliveryAddress}</Text>
+          <Text style={{ fontWeight: 500 }}>{address}</Text>
         </View>
         <View>
           <TouchableOpacity
             onPress={handleOpenChangeLocation}
-            style={{ borderWidth: 1, borderRadius: 10, padding: 2 }}
+            style={{ borderWidth: 1, borderRadius: 10, padding: 5 }}
           >
             <Text>Changle location</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <Text>Giỏ hàng</Text>
+      <SpaceComponent height={20}></SpaceComponent>
       <View style={{ flex: 1, backgroundColor: "white" }}>
-        <FlatList
+        <FlatList style={{}}
           ListEmptyComponent={
-            <>
-              <Text>gio hang rong</Text>
-            </>
+            
+           <View style={{alignItems:'center',justifyContent:'center',}}>
+            <SpaceComponent height={50}></SpaceComponent>
+            <BigCart></BigCart>
+            <SpaceComponent height={20}></SpaceComponent>
+            <Text style={{fontSize:20,fontWeight:600}}>Your cart is empty</Text>
+           </View>
           }
           showsVerticalScrollIndicator
-          keyExtractor={(item) => item.id.toString()}
-          data={items}
+          //keyExtractor={(item) => item.id.toString()}
+          data={cartItems}
           renderItem={({ item }) => (
             <ItemProduct key={item.id} item={item}></ItemProduct>
           )}
@@ -109,19 +124,20 @@ const CartScreen = () => {
       </View>
       {/* <Button title='clear' onPress={()=>clearCart()}></Button> */}
 
-      <View style={{ position: "relative", bottom: 0, right: 0, left: 0 }}>
+      <View style={{ position: "relative", bottom: 0, right: 0, left: 0,marginBottom:10 }}>
         <View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text>Subtotal</Text>
-            <Text>50.6</Text>
+            <Text>{totalPrice.toFixed(2)}</Text>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text>Delivery fee</Text>
-            <Text>allQuantity{totalQuantity}</Text>
+            {/* <Text>allQuantity{totalQuantity}</Text> */}
+            <Text>0</Text>
           </View>
         </View>
         <View>
@@ -129,13 +145,13 @@ const CartScreen = () => {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              borderTopWidth: 2,
+              borderTopWidth: 1,
             }}
           >
             <Text>Total</Text>
-            <Text>${totalPrice.toFixed(2)}</Text>
+            <Text>${totalPrice.toFixed(2)}</Text> 
           </View>
-          <ButtonComponent
+          <ButtonComponent disabled={!(cartItems.length>0)}
             onPress={handleOder}
             title="Oder Now"
           ></ButtonComponent>
@@ -166,15 +182,16 @@ const CartScreen = () => {
                     minHeight:100,
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor:'white',
+                    backgroundColor:(deliveryAddress==item.address)?appColor.primary_dark:'white',
+                    
                     borderWidth:1,
                     marginRight:10,
                     padding:5,
                   }}
                   onPress={()=>handleChangeLocation(item)}
                 >
-                  <Text>{item.name}</Text>
-                  <Text>{`${item.address}, ${item.city} `}
+                  <Text>Name: {item.name}</Text>
+                  <Text>Address: {`${item.address}, ${item.city} `}
                   <MaterialCommunityIcons name="home"></MaterialCommunityIcons></Text>
                 </TouchableOpacity>
               )}

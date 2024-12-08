@@ -38,7 +38,7 @@ const HomeScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
   const [features, setFeatures] = useState<any | undefined>();
-  const {items,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
+  const {cartItems,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
   const {user}= useAuthStore()
   //console.log("gia tri user trong store",user)
   const { getItem } = useAsyncStorage("authToken");
@@ -56,12 +56,12 @@ const HomeScreen = () => {
   const getCategories = async () => {
     const res = await categoryService.getAll();
 
-    setCategories(res?.data);
+    setCategories(res?.data.categories);
   };
   const getFeatureProducts = async () => {
     const res = await productService.getFeatures();
 
-    setFeatures(res?.data);
+    setFeatures(res?.data.products);
   };
   useEffect(() => {
     getCategories();

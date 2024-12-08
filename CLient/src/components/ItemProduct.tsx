@@ -18,7 +18,8 @@ type Props = {
 }
 
  const ItemProduct = ({counter,onPress,item}: Props) => {
-  const {items,decreaseQuantity,increaseQuantity,totalPrice,removeItem}=useCartStore()
+  console.log('link anh',item.urlImg)
+  const {cartItems,decreaseQuantity,increaseQuantity,totalPrice,removeItem}=useCartStore()
 
     const deleteAction=()=>{
         return(
@@ -45,6 +46,7 @@ type Props = {
        </View>
 
          </View>
+         
          {
              !counter?<View style={{alignItems:'center'}}>
               <TouchableOpacity onPress={()=>increaseQuantity(item.id)}>

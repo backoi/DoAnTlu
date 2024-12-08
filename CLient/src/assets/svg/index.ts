@@ -5,6 +5,7 @@ import Beverages from "./Beverages.svg";
 import Google from "./Google.svg";
 import Household from "./Household.svg";
 import Cart from "./Cart.svg";
+import BigCart from "./BigCart.svg";
 import Heart from "./Heart.svg";
 import Minus from "./Minus.svg";
 import Plus from "./Plus.svg";
@@ -15,6 +16,8 @@ import Trash from "./Trash.svg";
 import Add from "./Add.svg";
 import Filter from "./Filter.svg";
 import Reload from "./Reload.svg";
+import Box from "./Box.svg";
+import NotFound from "./NotFound.svg";
 
 
 
@@ -36,5 +39,7 @@ export {
     Add,
     Filter,
     Reload,
-    
+    BigCart,
+    Box,
+    NotFound,
 };

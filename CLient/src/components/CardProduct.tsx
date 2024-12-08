@@ -20,9 +20,10 @@ interface Props {
 }
 const CardProductComponent = ({ item, onPress }: Props) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const {items,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
+  const {cartItems,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
   //const add={id:item._id,name:item.name,urlImg:item.imgUrl,price:item.price,quantity:}
   const [isLike, setIsLike] = useState(false);
+  
   return (
     <View
       style={{

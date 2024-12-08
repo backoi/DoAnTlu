@@ -88,13 +88,14 @@ authRouter.post('/forgot-password',async(req,res)=>{
 
 authRouter.post('/change-password',async(req,res)=>{
   const {email,password}=req.body
+  //newpass nữa
   try {
     const user = await User.findOne({ email })
     const hashPass= await bcrypt.hash(password,10)
     const update = await User.findOneAndUpdate(user._id,{
       password : hashPass
   })
-      res.status(200).json({message:'update success'});
+      res.status(200).json({message:'update success',data:{userId:user._id}});
       
     } catch (error) {
       res.status(400).json({ error: error.message });

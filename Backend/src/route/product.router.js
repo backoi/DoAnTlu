@@ -35,7 +35,8 @@ productRouter.get('/', async (req, res) => {
     console.log('gia trị query',query);
     const products = await Product.find(query);//.polulate(category)
     console.log('tat ca san pham', products)
-    res.json(products);
+    res.status(200).json({message:'get products success',data:{products}});
+
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });
   }
@@ -44,7 +45,9 @@ productRouter.get('/', async (req, res) => {
 productRouter.get('/features', async (req, res) => {
   try {
     const products = await Product.find({isFeatures:true});
-    res.json(products);
+    res.status(200).json({message:'get feature success',data:{products}});
+
+   
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });
   }
@@ -58,7 +61,7 @@ productRouter.get('/:id', async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json({product,reviews});
+    res.json({message:"get product by id",data:{product,reviews}});
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });
   }

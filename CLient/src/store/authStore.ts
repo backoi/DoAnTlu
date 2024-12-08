@@ -7,7 +7,7 @@ interface AuthState{
         email?:string,
         address?:AddressType[];
     },
-    token:string,
+    accessToken:string,
     deliveryAddress:string,
     isRemember:boolean,
     isAuth:boolean,
@@ -30,14 +30,14 @@ const useAuthStore = create<AuthState>((set) => ({
     email:'',
     address:[],
   },
-  token:'',
+  accessToken:'',
   deliveryAddress:'',
   isRemember:false,
   isAuth:false,
   addAddress: async (newAddress:AddressType) => {
     const state=useAuthStore.getState()
     //console.log('gia tri user',state.user)
-    AsyncStorage.setItem('authUser', JSON.stringify({user:state.user,token:state.token}));
+    AsyncStorage.setItem('authUser', JSON.stringify({user:state.user,accessToken:state.accessToken}));
    // AsyncStorage.setItem('a',JSON.stringify('bac'));
 
     //console.log('giá trị update:',updatedUser.address)
@@ -48,20 +48,20 @@ const useAuthStore = create<AuthState>((set) => ({
       },
     }));
   },
-  
-  login:async (user1, token) =>{
+  //removeAddress: async (newAddress:AddressType) => {} flatlist remove theo index
+  login:async (user, accessToken) =>{
     const state=useAuthStore.getState()
     if(state.isRemember){
-        await AsyncStorage.setItem('authToken', token); // Lưu token vào AsyncStorage
+        await AsyncStorage.setItem('authToken', accessToken); // Lưu token vào AsyncStorage
     }
     set({
-        user:user1,token,
+        user,accessToken,
         isAuth:true,
     })
   },
   logout:async()=> {
     await AsyncStorage.removeItem('authToken');
-      set({user:{},token:'',
+      set({user:{},accessToken:'',
         isAuth:false,
         isRemember:false,
       })
@@ -77,7 +77,7 @@ const useAuthStore = create<AuthState>((set) => ({
     if(storedToken)
         //fecth info from api token
         set({
-            token:storedToken,
+          accessToken:storedToken,
             isRemember:true,
             isAuth:true,
     })

@@ -15,6 +15,8 @@ export type RootStackParamList = {
     Category:undefined,
     Review:undefined,
     WriteReview:undefined,
-    Payment:undefined,
+    Payment:{cartItems:any,totalAmount:any,totalItems:any,deliveryAddress:any},
     AddAddress:undefined,
+    OrderSuccess:undefined,
+    DetailOrder:{item:any},
   };

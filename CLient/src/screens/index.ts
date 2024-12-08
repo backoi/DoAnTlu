@@ -7,16 +7,20 @@ import SignUpScreen from "./auth/SignUpScreen";
 import SwiperScreen from "./auth/SwiperScreen";
 import WelcomeScreen from "./auth/WelcomeScreen";
 import CartScreen from "./cart/CartScreen";
-import PaymentMothodScreen from "./cart/PaymentMothodScreen";
+import OrderSuccessScreen from "./cart/OrderSuccessScreen";
+import PaymentMethodScreen from "./cart/PaymentMethodScreen";
 import CategoryScreen from "./home/CategoryScreen";
 import DetailScreen from "./home/DetailScreen";
 import HomeScreen from "./home/HomeScreen";
 import ReviewScreen from "./home/ReviewScreen";
 import SearchScreen from "./home/SearchScreen";
 import WriteReviewScreen from "./home/WriteReviewScreen";
+import DetailOrderScreen from "./oder/DetailOrderScreen";
+import OrderScreen from "./oder/OrderScreen";
 import AddAddressScreen from "./profile/AddAddressScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SplashScreen from "./SplashScreen";
+
 export{
     HomeScreen,
     LoginScreen,
@@ -34,7 +38,12 @@ export{
     SearchScreen,
     ReviewScreen,
     WriteReviewScreen,
-    PaymentMothodScreen,
+    PaymentMethodScreen,
     ProfileScreen,
 AddAddressScreen,
+OrderSuccessScreen,
+OrderScreen,
+DetailOrderScreen
+
+
 }

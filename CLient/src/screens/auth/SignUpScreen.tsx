@@ -66,7 +66,7 @@ const SignUpScreen = () => {
         <HeaderBar title="Sign Up"></HeaderBar>
       </ImageBackground>
       <View style={styles.textContainer}>
-        <SpaceComponent height={20} />
+        <SpaceComponent height={10} />
         <TextComponent text="Create an account" title />
         <TextComponent text="Quickly create account" />
         <Formik
@@ -88,7 +88,6 @@ const SignUpScreen = () => {
             touched,
           }: FormikValues) => (
             <View>
-              <SpaceComponent height={20} />
               <InputComponent
                 value={values.username}
                 onChangeText={handleChange("username")}
@@ -102,7 +101,6 @@ const SignUpScreen = () => {
                 }
               />
 
-              <SpaceComponent height={10} />
               <InputComponent
                 value={values.email}
                 onChangeText={handleChange("email")}
@@ -116,7 +114,6 @@ const SignUpScreen = () => {
                   />
                 }
               />
-              <SpaceComponent height={10} />
               <InputComponent
                 value={values.password}
                 onChangeText={handleChange("password")}
@@ -124,7 +121,6 @@ const SignUpScreen = () => {
                 password
                 placeholder="Password"
               />
-              <SpaceComponent height={10} />
               <InputComponent
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
@@ -132,7 +128,6 @@ const SignUpScreen = () => {
                 password
                 placeholder="Confirm Password"
               />
-              <SpaceComponent height={5} />
               <View style={{ marginLeft: 10 }}>
                 <Text style={{ color: "red" }}>
                   {(touched.email && errors.email) ||
