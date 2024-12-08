@@ -2,11 +2,11 @@ import axios from "axios";
 
 const API_URL = "http://192.168.1.14:3000/payment/";
 
-const createPayment = async (items: any, accessToken: string) => {
+const createPayment = async (totalAmount: any, accessToken: string) => {
   try {
     const response = await axios.post(
       `${API_URL}/create-payment-intent`,
-      { items },
+      { totalAmount },
       {
         headers: {
           Authorization: accessToken,
@@ -21,9 +21,8 @@ const createPayment = async (items: any, accessToken: string) => {
 };
 
 const confirmPayment = async (
-  accessToken: string,
   items: any,
-  deliveryAddress:string,
+  deliveryAddress:string,accessToken: string,
   orderId?: string,
   paymentMethod?: string,
 ) => {
@@ -33,7 +32,8 @@ const confirmPayment = async (
       {
         items,
         orderId,
-        paymentMethod,deliveryAddress
+        paymentMethod,
+        deliveryAddress
       },
       {
         headers: {

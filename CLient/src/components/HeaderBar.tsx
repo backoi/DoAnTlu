@@ -14,7 +14,7 @@ const HeaderBarComponent = (props:Props) => {
     const navigation=useNavigation()
     const {title,rightIC,color,onPress}=props
   return (
-    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
+    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
         <TouchableOpacity onPress={onPress?onPress:()=>navigation.goBack()}><Icon name='arrow-left' size={19} color={color??'white'}></Icon></TouchableOpacity>
     
     <Text style={[styles.text,{color:color??'white'}]}>{title}</Text>

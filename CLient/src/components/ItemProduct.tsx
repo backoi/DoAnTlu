@@ -18,7 +18,7 @@ type Props = {
 }
 
  const ItemProduct = ({counter,onPress,item}: Props) => {
-  console.log('link anh',item.urlImg)
+  
   const {cartItems,decreaseQuantity,increaseQuantity,totalPrice,removeItem}=useCartStore()
 
     const deleteAction=()=>{

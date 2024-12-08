@@ -20,18 +20,11 @@ paymentRouter.post(
       //   {customer: customer.id},
       //   {apiVersion: '2024-11-20.acacia'}
       // );
-      //console.log('Payment intent')
-      const { items, paymentMethod, totalItems } = req.body;
-      //const userId = '67338de8687ef8d9df287df5'
+      const { totalAmount} = req.body;
       // Tính tổng tiền
-      const totalAmount = items.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      );
-
       // Tạo payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: totalAmount * 100, // Số tiền tính bằng cents
+        amount: Math.round(totalAmount*100), // Số tiền tính bằng cents
         currency: "usd",
         payment_method_types: ["card"],
         //  automatic_payment_methods:{
@@ -50,6 +43,7 @@ paymentRouter.post(
           // customer: customer.id,
         },
       });
+
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -81,7 +75,7 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
       });
     }
     //thanh toan card thì sẽ paid
-    if (paymentMethod == "Stripe Card") {
+    else if (paymentMethod == "Stripe Card") {
       const order = new Order({
         userId,
         items,
@@ -98,20 +92,23 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
       });
     }
     //thanh toan cash thì sẽ pending
-    const order = new Order({
-      userId,
-      items,
-      totalAmount,
-      totalItems,
-      deliveryAddress,
-      paymentStatus: "Pending",
-      paymentMethod: "Cash",
-    });
-    await order.save();
-    res.json({
-      message: "Order updated successfully cash,pending",
-      data: { OderId: order.id },
-    });
+    else{
+      const order = new Order({
+        userId,
+        items,
+        totalAmount,
+        totalItems,
+        deliveryAddress,
+        paymentStatus: "Pending",
+        paymentMethod: "Cash",
+      });
+      await order.save();
+      res.json({
+        message: "Order updated successfully cash,pending",
+        data: { OderId: order.id },
+      });
+    
+  }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

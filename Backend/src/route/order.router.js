@@ -10,7 +10,7 @@ const orderRouter = express.Router();
 orderRouter.get('/',authenticateUser, async (req, res) => {
   try {
      const userId = req.user.userId;
-     console.log(userId);
+     console.log('usẻr trong oderrcsreen',userId);
      const onGoingOrders = await Order.find({userId,status: 'OnGoing'}).populate('items.product');//.sort({})
      const ordersHistory = await Order.find({
       userId,

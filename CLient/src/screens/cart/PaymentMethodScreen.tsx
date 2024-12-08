@@ -15,6 +15,8 @@ const MethodType={
   CARD:'Card',
 }
 const PaymentMethodScreen = ({route}:any,props:Props,) => {
+  const totalAmount =parseFloat(route.params.totalAmount.toFixed(2))
+  console.log(typeof(totalAmount))
   const deliveryAddress=route.params.deliveryAddress
   //const {deliveryAddress}=useAuthStore()
   //const address=(route.params.deliveryAddress=='Home')?:'';
@@ -24,11 +26,6 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
   const [method, setMethod] = useState<string>();
   const items=route.params.cartItems
   console.log(items)
-  // const items = [
-  //   { product: "673b561ae94ddc75ed2ee89e", price: 2, quantity: 1 },
-  //   { product: "673b57c3e94ddc75ed2ee956", price: 2, quantity: 3 },
-  //   { product: "6735f5a01eae9f4224c95dc3", price: 2.5, quantity: 2 },
-  // ];
   const createInit = async () => {
     const res = await paymentService.createPayment(items,accessToken);
     const { clientSecret } = res.data;
@@ -42,11 +39,8 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
   };
 
   const handlePay = async () => {
-    console.log('accestoken',accessToken)
-
     if (method == MethodType.CARD) {
       try {
-        console.log('Card');
         //Create a new customer
         // const customer = await paymentService.createCustomer("John Doe");
         // console.log('customer',customer)
@@ -58,7 +52,8 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
         // console.log('confirmPaymentRes',confirmPaymentRes)
         // Alert.alert("Payment successful");
         //Create a intent
-        const res = await paymentService.createPayment(items,accessToken);
+        const res = await paymentService.createPayment(totalAmount,accessToken);
+        console.log('createPayment',res)
         const { clientSecret } = res.data;
         //console.log('clientSecret',clientSecret)
         const { error } = await initPaymentSheet({
@@ -67,25 +62,28 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
           defaultBillingDetails: { name: "Customer" },
         });
 
-        
         if (error) {
           Alert.alert("Payment failed", error.message);
         } else {
           //open payment sheet
-          const { error } = await presentPaymentSheet();
+          const {error} = await presentPaymentSheet();
           if (error) {
             Alert.alert(`Error code: ${error.code}`, error.message);
+            
           } else {
-            paymentService.confirmPayment(accessToken,items,deliveryAddress,undefined,"Stripe Card",)
-            //Alert.alert("Payment successful");
+           await paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,"Stripe Card",)
+
+            navigation.navigate('OrderSuccess')
+            //Alert.alert("Payment successful");// ko the post them gi o day
           }
         }
+        //paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,"Stripe Card",)
       } catch (error) {
         console.log("error", error);
       }
     } 
     else {
-      paymentService.confirmPayment(accessToken,items,deliveryAddress,undefined,MethodType.CASH)
+      paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,MethodType.CASH)
       //Alert.alert("Payment cash successful");
       navigation.navigate('OrderSuccess')
     }
@@ -95,7 +93,7 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
   //    //setItems(route.params.cartItems);
   //  },[])
   return (
-    <View style={{ backgroundColor: appColor.background, flex: 1 }}>
+    <View style={{ backgroundColor: appColor.background, flex: 1 ,margin:10}}>
       <HeaderBar color="black" title="Payment Mothod"></HeaderBar>
       <View
         style={{

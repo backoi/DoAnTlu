@@ -50,10 +50,9 @@ const OderScreen = () => {
   }
   const fetchOrders = async () => {
     const res = await orderService.getUserOrders(accessToken);
-    console.log('data',res);
+    //console.log('data',res);
     setOngoingOrders(res.data.ongoing);
-    
-  setOrderHistory(res.data.history);
+    setOrderHistory(res.data.history);
   };
 
    useEffect(() => {
@@ -64,7 +63,7 @@ const OderScreen = () => {
 
      // Cleanup sự kiện khi component unmount
      return unsubscribe;
-   }, [navigation]);
+   }, []); //[navigation]
   // useEffect(() => {
   //   fetchOrders();
   // }, [activeOrder]);
@@ -140,8 +139,8 @@ const OderScreen = () => {
                   <Text>Order#{item._id}</Text>
                   <Text>Date: 26/12/2024</Text>
                   <View style={{ flexDirection: "row", gap: 10 }}>
-                    <Text>Items:{item.totalItems}</Text>
-                    <Text>Price:{(item.totalAmount).toFixed(2)}$</Text>
+                    <Text>Items: {item.totalItems}</Text>
+                    <Text>Price: {(item.totalAmount).toFixed(2)}$</Text>
                   </View>
                 </View>
               </View>
