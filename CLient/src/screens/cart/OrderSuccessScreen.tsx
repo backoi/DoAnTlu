@@ -20,6 +20,7 @@ const OrderSuccessScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   useEffect(()=>{
   clearCart()
+  //lam sao de lam sach coupon
   },[])
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1,margin:10 }}>

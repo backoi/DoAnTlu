@@ -5,6 +5,8 @@ import {User} from '../models/user.model.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
+import { Coupon } from '../models/coupon.model.js';
+import crypto from 'crypto';
 const authRouter = express.Router();
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -32,8 +34,18 @@ authRouter.post('/register', async (req, res) => {
         const newUser= new User({username,email,password:hashPass})
         console.log(newUser)
         await newUser.save()
-        const token = jwt.sign({ userId: newUser._id, email},process.env.SECRET_KEY,{expiresIn:'1d'});//backoi hoặc dùng process.env.JWT_SECRET
-        res.status(201).json({message:'Sign up success',data:{accessToken:token} }); 
+
+        //tao ma giam gia
+        const discountCode = crypto.randomBytes(4).toString('hex').toUpperCase(); // Ví dụ: "4F7A1B2C"
+        const coupon = new Coupon({
+            code: discountCode,
+            discountPercentage: 10, // Giảm giá 10%
+            user: newUser._id,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Hết hạn sau 7 ngày
+        });
+        await coupon.save();
+        const accessToken = jwt.sign({ userId: newUser._id, email},process.env.SECRET_KEY,{expiresIn:'1d'});//backoi hoặc dùng process.env.JWT_SECRET
+        res.status(201).json({message:'Sign up success',data:{accessToken,discountCode} }); 
     }
   } catch (error) {
     res.json({ message: error.message });

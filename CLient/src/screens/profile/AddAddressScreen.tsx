@@ -4,7 +4,6 @@
 
 
 
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
 import MapView,{ Marker } from 'react-native-maps';

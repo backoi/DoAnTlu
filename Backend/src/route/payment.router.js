@@ -2,6 +2,7 @@ import express from "express";
 import Stripe from "stripe";
 import { Order } from "../models/order.model.js";
 import { authenticateUser } from "../middleware/authenticateUser.js";
+import { Coupon } from "../models/coupon.model.js";
 
 const stripe = new Stripe(
   "sk_test_51QRxCpFWO9StdPGrxgRdI0gO4CPgWItIzjZs6I5GBdW25seLPMBlc4lM743kT9fw2jyOMbWvovMsdTfieBOcfMmi00pEdYymxU"
@@ -54,7 +55,20 @@ paymentRouter.post(
 paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
   try {
     const userId = req.user.userId; //lay tu token
-    const { orderId, paymentMethod, items, deliveryAddress } = req.body;
+    const { orderId, paymentMethod, items, deliveryAddress,coupon } = req.body;
+    if(coupon) {
+      const couponCode = coupon;
+      //console.log('couponCode', couponCode)
+      const couponData = await Coupon.findOneAndUpdate({ code:couponCode,user:userId },{isUsed:true});
+      //if (!couponData) return 
+      //if (!couponData) return res.status(404).json({ message: "Coupon not found" });
+      //if (couponData.isUsed) return res.status(400).json({ message: "Coupon is already used" });
+      //if (new Date(couponData.expiryDate) < new Date())
+      //  return res.status(400).json({ message: "Coupon has expired" });
+      //totalAmount = totalAmount - (totalAmount * couponData.discount) / 100;
+      
+      //await couponData.save();
+    }
     const totalAmount = items.reduce(
       (total, item) => total + item.amountPrice,
       0
@@ -113,5 +127,30 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+paymentRouter.post('/validate-coupon',authenticateUser,async (req, res) => {
+  try {
+    const { couponCode } = req.body;
+    console.log('nhan dc code',couponCode)
+    console.log('id',req.user)
+
+    // Kiểm tra mã giảm giá
+    const coupon = await Coupon.findOne({ code: couponCode, user: req.user.userId, isUsed: false });
+
+    if (!coupon) {
+     return res.json({ data:{isValid: false}, message: 'Invalid or expired coupon code' });
+    }
+    if (coupon.isUsed) {
+      return res.json({ data:{isValid: false}, message: "Coupon is already used" });
+    }
+
+    res.status(200).json({data:{
+        isValid: true,
+        discountPercentage: coupon.discountPercentage},message: 'Coupon code is invalid'
+    });
+} catch (error) {
+    res.status(500).json({ message: error.message });
+}
+})
 
 export { paymentRouter };

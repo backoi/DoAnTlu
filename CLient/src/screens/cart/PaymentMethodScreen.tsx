@@ -16,7 +16,9 @@ const MethodType={
 }
 const PaymentMethodScreen = ({route}:any,props:Props,) => {
   const totalAmount =parseFloat(route.params.totalAmount.toFixed(2))
-  console.log(typeof(totalAmount))
+  const coupon =route.params.coupon
+  console.log('tổng tiền:',totalAmount)
+  console.log('coupon:',coupon)
   const deliveryAddress=route.params.deliveryAddress
   //const {deliveryAddress}=useAuthStore()
   //const address=(route.params.deliveryAddress=='Home')?:'';
@@ -25,7 +27,7 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [method, setMethod] = useState<string>();
   const items=route.params.cartItems
-  console.log(items)
+  console.log('danh sach san pham:',items)
   const createInit = async () => {
     const res = await paymentService.createPayment(items,accessToken);
     const { clientSecret } = res.data;
@@ -71,7 +73,7 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
             Alert.alert(`Error code: ${error.code}`, error.message);
             
           } else {
-           await paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,"Stripe Card",)
+           await paymentService.confirmPayment(items,deliveryAddress,accessToken,coupon,undefined,"Stripe Card",)
 
             navigation.navigate('OrderSuccess')
             //Alert.alert("Payment successful");// ko the post them gi o day
@@ -83,7 +85,7 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
       }
     } 
     else {
-      paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,MethodType.CASH)
+      paymentService.confirmPayment(items,deliveryAddress,accessToken,coupon,undefined,MethodType.CASH)
       //Alert.alert("Payment cash successful");
       navigation.navigate('OrderSuccess')
     }

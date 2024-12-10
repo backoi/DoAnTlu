@@ -5,6 +5,7 @@ import {
   Button,
   ScrollView,
   Alert,
+  TextInput,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -19,19 +20,14 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { FlatList } from "react-native-gesture-handler";
-import { getAddresses } from "../../utils/addressStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BigCart, Cart } from "../../assets/svg";
 import { appColor } from "../../constants/appColor";
+import axios from "axios";
+import { paymentService } from "../../utils/paymentService";
 
 const CartScreen = () => {
-  const { logout,user,deliveryAddress } = useAuthStore();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const snapPoints = useMemo(() => ['25%', '40%',], []);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const [address,setAddress]=useState<any>(deliveryAddress)
-  const [listAddress,setListAddress]=useState<any>([])
-  
+  const { logout,user,deliveryAddress ,accessToken} = useAuthStore();
   const {
     cartItems,
     totalQuantity,
@@ -40,15 +36,49 @@ const CartScreen = () => {
     totalPrice,
     clearCart,
   } = useCartStore();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const snapPoints = useMemo(() => ['25%', '40%',], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [coupon,setCoupon] = useState('')
+  const [discountPerc,setDiscountPerc] = useState(0)
+  const [address,setAddress]=useState<any>(deliveryAddress)
+  const [listAddress,setListAddress]=useState<any>([])
+  //const [totalAmount,setTotalAmount]=useState(totalPrice)
+  
   const listItemsCart=cartItems.map((item)=>({product:item.id,quantityPurchased:item.quantity,amountPrice:(item.price*item.quantity)}))
   const handleOder = () => {
-    
+    //nhu nay hop ly k, bat nguoi dung nhap lai
+    setCoupon('')
+    setDiscountPerc(0)
     if(!address){
       Alert.alert('Vui lòng chọn đia chỉ giao hàng!')
       return;
     }
-    navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:address});
+    navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:address,coupon});
   };
+  const handleCoupon =async()=>{
+    try {
+      const res=await paymentService.validateCoupon(coupon,accessToken)
+      if(res.data.isValid){
+        const percentage=res.data.discountPercentage
+        setDiscountPerc(percentage)
+        //setTotalAmount((amount)=>amount-amount*percentage/100)
+        Alert.alert('Mã khuyến mãi hop lệ!')
+        console.log(totalPrice)
+      }
+      console.log('res',res.data);
+    } catch (error) {
+      console.log('Loi khi validate coupon:', error);
+    }
+  }
+  const handleCancelCoupon =()=>{
+    setCoupon(''),
+    setDiscountPerc(0),
+    //setTotalAmount(totalPrice),
+    
+    Alert.alert('Da huy ma khuyen mai!')
+  }
+
   const handleOpenChangeLocation = () => {
     bottomSheetRef.current?.expand();
   };
@@ -102,6 +132,25 @@ const CartScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <View style={{ flexDirection: "row",justifyContent:'space-between',borderRadius:15,borderWidth:1,padding:5,borderColor:appColor.border}}>
+        <View>
+          <TextInput value={coupon} onChangeText={setCoupon} placeholder="Enter your coupon"></TextInput>
+        </View>
+        <View style={{flexDirection:'row',gap:10}}> 
+          <TouchableOpacity
+            onPress={handleCoupon}
+            style={{  borderRadius: 15,padding:5,justifyContent:'center',backgroundColor:appColor.primary_dark}}
+          >
+            <Text style={{color:'white'}}>Apply</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleCancelCoupon}
+            style={{  borderRadius: 15,padding:5,justifyContent:'center',backgroundColor:'red', }}
+          >
+            <Text style={{color:'white'}}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <SpaceComponent height={20}></SpaceComponent>
       <View style={{ flex: 1, backgroundColor: "white" }}>
         <FlatList style={{}}
@@ -130,14 +179,14 @@ const CartScreen = () => {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text>Subtotal</Text>
-            <Text>{totalPrice.toFixed(2)}</Text>
+            <Text>${totalPrice.toFixed(2)}</Text>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text>Delivery fee</Text>
+            <Text>Discount (%)</Text>
             {/* <Text>allQuantity{totalQuantity}</Text> */}
-            <Text>0</Text>
+            <Text>{discountPerc}%</Text>
           </View>
         </View>
         <View>
@@ -149,7 +198,12 @@ const CartScreen = () => {
             }}
           >
             <Text>Total</Text>
-            <Text>${totalPrice.toFixed(2)}</Text> 
+            <Text>$
+              {
+              discountPerc?(totalPrice-totalPrice*discountPerc/100).toFixed(2):totalPrice.toFixed(2)
+             //totalPrice.toFixed(2)
+              }
+              </Text> 
           </View>
           <ButtonComponent disabled={!(cartItems.length>0)}
             onPress={handleOder}

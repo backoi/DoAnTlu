@@ -55,18 +55,19 @@ const OderScreen = () => {
     setOrderHistory(res.data.history);
   };
 
-   useEffect(() => {
-     // Lắng nghe sự kiện focus của màn hình
-     const unsubscribe = navigation.addListener('focus', () => {
-       fetchOrders(); // Gọi lại hàm để cập nhật danh sách
-     });
+  //  useEffect(() => {
+  //    // Lắng nghe sự kiện focus của màn hình
+  //    const unsubscribe = navigation.addListener('focus', () => {
+  //      fetchOrders(); // Gọi lại hàm để cập nhật danh sách
+  //    });
 
-     // Cleanup sự kiện khi component unmount
-     return unsubscribe;
-   }, []); //[navigation]
-  // useEffect(() => {
-  //   fetchOrders();
-  // }, [activeOrder]);
+  //    // Cleanup sự kiện khi component unmount
+  //    return unsubscribe;
+  //  }, []); //[navigation] //neu cai nay thi goi nhieu qua
+  //neu tao store thi thua` k can thiet
+  useEffect(() => {
+    fetchOrders();
+  }, [activeOrder]); //neu chon cai nay thi khi them orders no ko cap nhat
   return (
     <View style={{ marginHorizontal: 10 }}>
       <HeaderBar color="black" title="Orders"></HeaderBar>
@@ -104,7 +105,7 @@ const OderScreen = () => {
         renderItem={({ item, index }: any) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("DetailOrder", { item: ongoingOrders[index] })
+              navigation.navigate("DetailOrder", { item: ongoingOrders[index] })//doan nay chua xem chi tiet o lich su
             }
             style={{
               marginBottom: 10,
@@ -124,7 +125,7 @@ const OderScreen = () => {
                     padding: 5,
                   }}
                 >
-                  <Box width={50}></Box>
+                  <Box width={70}></Box>
                 </View>
                 <View>
                 <View style={{flexDirection:'row'}}>
@@ -176,7 +177,7 @@ const OderScreen = () => {
                       backgroundColor: appColor.primary_dark,
                     }}
                   >
-                    <Text>Track order</Text>
+                    <Text>Comfirm order</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => cancelOrder(item._id)}

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { IP_ADDRESS } from '.';
 
-const API_URL = 'http://192.168.1.14:3000/user/order';
+const API_URL = `http://${IP_ADDRESS}:3000/user/order`;
 
 const getUserOrders=async(accessToken:string)=>{
     try {

@@ -34,6 +34,7 @@ const SignUpScreen = () => {
     try {
       setIsLoading(true);
       const response = await authService.register(newUser);
+      console.log('data nhận được: ',response);
       navigation.navigate("Login");
       setIsLoading(false);
       toast.show("Sign up success", { type: "success", placement: "top" });

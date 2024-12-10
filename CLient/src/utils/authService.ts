@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { User } from '../assets/types/UserType';
+import { IP_ADDRESS } from '.';
 
-const API_URL = 'http://192.168.1.14:3000/api/auth';
+const API_URL = `http://${IP_ADDRESS}:3000/api/auth`;
 
 
 const register = async (user: User) => {

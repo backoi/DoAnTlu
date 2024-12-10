@@ -18,6 +18,12 @@ import Filter from "./Filter.svg";
 import Reload from "./Reload.svg";
 import Box from "./Box.svg";
 import NotFound from "./NotFound.svg";
+import AboutMe from "./AboutMe.svg";
+import Notification from "./Notification.svg";
+import SignOut from "./SignOut.svg";
+import Right from "./Right.svg";
+import Lock from "./Lock.svg";
+import GreenHeart from "./GreenHeart.svg";
 
 
 
@@ -42,4 +48,10 @@ export {
     BigCart,
     Box,
     NotFound,
+    AboutMe,
+    Notification,
+    SignOut,
+    Right,
+    Lock,
+    GreenHeart,
 };

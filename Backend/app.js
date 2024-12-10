@@ -17,6 +17,7 @@ import { paymentRouter } from "./src/route/payment.router.js";
 import { Order } from "./src/models/order.model.js";
 import { orderRouter } from "./src/route/order.router.js";
 import { userRouter } from "./src/route/user.router.js";
+import { Coupon } from "./src/models/coupon.model.js";
 const app = express();
 const port = 3000;
 AdminJS.registerAdapter(AdminJSMongoose);
@@ -55,6 +56,9 @@ const adminJs = new AdminJS({
     },
     {
       resource: Order,
+    },
+    {
+      resource: Coupon,
     },
   ],
   rootPath: "/admin",

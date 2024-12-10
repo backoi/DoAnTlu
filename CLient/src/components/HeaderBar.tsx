@@ -8,14 +8,18 @@ interface Props{
     rightIC?: ReactNode,
     title: string,
     color?:string,
+    back?: boolean,
     onPress?:()=>void,
 }
 const HeaderBarComponent = (props:Props) => {
     const navigation=useNavigation()
-    const {title,rightIC,color,onPress}=props
+    const {title,rightIC,color,back,onPress}=props
   return (
     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-        <TouchableOpacity onPress={onPress?onPress:()=>navigation.goBack()}><Icon name='arrow-left' size={19} color={color??'white'}></Icon></TouchableOpacity>
+       {
+           
+          back? <TouchableOpacity onPress={onPress?onPress:()=>navigation.goBack()}><Icon name='arrow-left' size={19} color={color??'white'}></Icon></TouchableOpacity>:<View></View>
+    }
     
     <Text style={[styles.text,{color:color??'white'}]}>{title}</Text>
     {

@@ -100,6 +100,6 @@ const useCartStore = create<CartState>((set,get) => ({
       }
     })
   },
-  clearCart: () => set({ cartItems: [], totalPrice: 0 }),
+  clearCart: () => set({ cartItems: [], totalPrice: 0,totalQuantity:0 }),
 }))
 export default useCartStore;
