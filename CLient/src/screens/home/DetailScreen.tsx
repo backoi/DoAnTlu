@@ -8,6 +8,8 @@ import { appColor } from '../../constants/appColor';
 import { Rating } from 'react-native-ratings';
 import { productService } from '../../utils/productService';
 import useCartStore from '../../store/cartStore';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../assets/types/NavigationType';
 
 interface Props {
   onPress?:(id:any)=>void
@@ -16,12 +18,14 @@ interface ItemCart{
   id:number,name:string,price:number,stock:number,urlImg:string,quantity:number,unit:string
 }
 //xu ly add cart
-const DetailScreen = ({route,navigation}:any) => {
+const DetailScreen = ({route}:any) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const [product,setProduct]= useState<any>()
   const [quantity,setQuantity]= useState(1)
   const [reviews,setReviews]= useState<any>()
   
-  const {addItem,items,decreaseQuantity,increaseQuantity,totalPrice,clearCart}=useCartStore()
+  const {addItem,cartItems,decreaseQuantity,increaseQuantity,totalPrice,clearCart}=useCartStore()
   
   const getProduct=async (id:any)=>{
     const res= await productService.getProductWithID(id);
@@ -55,7 +59,7 @@ const DetailScreen = ({route,navigation}:any) => {
           <Text style={{fontSize:23,fontWeight:'500',color:'black'}}>{product?.name}</Text>
           <Text style={{color:appColor.text}}>{product?.unit}</Text>
 
-          <TouchableOpacity onPress={()=>{navigation.navigate('Review')}} style={{flexDirection:'row'}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Review',{productId:route?.params.id})}} style={{flexDirection:'row'}}>
             <Text>4.5</Text>
             
 

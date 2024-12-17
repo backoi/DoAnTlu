@@ -11,8 +11,9 @@ const getUserOrders=async(accessToken:string)=>{
             }
         });
         return response.data
-    } catch (error) {
-        
+    } catch (error:any) {
+        console.log("Lỗi bên service get all order ")
+        throw error.response.data;
     }
 }
 const updateStatus=async(orderId:string,accessToken:string)=>{
@@ -29,8 +30,9 @@ const updateStatus=async(orderId:string,accessToken:string)=>{
             }
         );
         return response.data
-    } catch (error) {
-        
+    } catch (error:any) {
+        console.log("Lỗi bên service update status ")
+        throw error.response.data;
     }
 }
 const cancelOrder=async(orderId:string,accessToken:string)=>{
@@ -44,8 +46,9 @@ const cancelOrder=async(orderId:string,accessToken:string)=>{
             }
         );
         return response.data
-    } catch (error) {
-        
+    } catch (error:any) {
+        console.log("Lỗi bên service cancel order")
+        throw error.response.data;
     }
 }
 export const orderService= {

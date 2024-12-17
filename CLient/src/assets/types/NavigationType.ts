@@ -13,7 +13,7 @@ export type RootStackParamList = {
     Product:undefined,
     Search?:{text?:any,category?:any},
     Category:undefined,
-    Review:undefined,
+    Review:{productId:any,},
     WriteReview:undefined,
     Payment:{cartItems:any,totalAmount:any,totalItems:any,deliveryAddress:any,coupon:any},
     AddAddress:undefined,
