@@ -19,39 +19,22 @@ import Reload from "./Reload.svg";
 import Box from "./Box.svg";
 import NotFound from "./NotFound.svg";
 import AboutMe from "./AboutMe.svg";
+import AboutMeGreen from "./AboutMeGreen.svg";
 import Notification from "./Notification.svg";
 import SignOut from "./SignOut.svg";
 import Right from "./Right.svg";
 import Lock from "./Lock.svg";
 import GreenHeart from "./GreenHeart.svg";
-
-
-
+import Email from "./Email.svg";
+import Phone from "./Phone.svg";
+import Mark from "./Mark.svg";
 
 export {
-    Vegetables,
-    Fruits,
-    Grocery,
-    Beverages,
-    Google,
-    Household,
-    Cart,Heart,
-    Minus,
-    Plus,
-    Back,
-    Search,
-    HeartFill,
-    Trash,
-    Add,
-    Filter,
-    Reload,
-    BigCart,
-    Box,
-    NotFound,
-    AboutMe,
-    Notification,
-    SignOut,
-    Right,
-    Lock,
-    GreenHeart,
+    Vegetables,Fruits,Grocery,Beverages,
+    Google,Household,Cart,Heart,Minus,Plus,
+    Back,Search,HeartFill,Trash,Add,
+    Filter,Reload,BigCart,Box,NotFound,
+    AboutMe,Notification,SignOut,Right,
+    Lock,GreenHeart,Email,AboutMeGreen,
+    Phone,Mark,
 };

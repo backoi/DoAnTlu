@@ -33,13 +33,15 @@ import useAuthStore from "../../store/authStore";
 import { categoryService } from "../../utils/categoryService";
 import { productService } from "../../utils/productService";
 import useCartStore from "../../store/cartStore";
+import * as Notifications from "expo-notifications";
+import axios from "axios";
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
   const [features, setFeatures] = useState<any | undefined>();
   const {cartItems,decreaseQuantity,increaseQuantity,totalPrice,addItem}=useCartStore()
-  const {user}= useAuthStore()
+  const {user,accessToken}= useAuthStore()
   //console.log("gia tri user trong store",user)
   const { getItem } = useAsyncStorage("authToken");
   // const getToken = async () => {
@@ -63,7 +65,20 @@ const HomeScreen = () => {
 
     setFeatures(res?.data.products);
   };
+
+   const registerForPushNotificationsAsync = async () => {
+    const prjId="61d8e604-72a4-4074-8d9d-8dccaa86942b"
+      const token = (await Notifications.getExpoPushTokenAsync({projectId:prjId})).data;
+      console.log('mã token thiết bị: ',token);
+
+      const res=await axios.post("http://192.168.1.10:3000/device/register", {
+        token,
+      },{headers:{Authorization:accessToken}});
+      console.log('res',res.data)
+      
+   }
   useEffect(() => {
+    registerForPushNotificationsAsync();
     getCategories();
     getFeatureProducts();
   }, []);

@@ -19,4 +19,5 @@ export type RootStackParamList = {
     AddAddress:undefined,
     OrderSuccess:undefined,
     DetailOrder:{item:any},
+    Infor:undefined,
   };

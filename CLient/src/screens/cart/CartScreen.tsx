@@ -21,7 +21,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BigCart, Cart } from "../../assets/svg";
+import { BigCart, Cart, Mark } from "../../assets/svg";
 import { appColor } from "../../constants/appColor";
 import axios from "axios";
 import { paymentService } from "../../utils/paymentService";
@@ -246,7 +246,7 @@ const CartScreen = () => {
                 >
                   <Text>Name: {item.name}</Text>
                   <Text>Address: {`${item.address}, ${item.city} `}
-                  <MaterialCommunityIcons name="home"></MaterialCommunityIcons></Text>
+                  <Mark/></Text>
                 </TouchableOpacity>
               )}
 

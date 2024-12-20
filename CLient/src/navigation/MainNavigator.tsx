@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AddAddressScreen, CategoryScreen, DetailScreen, ForgetPassScreen, LoginScreen, OrderSuccessScreen, OnBoardingScreen, OTPScreen, PaymentMethodScreen, ResetPassScreen, ReviewScreen, SearchScreen, SignUpScreen, WelcomeScreen, WriteReviewScreen, DetailOrderScreen } from '../screens';
+import { AddAddressScreen, CategoryScreen, DetailScreen, ForgetPassScreen, LoginScreen, OrderSuccessScreen, OnBoardingScreen, OTPScreen, PaymentMethodScreen, ResetPassScreen, ReviewScreen, SearchScreen, SignUpScreen, WelcomeScreen, WriteReviewScreen, DetailOrderScreen, InforScreen } from '../screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../assets/types/NavigationType';
 import TabNavigator from './TabNavigator';
@@ -23,6 +23,7 @@ const MainNavigator = () => {
         <Stack.Screen name="AddAddress" component={AddAddressScreen} />
         <Stack.Screen name="OrderSuccess" component={OrderSuccessScreen} />
         <Stack.Screen name="DetailOrder" component={DetailOrderScreen} />
+        <Stack.Screen name="Infor" component={InforScreen} />
 
       </Stack.Navigator>
   )

@@ -18,6 +18,7 @@ import WriteReviewScreen from "./home/WriteReviewScreen";
 import DetailOrderScreen from "./oder/DetailOrderScreen";
 import OrderScreen from "./oder/OrderScreen";
 import AddAddressScreen from "./profile/AddAddressScreen";
+import InforScreen from "./profile/InforScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SplashScreen from "./SplashScreen";
 
@@ -43,7 +44,8 @@ export{
 AddAddressScreen,
 OrderSuccessScreen,
 OrderScreen,
-DetailOrderScreen
+DetailOrderScreen,
+InforScreen,
 
 
 }

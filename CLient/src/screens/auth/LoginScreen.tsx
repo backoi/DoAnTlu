@@ -53,7 +53,6 @@ const LoginScreen = () => {
       //setDeliveryAddress(response)
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
-      
     } catch (error: any) {
       Alert.alert("Login Failed", error.message || "Invalid credentials !");
     }

@@ -23,7 +23,7 @@ const InputComponent = (props:Props) => {
         password?<MaterialCommunityIcons name="lock-outline" size={23} color={appColor.text} />:leftIC
       }
       
-      <TextInput onChangeText={text=>onChangeText(text)} onBlur={onBlur} value={value} secureTextEntry={password&&isShowedPass} placeholder={placeholder} style={styles.textInput}></TextInput>
+      <TextInput onChangeText={onChangeText} onBlur={onBlur} value={value} secureTextEntry={password&&isShowedPass} placeholder={placeholder} style={styles.textInput}></TextInput>
       {
         password?<TouchableOpacity onPress={()=>setIsShowedPass(!isShowedPass)}><MaterialCommunityIcons name={isShowedPass?'eye-off-outline':'eye-outline'} size={23} color={appColor.text} /></TouchableOpacity>:null
       }
