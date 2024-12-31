@@ -1,22 +1,25 @@
 import { Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { ButtonComponent, HeaderBar, InputComponent, SpaceComponent, TextComponent } from '../../components'
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { ButtonComponent, HeaderBar, InputComponent, Loading, SpaceComponent, TextComponent } from '../../components'
 import { appColor } from '../../constants/appColor';
 import {  useToast } from 'react-native-toast-notifications';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { authService } from '../../utils/authService';
+import { RootStackParamList } from '../../assets/types/NavigationType';
 const ResetPassScreen = ({route}:any) => {
-  //const {email}=route.params
+  const navigation=useNavigation<NavigationProp<RootStackParamList>>()
+  const [loading,setLoading]=useState(false)
+  console.log('route',route)
+  const email=route.params
   const toast=useToast()
-  const navigation=useNavigation()
   const [errorMessage,setErrorMessage]= useState('')
   const [password,setPassword]= useState('')
   const [confirmPassword,setConfirmPassword]= useState('')
   const handleChangePass=async()=>{
-    //await authService.changePass(email,password)
+    const res=await authService.changePass(email,password)
+    console.log('res',res?.data)
     toast.show("Changed password!!",{type:'success',placement:'top'})
-    navigation.navigate('Login' as never)
+    navigation.navigate('Login')
   }
   const validator =(key: string)=>{
     let error=""
@@ -56,6 +59,7 @@ const ResetPassScreen = ({route}:any) => {
       <SpaceComponent height={20}/>
       <Text>{errorMessage??errorMessage}</Text>
       <ButtonComponent onPress={()=>handleChangePass()} title='Change password'/>
+        <Loading visiable={loading}></Loading>
     </View>
   )
 }

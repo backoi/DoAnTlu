@@ -9,7 +9,7 @@ import Loading from "./Loading";
 import Quantity from "./Quantity";
 import SpaceComponent from "./SpaceComponent";
 import TextComponent from "./TextComponent";
-
+import ModalComponent from "./ModalComponent";
 export {
     ButtonComponent,
     InputComponent,
@@ -22,5 +22,6 @@ export {
     ListProduct,
     Loading,
     ItemProduct,
+    ModalComponent,
     //swipable product item //react-native-image-slider-box
 }

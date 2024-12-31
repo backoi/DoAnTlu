@@ -23,7 +23,7 @@ const AddAddressScreen = () => {
    const [name,setName]=useState('')
    const [phone,setPhone]=useState('')
   const [address,setAddress]=useState('')
-   const [city,setCity]=useState('')
+   const [district,setDistrict]=useState('')
    const {addAddress}= useAuthStore()
    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   // const handleRegionChange = (newRegion:any) => {
@@ -48,7 +48,7 @@ const AddAddressScreen = () => {
         name,
         phone,
         address,
-        city
+        district
     }
     await addAddress(newAddress)
     navigation.goBack()
@@ -75,9 +75,9 @@ const AddAddressScreen = () => {
         
         <TextInput
           style={styles.input}
-          value={city}
-          onChangeText={setCity}
-          placeholder="City"
+          value={district}
+          onChangeText={setDistrict}
+          placeholder="District"
         />
         <View style={styles.saveSwitch}>
         <Switch style={{}}>
@@ -98,11 +98,6 @@ const styles = StyleSheet.create({
   form: { padding: 20, backgroundColor: '#fff' },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 },
   saveSwitch:{flexDirection:'row',alignItems:'center'}
-  
- 
-  
-  
-  
 });
 
 export default AddAddressScreen;

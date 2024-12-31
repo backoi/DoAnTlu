@@ -18,26 +18,14 @@ import { Order } from "./src/models/order.model.js";
 import { orderRouter } from "./src/route/order.router.js";
 import { userRouter } from "./src/route/user.router.js";
 import { Coupon } from "./src/models/coupon.model.js";
-import {Expo} from "expo-server-sdk"
-import { after } from "node:test";
+import { Expo } from "expo-server-sdk";
 import { Device } from "./src/models/device.model.js";
-import nodemailer from 'nodemailer'
 import { deviceRouter } from "./src/route/device.router.js";
+import analyticsRouter from "./src/route/analytic.router.js";
 
-const expo= new Expo();
+const expo = new Expo();
 const app = express();
 const port = 3000;
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS_EMAIL,
-  },
-});
-
 
 
 AdminJS.registerAdapter(AdminJSMongoose);
@@ -52,8 +40,10 @@ const start = async () => {
 start();
 const adminJs = new AdminJS({
   //databases: [],
-  resources: [{
-      resource: User,options: {
+  resources: [
+    {
+      resource: User,
+      options: {
         // navigation: {
         //   name: 'EcoMarket', // Thay "Test" thành tên bạn muốn
         //    // Tùy chọn: thêm icon nếu muốn
@@ -84,52 +74,58 @@ const adminJs = new AdminJS({
       resource: Coupon,
 
       options: {
-        actions:{
-          new:{
+        actions: {
+          new: {
             after: async (request, response, context) => {
-              const {record,h,resource} = context //currentAdmin nếu có đặt mật khẩu
+              const { record, h, resource } = context; //currentAdmin nếu có đặt mật khẩu
               const coupon = record.params;
-              if(record.isValid()){
-              //console.log('thanh cong:',coupon)
-              console.log('thanh cong to jsson:',record.toJSON().params)
+              const userId = coupon.user;
+              console.log("coupon:", coupon);
+              let devices = [];
+              if (userId) {
+                devices = await Device.find({ userId });
+              } else {
+                devices = await Device.find();
               }
-              else{
-                console.log('that bai:')
-              }
-        //        // Lấy tất cả device 
-               const devices = await Device.find();
-                //console.log('devices:',devices)
-        //       // Tạo messages cho Expo
               const pushTokens = devices.map((device) => device.token);
-              // console.log('pushTokens:',pushTokens)
-              const messages = pushTokens.map((pushToken) => ({
-                to: pushToken,
-                sound: 'default',
-                title: 'New Coupon',
-                body: 'A new coupon has been created',
-              }));
-              //console.log('messages:',messages)
-         // gui thong bao
-         let chunks = expo.chunkPushNotifications(messages);
-         for (let chunk of chunks) {
-           try {
-             await expo.sendPushNotificationsAsync(chunk);
-          } catch (error) {
-            console.error('Error sending notifications:', error);
-          }
-         }
-              return  {
-                redirectUrl: h.resourceUrl({ resourceId: resource._decorated?.id() || resource.id() }),
-                record:record.toJSON(),
-                notice: {
-                  message: 'successfullyCreated',
-                  type: 'success',
-                },
+
+              if (record.isValid()) {
+                //tạo thông báo
+                const messages = pushTokens.map((pushToken) => ({
+                  to: pushToken,
+                  sound: "default",
+                  title: "New Coupon",
+                  body: `You have a new coupon: ${coupon.code} with discount ${coupon.discountPercentage}%`,
+                }));
+
+                //gui thong bao cho tat ca cac thiet bi
+                let chunks = expo.chunkPushNotifications(messages);
+                for (let chunk of chunks) {
+                  try {
+                    await expo.sendPushNotificationsAsync(chunk);
+                  } catch (error) {
+                    console.error("Error sending notifications:", error);
+                  }
+                }
+                console.log("Send to all customers successfully");
+              } else {
+                console.log("Falled validation:", record.errors);
               }
+
+              return {
+                redirectUrl: h.resourceUrl({
+                  resourceId: resource._decorated?.id() || resource.id(),
+                }),
+                record: record.toJSON(),
+                notice: {
+                  message: "successfullyCreated",
+                  type: "success",
+                },
+              };
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
   ],
   rootPath: "/admin",
@@ -149,8 +145,9 @@ app.use("/api/product", productRouter);
 app.use("/api/review", reviewRouter);
 app.use("/user/order", orderRouter);
 app.use("/user/profile", userRouter);
-app.use("/payment/", paymentRouter);
-app.use("/device/", deviceRouter);
+app.use("/payment", paymentRouter);
+app.use("/device", deviceRouter);
+app.use("/analytic", analyticsRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to AdminJS with Express!");

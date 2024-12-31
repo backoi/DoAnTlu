@@ -7,7 +7,7 @@ const deviceRouter = express.Router();
 deviceRouter.post("/register",authenticateUser, async (req, res) => {
     const {userId} = req.user
   const { token } = req.body;
-
+  //console.log("register token", token);
   if (!Expo.isExpoPushToken(token)) {
     return res.status(400).json({ message: "Invalid Expo push token" });
   }
@@ -20,7 +20,21 @@ deviceRouter.post("/register",authenticateUser, async (req, res) => {
       await device.save();
     }
 
-    res.status(200).json({ message: "Token registered successfully" ,device});
+    res.status(200).json({ message: "Token registered successfully" ,data:{device}});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+//xóa
+
+deviceRouter.delete("/delete",authenticateUser, async (req, res) => {
+    const {userId} = req.user
+  console.log("delete token", userId);
+
+  try {
+    await Device.findOneAndDelete({ userId });
+
+    res.status(200).json({ message: "Token deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

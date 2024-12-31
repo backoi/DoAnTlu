@@ -1,14 +1,12 @@
-import axios from 'axios';
 import { User } from '../assets/types/UserType';
-import { IP_ADDRESS } from '.';
 
-const API_URL = `http://${IP_ADDRESS}:3000/api/auth`;
+import useAxiosService from "./axiosService";
 
-
+const axios=useAxiosService()
 const register = async (user: User) => {
     try {
         //console.log(user)
-        const response = await axios.post(`${API_URL}/register`, user);
+        const response = await axios.post(`api/auth/register`, user);
         return response.data;
     } catch (error:any) {
         throw error.response.data
@@ -18,7 +16,7 @@ const register = async (user: User) => {
 const login = async (email: string, password: string) => {
     try {
         //console.log(email)
-        const response = await axios.post(`${API_URL}/login`, { email, password });
+        const response = await axios.post(`api/auth/login`, { email, password });
         return response.data;
     } catch (error:any)
     {
@@ -29,7 +27,7 @@ const login = async (email: string, password: string) => {
 const forgotPass = async (email: string) => {
     try {
         //console.log(email)
-        const response = await axios.post(`${API_URL}/forgot-password`, { email});
+        const response = await axios.post(`api/auth/forgot-password`, { email});
         return response.data;
     } catch (error:any)
     {
@@ -41,8 +39,8 @@ const forgotPass = async (email: string) => {
 const changePass = async (email: string,password:string) => {
     try {
         //console.log(email)
-        const response = await axios.post(`${API_URL}/change-password`, { email,password});
-        return response.data;
+        const response = await axios.post(`api/auth/change-password`, { email,password});
+        return response;
     } catch (error:any)
     {
         console.log("Lỗi bên service change pass")

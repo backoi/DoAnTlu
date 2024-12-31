@@ -15,7 +15,7 @@ const HeaderBarComponent = (props:Props) => {
     const navigation=useNavigation()
     const {title,rightIC,color,back,onPress}=props
   return (
-    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',margin:10}}>
        {
            
           back? <TouchableOpacity onPress={onPress?onPress:()=>navigation.goBack()}><Icon name='arrow-left' size={19} color={color??'white'}></Icon></TouchableOpacity>:<View></View>
@@ -31,8 +31,8 @@ const HeaderBarComponent = (props:Props) => {
 };
 const styles = StyleSheet.create({
     text:{
-        fontSize:appSize.para,
-        
+        fontSize:20,
+        fontWeight:'bold'
     }
 })
 export default HeaderBarComponent

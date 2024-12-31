@@ -17,8 +17,7 @@ const MethodType={
 const PaymentMethodScreen = ({route}:any,props:Props,) => {
   const totalAmount =parseFloat(route.params.totalAmount.toFixed(2))
   const coupon =route.params.coupon
-  console.log('tổng tiền:',totalAmount)
-  console.log('coupon:',coupon)
+  
   const deliveryAddress=route.params.deliveryAddress
   //const {deliveryAddress}=useAuthStore()
   //const address=(route.params.deliveryAddress=='Home')?:'';
@@ -27,7 +26,11 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [method, setMethod] = useState<string>();
   const items=route.params.cartItems
-  console.log('danh sach san pham:',items)
+  useEffect(() => {
+    console.log('danh sach san pham:',items)
+    console.log('tổng tiền:',totalAmount)
+    console.log('coupon:',coupon)
+  },[])
   const createInit = async () => {
     const res = await paymentService.createPayment(items,accessToken);
     const { clientSecret } = res.data;

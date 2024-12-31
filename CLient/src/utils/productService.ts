@@ -1,11 +1,10 @@
-import axios from 'axios';
-import { IP_ADDRESS } from '.';
+import useAxiosService from "./axiosService";
 
-const API_URL = `http://${IP_ADDRESS}:3000/api/product`;
+const axios=useAxiosService()
 
 const getAll=async()=>{
     try {
-        const response = await axios.get(`${API_URL}/`);
+        const response = await axios.get(`api/product/`);
         return response.data
     } catch (error:any) {
         console.log("Lỗi bên service get all product")
@@ -14,7 +13,7 @@ const getAll=async()=>{
 }
 const getProductWithID= async(id:any)=>{
     try {
-        const response = await axios.get(`${API_URL}/${id}`);
+        const response = await axios.get(`api/product/${id}`);
         return response.data
     } catch (error:any) {
         console.log("Lỗi bên service get product with id")
@@ -24,7 +23,7 @@ const getProductWithID= async(id:any)=>{
 
 const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,minRate?:number)=>{
     try {
-        const response = await axios.get(`${API_URL}/`,{
+        const response = await axios.get(`api/product/`,{
             params:{
                 search,
                 category,
@@ -39,19 +38,19 @@ const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,
         throw error.response.data;
     }
 }
-const getFeatures= async()=>{
+const getBestSeller= async()=>{
     try {
-        const response = await axios.get(`${API_URL}/features`);
+        const response = await axios.get(`analytic/top-selling-products`);
         //console.log('data',response.data)
         return response.data
     } catch (error:any) {
-        console.log("Lỗi bên service get features")
+        console.log("Lỗi bên service get best seller")
         throw error.response.data;
     }
 }
 export const productService= {
     getAll,
     getProducts,
-    getFeatures,
+    getBestSeller,
     getProductWithID,
 }

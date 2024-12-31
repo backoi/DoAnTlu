@@ -1,22 +1,47 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CartScreen, DetailScreen, HomeScreen, OrderScreen, ProfileScreen } from '../screens';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 const Tab = createBottomTabNavigator();
+
 const TabNavigator = () => {
   return (
-    
-      <Tab.Navigator screenOptions={{headerShown:false}}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Cart" component={CartScreen} />
-        <Tab.Screen name="Order" component={OrderScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        
-      </Tab.Navigator>
-    
-  )
-}
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
 
-export default TabNavigator
+          switch (route.name) {
+            case 'Home':
+              iconName = 'home';
+              break;
+            case 'Cart':
+              iconName = 'shopping-cart';
+              break;
+            case 'Order':
+              iconName = 'receipt';
+              break;
+            case 'Profile':
+              iconName = 'person';
+              break;
+            default:
+              iconName = 'circle'; // Default icon
+          }
+
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#6200EE', // Màu icon khi active
+        tabBarInactiveTintColor: 'gray', // Màu icon khi không active
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Cart" component={CartScreen} />
+      <Tab.Screen name="Order" component={OrderScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+};
+
+export default TabNavigator;

@@ -27,6 +27,7 @@ import axios from "axios";
 import { paymentService } from "../../utils/paymentService";
 
 const CartScreen = () => {
+  //useCartStore.getState().loadCartFromStorage()
   const { logout,user,deliveryAddress ,accessToken} = useAuthStore();
   const {
     cartItems,
@@ -37,7 +38,7 @@ const CartScreen = () => {
     clearCart,
   } = useCartStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const snapPoints = useMemo(() => ['25%', '40%',], []);
+  const snapPoints = useMemo(() => ['25%', '40%','50%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [coupon,setCoupon] = useState('')
   const [discountPerc,setDiscountPerc] = useState(0)
@@ -45,13 +46,13 @@ const CartScreen = () => {
   const [listAddress,setListAddress]=useState<any>([])
   //const [totalAmount,setTotalAmount]=useState(totalPrice)
   
-  const listItemsCart=cartItems.map((item)=>({product:item.id,quantityPurchased:item.quantity,amountPrice:(item.price*item.quantity)}))
+  const listItemsCart=cartItems.map((item)=>({productId:item.id,quantityPurchased:item.quantity,amountPrice:(item.price*item.quantity)}))
   const handleOder = () => {
     //nhu nay hop ly k, bat nguoi dung nhap lai
     setCoupon('')
     setDiscountPerc(0)
     if(!address){
-      Alert.alert('Vui lòng chọn đia chỉ giao hàng!')
+      Alert.alert('Order failed','Please choose delivery address!')
       return;
     }
     navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:address,coupon});
@@ -63,12 +64,12 @@ const CartScreen = () => {
         const percentage=res.data.discountPercentage
         setDiscountPerc(percentage)
         //setTotalAmount((amount)=>amount-amount*percentage/100)
-        Alert.alert('Mã khuyến mãi hop lệ!')
+        Alert.alert('Notification','Coupon is valid!')
         console.log(totalPrice)
       }
       console.log('res',res.data);
     } catch (error) {
-      console.log('Loi khi validate coupon:', error);
+      console.log('Error:', error);
     }
   }
   const handleCancelCoupon =()=>{
@@ -76,7 +77,7 @@ const CartScreen = () => {
     setDiscountPerc(0),
     //setTotalAmount(totalPrice),
     
-    Alert.alert('Da huy ma khuyen mai!')
+    Alert.alert('Notification','Cancelled coupon!')
   }
 
   const handleOpenChangeLocation = () => {
@@ -98,7 +99,10 @@ const CartScreen = () => {
   useEffect(() => {
     fetchAddress();
   },[user.address]);
-
+  useEffect(() => {
+    useCartStore.getState().loadCartFromStorage()
+  }
+  ,[]);
   // useEffect(() => {
   //   // Lắng nghe sự kiện focus của màn hình
   //   const unsubscribe = navigation.addListener('focus', () => {
@@ -245,7 +249,7 @@ const CartScreen = () => {
                   onPress={()=>handleChangeLocation(item)}
                 >
                   <Text>Name: {item.name}</Text>
-                  <Text>Address: {`${item.address}, ${item.city} `}
+                  <Text>Address: {`${item.address}, ${item.district} `}
                   <Mark/></Text>
                 </TouchableOpacity>
               )}

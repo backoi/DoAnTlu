@@ -5,6 +5,7 @@ import { ToastProvider } from 'react-native-toast-notifications'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import * as Notifications from "expo-notifications";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { SplashScreen } from "./src/screens";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -31,8 +32,16 @@ const registerForPushNotificationsAsync = async () => {
   }
 }
 export default function App() {
+  const [isSplash, setIsSplash] = useState(true);
 useEffect(() => {
   registerForPushNotificationsAsync()
+  // Hiển thị SplashScreen trong 3 giây
+  const timer = setTimeout(() => {
+    setIsSplash(false);
+  }, 2000);
+
+  // Dọn dẹp timer khi component unmount
+  return () => clearTimeout(timer);
 }, []);
   return (
     <StripeProvider  urlScheme="your-url-scheme"
@@ -40,9 +49,14 @@ useEffect(() => {
     publishableKey="pk_test_51QRxCpFWO9StdPGrHUJoiIrseSZeNsHxfzILLiGXPZQ1F05bm8Kvz5NzhBTtKvH83BRk37t3GhebOsVddX4jWkvq002GrA5Blx">
         <GestureHandlerRootView>
     <ToastProvider>
-      <NavigationContainer>
-          <AppNavigator/>
-      </NavigationContainer>
+    {isSplash ? (
+            <SplashScreen />
+          ) : (
+            <NavigationContainer>
+              <AppNavigator />
+            </NavigationContainer>
+          )}
+      
     </ToastProvider>
     </GestureHandlerRootView>
       </StripeProvider>

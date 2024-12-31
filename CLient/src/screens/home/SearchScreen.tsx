@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ButtonComponent, CardProduct, InputComponent } from "../../components";
+import { ButtonComponent, CardProduct, InputComponent, SpaceComponent } from "../../components";
 import { Back, Filter, Heart, NotFound, Reload, Search } from "../../assets/svg";
 import { productService } from "../../utils/productService";
 import { useNavigation } from "@react-navigation/native";
@@ -128,18 +128,19 @@ const SearchScreen = ({ route }: any, props: Props) => {
       </View>
       <View>
         
-        <FlatList
+        <FlatList ListFooterComponent={<SpaceComponent height={100}></SpaceComponent>}
         style={{}}
           numColumns={2}
           data={data}
           renderItem={({ item }) => <CardProduct item={item}></CardProduct>}
           ListEmptyComponent={<View style={{justifyContent:'center',alignItems:'center',marginTop:50}}>
             <NotFound height={70} width={70}></NotFound>
-            <Text style={{fontSize:23}}>Not found, please change search</Text>
+            <Text style={{fontSize:23}}>Not found product, please change search</Text>
           </View>}
         ></FlatList>
+        
       </View>
-
+      
       <BottomSheet
         style={{}}
         ref={bottomSheetRef}

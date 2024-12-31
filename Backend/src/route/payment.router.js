@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { Order } from "../models/order.model.js";
 import { authenticateUser } from "../middleware/authenticateUser.js";
 import { Coupon } from "../models/coupon.model.js";
+import { Product } from "../models/product.model.js";
 
 const stripe = new Stripe(
   "sk_test_51QRxCpFWO9StdPGrxgRdI0gO4CPgWItIzjZs6I5GBdW25seLPMBlc4lM743kT9fw2jyOMbWvovMsdTfieBOcfMmi00pEdYymxU"
@@ -53,9 +54,30 @@ paymentRouter.post(
 
 // Cập nhật trạng thái đơn hàng sau khi thanh toán
 paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
+  //ham tru so luong trong kho
+  const userId = req.user.userId; //lay tu token
+  const { orderId, paymentMethod, items, deliveryAddress,coupon } = req.body;
+  const updateProductInventory = async (items) => {
+    for (const item of items) {
+      const product = await Product.findById(item.productId);
+      if (!product) {
+        return res
+          .status(404)
+          .json({ message: `Product with ID ${item.productId} not found` });
+      }
+      else if (product.stock < item.quantityPurchased) {
+        return res
+          .status(400)
+          .json({
+            message: `Product ${product.name} does not have enough stock`,
+          });
+      }
+
+      product.stock -= item.quantityPurchased; // Trừ số lượng sản phẩm
+      await product.save();
+    }
+  }
   try {
-    const userId = req.user.userId; //lay tu token
-    const { orderId, paymentMethod, items, deliveryAddress,coupon } = req.body;
     if(coupon) {
       const couponCode = coupon;
       //console.log('couponCode', couponCode)
@@ -89,11 +111,13 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
       });
     }
     //thanh toan card thì sẽ paid
+    
     else if (paymentMethod == "Stripe Card") {
+      console.log("totalAmount", totalAmount.tofixed(4))
       const order = new Order({
         userId,
         items,
-        totalAmount,
+        totalAmount:totalAmount.toFixed(2),
         totalItems,
         deliveryAddress,
         paymentStatus: "Paid",
@@ -110,13 +134,14 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
       const order = new Order({
         userId,
         items,
-        totalAmount,
+        totalAmount:totalAmount.toFixed(2),
         totalItems,
         deliveryAddress,
         paymentStatus: "Pending",
         paymentMethod: "Cash",
       });
       await order.save();
+      await updateProductInventory(items);
       res.json({
         message: "Order updated successfully cash,pending",
         data: { OderId: order.id },
@@ -131,11 +156,11 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
 paymentRouter.post('/validate-coupon',authenticateUser,async (req, res) => {
   try {
     const { couponCode } = req.body;
-    console.log('nhan dc code',couponCode)
-    console.log('id',req.user)
+    //console.log('nhan dc code',couponCode)
+    //console.log('id',req.user)
 
     // Kiểm tra mã giảm giá
-    const coupon = await Coupon.findOne({ code: couponCode, user: req.user.userId, isUsed: false });
+    const coupon = await Coupon.findOne({ code: couponCode, userId: req.user.userId, isUsed: false });
 
     if (!coupon) {
      return res.json({ data:{isValid: false}, message: 'Invalid or expired coupon code' });

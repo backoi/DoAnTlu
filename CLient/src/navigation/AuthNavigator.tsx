@@ -18,7 +18,7 @@ const AuthNavigator = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Forget" component={ForgetPassScreen} />
-        <Stack.Screen name="Otp" component={OTPScreen} />
+        <Stack.Screen name="OTP" component={OTPScreen} />
         <Stack.Screen name="ResetPass" component={ResetPassScreen} />    
        
         

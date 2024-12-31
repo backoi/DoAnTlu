@@ -1,33 +1,22 @@
-import axios from 'axios';
-import { IP_ADDRESS } from '.';
 
-const API_URL = `http://${IP_ADDRESS}:3000/user/order`;
+import useAxiosService from "./axiosService";
 
-const getUserOrders=async(accessToken:string)=>{
+const axios=useAxiosService()
+const getUserOrders=async()=>{
     try {
-        const response = await axios.get(`${API_URL}/`,{
-            headers:{
-                Authorization:accessToken,
-            }
-        });
+        const response = await axios.get(`user/order/`);
         return response.data
     } catch (error:any) {
         console.log("Lỗi bên service get all order ")
         throw error.response.data;
     }
 }
-const updateStatus=async(orderId:string,accessToken:string)=>{
+const updateStatus=async(orderId:string)=>{
     try {
-        const response = await axios.post(`${API_URL}/changeStatus`,{
+        const response = await axios.post(`user/order/changeStatus`,{
            
                 orderId}
             ,
-            {
-
-                headers:{
-                    Authorization:accessToken,
-                }
-            }
         );
         return response.data
     } catch (error:any) {
@@ -37,7 +26,7 @@ const updateStatus=async(orderId:string,accessToken:string)=>{
 }
 const cancelOrder=async(orderId:string,accessToken:string)=>{
     try {
-        const response = await axios.post(`${API_URL}/cancelOrder`,
+        const response = await axios.post(`user/order/cancelOrder`,
             {orderId},{
 
                 headers:{

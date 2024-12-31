@@ -1,28 +1,21 @@
-import axios from 'axios';
-import { IP_ADDRESS } from '.';
+import useAxiosService from "./axiosService";
 
-const API_URL = `http://${IP_ADDRESS}:3000/api/review`;
-
+const axios=useAxiosService()
 const getReviewById=async(productId:string)=>{
     try {
-        const response = await axios.get(`${API_URL}/${productId}`);
+        const response = await axios.get(`api/review/${productId}`);
         return response.data
     } catch (error:any) {
         console.log("Lỗi bên service review id")
         throw error.response.data;
     }
 }
-const createReview=async(productId:string,rating:number,comment:string,accessToken:string)=>{
+const createReview=async(productId:string,rating:number,comment:string)=>{
     try {
-        const response = await axios.post(`${API_URL}/${productId}/reviews`,{
+        const response = await axios.post(`api/review/${productId}/reviews`,{
                 rating,
                 comment
             },
-            {
-                headers:{
-                    Authorization:accessToken,
-                }
-            }
         );
         return response.data
     } catch (error:any) {

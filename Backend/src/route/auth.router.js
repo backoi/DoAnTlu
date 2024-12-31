@@ -7,18 +7,18 @@ import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
 import { Coupon } from '../models/coupon.model.js';
 import crypto from 'crypto';
+import "dotenv/config";
+
 const authRouter = express.Router();
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // true for port 465, false for other ports
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS_EMAIL,
+    user: process.env.SMTP_EMAIL,
+    pass: process.env.SMTP_PASS_EMAIL,
   },
 });
-
-
 //dang ki
 authRouter.post('/register', async (req, res) => {
   try {
@@ -32,7 +32,7 @@ authRouter.post('/register', async (req, res) => {
     else{
         const hashPass= await bcrypt.hash(password,10)
         const newUser= new User({username,email,password:hashPass})
-        console.log(newUser)
+        //console.log(newUser)
         await newUser.save()
 
         //tao ma giam gia
@@ -66,7 +66,7 @@ authRouter.post('/login',async(req,res)=>{
         }
         else{
           const token = jwt.sign({ userId: existedUsers._id },process.env.SECRET_KEY,{expiresIn:'1d'});//hoặc dùng process.env.JWT_SECRET
-          res.status(200).json({message:'Login success',data:{username:existedUsers.username,email,address:existedUsers.address, accessToken:token} });
+          res.status(200).json({message:'Login success',data:{username:existedUsers.username,email,phone:existedUsers.phone,address:existedUsers.address, accessToken:token} });
         }
       } catch (error) {
         res.status(400).json({ error: error.message });
@@ -80,17 +80,17 @@ authRouter.post('/forgot-password',async(req,res)=>{
       const { email } = req.body;
       const user = await User.findOne({ email })
       if(!user){
-        res.status(404).json({message:'khong ton tai tai khoan nay'});
+        res.status(404).json({message:'Email not exists!'});
       }
       else{
         await transporter.sendMail({
-        from: `"Le Bac 👻" <${process.env.EMAIL}>`, // sender address
+        from: `"Le Bac 👻" <${process.env.EMAIL}>`, // sender address 
         to: email, // list of receivers
         subject: "Verify code ✔", // Subject line
         text: "This is verify code to reset password!!", // plain text body
         html: `<b>Verify code: ${randomCode} </b>`, // html body
       })
-      res.status(200).json({message:'send success',data:{code:randomCode}});
+      res.status(200).json({message:'Send success!',data:{code:randomCode}});
     };
     } catch (error) {
       res.status(405).json({ error:error.message });
@@ -100,14 +100,17 @@ authRouter.post('/forgot-password',async(req,res)=>{
 
 authRouter.post('/change-password',async(req,res)=>{
   const {email,password}=req.body
+  //console.log('data received',email,password)
   //newpass nữa
   try {
     const user = await User.findOne({ email })
+    //console.log('user',user)
     const hashPass= await bcrypt.hash(password,10)
     const update = await User.findOneAndUpdate(user._id,{
       password : hashPass
   })
-      res.status(200).json({message:'update success',data:{userId:user._id}});
+
+    res.status(200).json({message:'Update success!'});
       
     } catch (error) {
       res.status(400).json({ error: error.message });

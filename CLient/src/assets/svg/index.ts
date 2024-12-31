@@ -28,6 +28,8 @@ import GreenHeart from "./GreenHeart.svg";
 import Email from "./Email.svg";
 import Phone from "./Phone.svg";
 import Mark from "./Mark.svg";
+import Coupon from "./Coupon.svg";
+import Progress from "./Progress.svg";
 
 export {
     Vegetables,Fruits,Grocery,Beverages,
@@ -36,5 +38,5 @@ export {
     Filter,Reload,BigCart,Box,NotFound,
     AboutMe,Notification,SignOut,Right,
     Lock,GreenHeart,Email,AboutMeGreen,
-    Phone,Mark,
+    Phone,Mark,Coupon,Progress
 };

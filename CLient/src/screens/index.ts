@@ -15,37 +15,28 @@ import HomeScreen from "./home/HomeScreen";
 import ReviewScreen from "./home/ReviewScreen";
 import SearchScreen from "./home/SearchScreen";
 import WriteReviewScreen from "./home/WriteReviewScreen";
-import DetailOrderScreen from "./oder/DetailOrderScreen";
-import OrderScreen from "./oder/OrderScreen";
+import DetailOrderScreen from "./order/DetailOrderScreen";
+import OrderScreen from "./order/OrderScreen";
 import AddAddressScreen from "./profile/AddAddressScreen";
 import InforScreen from "./profile/InforScreen";
 import ProfileScreen from "./profile/ProfileScreen";
 import SplashScreen from "./SplashScreen";
-
+import FavoriteScreen from "./profile/FavoriteScreen";
+import TrackOrderScreen from "./order/TrackOrderScreen";
+import CouponScreen from "./profile/CouponScreen";
+import BestSellerScreen from "./home/BestSellerScreen";
+import NotificationScreen from "./profile/NotificationScreen";
 export{
-    HomeScreen,
-    LoginScreen,
-    CartScreen,
-    SplashScreen,
-    OnBoardingScreen,
-    SwiperScreen,
-    WelcomeScreen,
-    SignUpScreen,
-    CategoryScreen,
-    DetailScreen,
-    ForgetPassScreen,
-    OTPScreen,
-    ResetPassScreen,
-    SearchScreen,
-    ReviewScreen,
-    WriteReviewScreen,
-    PaymentMethodScreen,
-    ProfileScreen,
-AddAddressScreen,
-OrderSuccessScreen,
-OrderScreen,
-DetailOrderScreen,
-InforScreen,
+    HomeScreen,LoginScreen,CategoryScreen,
+    CartScreen,SplashScreen,OnBoardingScreen,
+    SwiperScreen,WelcomeScreen,SignUpScreen,
+    DetailScreen,ForgetPassScreen,OTPScreen,
+    ResetPassScreen,SearchScreen,ReviewScreen,
+    WriteReviewScreen,PaymentMethodScreen,ProfileScreen,
+    AddAddressScreen,OrderSuccessScreen,OrderScreen,
+    DetailOrderScreen,InforScreen,FavoriteScreen,
+    TrackOrderScreen,CouponScreen,BestSellerScreen,
+    NotificationScreen,
 
 
 }

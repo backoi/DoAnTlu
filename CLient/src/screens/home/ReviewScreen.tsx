@@ -7,12 +7,15 @@ import axios from 'axios'
 import { reviewService } from '../../utils/reviewService'
 import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../../assets/types/NavigationType'
+import { formatToVietnamTime } from '../../utils/validate'
 
+// Thêm 7 giờ vào thời gian UTC
 type Props = {}
 
 const ReviewScreen = ({route}:any) => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {productId}= route.params
+  
   const [reviews, setReviews] = useState([])
   const getReview = async () => {
     const res = await reviewService.getReviewById(productId)
@@ -29,8 +32,6 @@ const ReviewScreen = ({route}:any) => {
       return unsubscribe;
     }, []); //[navigation] //neu cai nay thi goi nhieu qua
   
-  console.log('render')
-  console.log('----------')
   return (
     <View>
       <HeaderBar color='black' title='Reviews' rightIC={<TouchableOpacity onPress={()=>navigation.navigate('WriteReview',productId)} style={{}}><Add height={23}/></TouchableOpacity>}/>
@@ -39,11 +40,11 @@ const ReviewScreen = ({route}:any) => {
           <View style={{}}>
             <Image style={{width:20,height:20}} source={{uri:'https://topdanangcity.com/wp-content/uploads/2024/09/avatar-trang-1Ob2zMM.jpg'}}></Image>
           </View>
-          <Text>{item?.user.username}</Text>
+          <Text>{item?.userId.username}</Text>
         </View>
         <View>
-          <View style={{flexDirection:'row',gap:5}}>
-          <Text>{item?.rating}</Text>
+          <View style={{flexDirection:'column',gap:5}}>
+          <Text>{formatToVietnamTime(item?.createdAt)}</Text>
         <Rating style={{alignItems:'flex-start'}} startingValue={item?.rating} fractions={1} jumpValue={0.5} imageSize={20} type='star' ratingCount={5}  readonly
           />
           </View>

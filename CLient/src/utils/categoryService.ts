@@ -1,11 +1,10 @@
-import axios from 'axios';
-import { IP_ADDRESS } from '.';
+import useAxiosService from "./axiosService";
 
-const API_URL = `http://${IP_ADDRESS}:3000/api/category`;
+const axios=useAxiosService()
 
 const getAll=async()=>{
     try {
-        const response = await axios.get(`${API_URL}/`);
+        const response = await axios.get(`api/category`);
         return response.data
     } catch (error:any) {
         console.log("Lỗi bên service get all categories")

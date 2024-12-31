@@ -35,4 +35,8 @@ const a = (props: Props) => {
 
 export default a
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container:{},
+  output:{},
+  input: {},
+})

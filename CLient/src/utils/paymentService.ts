@@ -1,12 +1,11 @@
-import axios from "axios";
-import { IP_ADDRESS } from '.';
 
-const API_URL = `http://${IP_ADDRESS}:3000/payment/`;
+import useAxiosService from "./axiosService";
 
+const axios=useAxiosService()
 const createPayment = async (totalAmount: any, accessToken: string) => {
   try {
     const response = await axios.post(
-      `${API_URL}/create-payment-intent`,
+      `payment/create-payment-intent`,
       { totalAmount },
       {
         headers: {
@@ -30,7 +29,7 @@ const confirmPayment = async (
 ) => {
   try {
     const response = await axios.post(
-      `${API_URL}/confirm-payment`,
+      `payment//confirm-payment`,
       {
         items,
         orderId,
@@ -54,7 +53,7 @@ const confirmPayment = async (
 const validateCoupon = async(couponCode: string,accessToken:string)=>{
   try {
     const response = await axios.post(
-      `${API_URL}/validate-coupon`,
+      `payment/validate-coupon`,
       { couponCode },
       {
         headers: {
@@ -65,7 +64,7 @@ const validateCoupon = async(couponCode: string,accessToken:string)=>{
     
     return response.data;
   } catch (error: any) {
-    console.log("L��i bên service validate coupon");
+    console.log("Loi bên service payment validate coupon");
     throw error.response.data;
   }
 }

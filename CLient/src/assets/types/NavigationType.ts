@@ -8,7 +8,7 @@ export type RootStackParamList = {
     OnBoarding:undefined,
     SignUp:undefined,
     Forget:undefined,
-    Otp:{code:any,email:any},
+    OTP:{code:any,email:any},
     ResetPass:undefined,
     Product:undefined,
     Search?:{text?:any,category?:any},
@@ -20,4 +20,9 @@ export type RootStackParamList = {
     OrderSuccess:undefined,
     DetailOrder:{item:any},
     Infor:undefined,
+    TrackOrder:{item:any},
+    Favorite:undefined,
+    Coupon:undefined,
+    BestSeller:undefined,
+    Notification:undefined
   };

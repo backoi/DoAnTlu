@@ -10,20 +10,21 @@ import { authService } from '../../utils/authService';
 const OTPScreen = ({route}:any) => {
   const [limit,setLimit]=useState(60)
   let {code,email}=route.params
-    const navigation=useNavigation<NavigationProp<RootStackParamList>>()
+  
+  const navigation=useNavigation<NavigationProp<RootStackParamList>>()
   const [otp,setOtp]= useState('')
   //console.log(otp)
   const handleVerify =()=>{
+    
     if(!otp){
       Alert.alert('Vui lòng điền mã')
     }
-    else if(otp!==code){
+    else if(otp!=code){
       Alert.alert('Sai mã')
 
     }
     else{
       navigation.navigate('ResetPass',email)
-
     }
   }
   const sendNewCode=async()=>{
@@ -35,14 +36,14 @@ const OTPScreen = ({route}:any) => {
       Alert.alert('loi',error.message)
     }
   }
-  useEffect(() => {
-    if (limit > 0) {
-      const interval = setInterval(() => {
-        setLimit(limit => limit - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [limit]);
+  // useEffect(() => {
+  //   if (limit > 0) {
+  //     const interval = setInterval(() => {
+  //       setLimit(limit => limit - 1);
+  //     }, 1000);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [limit]);
 
     return (
     <View style={{marginHorizontal:10}}>

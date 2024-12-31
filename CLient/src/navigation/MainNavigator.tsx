@@ -1,7 +1,15 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AddAddressScreen, CategoryScreen, DetailScreen, ForgetPassScreen, LoginScreen, OrderSuccessScreen, OnBoardingScreen, OTPScreen, PaymentMethodScreen, ResetPassScreen, ReviewScreen, SearchScreen, SignUpScreen, WelcomeScreen, WriteReviewScreen, DetailOrderScreen, InforScreen } from '../screens';
+import { AddAddressScreen, CategoryScreen, DetailScreen, 
+  ForgetPassScreen, LoginScreen, OrderSuccessScreen, 
+  OnBoardingScreen, OTPScreen, PaymentMethodScreen, ResetPassScreen, 
+  ReviewScreen, SearchScreen, SignUpScreen, WelcomeScreen, 
+  WriteReviewScreen, DetailOrderScreen, InforScreen, FavoriteScreen, 
+  TrackOrderScreen,
+  CouponScreen,
+  BestSellerScreen,
+  NotificationScreen} from '../screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../assets/types/NavigationType';
 import TabNavigator from './TabNavigator';
@@ -24,6 +32,10 @@ const MainNavigator = () => {
         <Stack.Screen name="OrderSuccess" component={OrderSuccessScreen} />
         <Stack.Screen name="DetailOrder" component={DetailOrderScreen} />
         <Stack.Screen name="Infor" component={InforScreen} />
+        <Stack.Screen name="Favorite" component={FavoriteScreen} />
+        <Stack.Screen name="TrackOrder" component={TrackOrderScreen} />
+        <Stack.Screen name="Coupon" component={CouponScreen} />
+        <Stack.Screen name="Notification" component={NotificationScreen} />
 
       </Stack.Navigator>
   )

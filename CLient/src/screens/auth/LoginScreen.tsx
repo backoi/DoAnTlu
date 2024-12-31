@@ -46,10 +46,12 @@ const LoginScreen = () => {
       }
       setIsLoading(true);
       const response = await authService.login(email, password);
-      const { username,address, accessToken } = response.data;
-      const user={ username,email,address}
-      console.log(response)
+      const { username,phone,address, accessToken } = response.data;
+      const user={ username,email,phone,address}
+      //console.log(response.data)
       login( user, accessToken);
+      //neu khong luu mat khau thi phai xoa sach, khong la se bi su dung lai du lieu store
+      //AsyncStorage.clear()
       //setDeliveryAddress(response)
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
@@ -104,7 +106,7 @@ const LoginScreen = () => {
 
           <View style={{ justifyContent: "center" }}>
             <TouchableOpacity
-              onPress={() => AsyncStorage.clear()}
+              onPress={() => navigation.navigate("Forget")}
             >
               <Text style={{ color: appColor.link }}>Forget password</Text>
             </TouchableOpacity>

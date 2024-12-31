@@ -25,9 +25,12 @@ import { useToast } from "react-native-toast-notifications";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import { Formik, FormikValues } from "formik";
 import * as Yup from "yup";
+import useAuthStore from "../../store/authStore";
 const SignUpScreen = () => {
   const toast = useToast();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { user, login, setIsRemember,setDeliveryAddress } = useAuthStore();
+
   const [isLoading, setIsLoading] = useState(false);
   const handleSignUp = async ({ username, email, password }: FormikValues) => {
     const newUser: User = { username, email, password };
@@ -35,9 +38,13 @@ const SignUpScreen = () => {
       setIsLoading(true);
       const response = await authService.register(newUser);
       console.log('data nhận được: ',response);
-      navigation.navigate("Login");
+      const {accessToken}=response.data
+      const user={ username,email,phone:'',address:''}
+      login( user, accessToken);
+      //navigation.navigate("Tab", { screen: "Home", params: {code:response.data.discountCode} } as never);
       setIsLoading(false);
       toast.show("Sign up success", { type: "success", placement: "top" });
+      Alert.alert("Welcome to EcoMarket", "You get a discount code for new user: "+response.data.discountCode);
     } catch (error: any) {
       Alert.alert("Sign Up Failed", error.message || "An error occurred");
     }

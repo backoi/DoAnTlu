@@ -17,8 +17,8 @@ productRouter.get('/', async (req, res) => {
   //min max rate
   if (minPrice || maxPrice) {
     query.price = {};
-    console.log('gia tri min price: ' + minPrice)
-    console.log('gia tri max price: ' + maxPrice)
+    //console.log('gia tri min price: ' + minPrice)
+    //console.log('gia tri max price: ' + maxPrice)
     if (minPrice) {
         query.price.$gte = parseFloat(minPrice); // Giá >= minPrice
     }
@@ -32,9 +32,9 @@ productRouter.get('/', async (req, res) => {
       query.averageRating = { $gte: parseFloat(minRate) }; // Đánh giá >= minRate
   }
   try {
-    console.log('gia trị query',query);
+    //console.log('gia trị query',query);
     const products = await Product.find(query);//.polulate(category)
-    console.log('tat ca san pham', products)
+    //console.log('tat ca san pham', products)
     res.status(200).json({message:'get products success',data:{products}});
 
   } catch (error) {
@@ -42,16 +42,16 @@ productRouter.get('/', async (req, res) => {
   }
 });
 
-productRouter.get('/features', async (req, res) => {
-  try {
-    const products = await Product.find({isFeatures:true});
-    res.status(200).json({message:'get feature success',data:{products}});
+// productRouter.get('/features', async (req, res) => {
+//   try {
+//     const products = await Product.find({isFeatures:true});
+//     res.status(200).json({message:'get feature success',data:{products}});
 
    
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching product', error });
-  }
-});
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching product', error });
+//   }
+// });
 
 productRouter.get('/:id', async (req, res) => {
   const {id}=req.params // đặt tên trùng với endpoint //params là :
@@ -61,7 +61,7 @@ productRouter.get('/:id', async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json({message:"get product by id",data:{product,reviews}});
+    res.json({message:"get product by id",data:{product}});
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });
   }
