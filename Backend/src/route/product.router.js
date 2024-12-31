@@ -35,23 +35,19 @@ productRouter.get('/', async (req, res) => {
     //console.log('gia trị query',query);
     const products = await Product.find(query);//.polulate(category)
     //console.log('tat ca san pham', products)
-    res.status(200).json({message:'get products success',data:{products}});
+    const updatedProducts = products.map(product => {
+      if (product.discount > 0) {
+        product.discountedPrice = product.price * (1 - product.discount / 100);
+      }
+      return product;
+    });
+    res.status(200).json({message:'get products success',data:{products:updatedProducts}});
 
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });
   }
 });
 
-// productRouter.get('/features', async (req, res) => {
-//   try {
-//     const products = await Product.find({isFeatures:true});
-//     res.status(200).json({message:'get feature success',data:{products}});
-
-   
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching product', error });
-//   }
-// });
 
 productRouter.get('/:id', async (req, res) => {
   const {id}=req.params // đặt tên trùng với endpoint //params là :
@@ -67,7 +63,16 @@ productRouter.get('/:id', async (req, res) => {
   }
 });
 
+// productRouter.get('/features', async (req, res) => {
+//   try {
+//     const products = await Product.find({isFeatures:true});
+//     res.status(200).json({message:'get feature success',data:{products}});
 
+   
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching product', error });
+//   }
+// });
 
 
 export {productRouter};

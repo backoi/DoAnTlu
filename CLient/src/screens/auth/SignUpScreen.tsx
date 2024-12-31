@@ -68,7 +68,7 @@ const SignUpScreen = () => {
       <StatusBar></StatusBar>
       <ImageBackground
         resizeMode="cover"
-        source={require("../../assets/images/welcome2.png")}
+        source={require("../../assets/images/welcome/welcome2.png")}
         style={{ width: "100%", height: "140%", flex: 0.7 }}
       >
         <HeaderBar title="Sign Up"></HeaderBar>

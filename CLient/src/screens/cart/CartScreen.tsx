@@ -67,6 +67,9 @@ const CartScreen = () => {
         Alert.alert('Notification','Coupon is valid!')
         console.log(totalPrice)
       }
+      else{
+        Alert.alert('Notification',res.message)
+      }
       console.log('res',res.data);
     } catch (error) {
       console.log('Error:', error);

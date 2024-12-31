@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { userService } from "../../utils/userService";
 import { HeaderBar } from "../../components";
+import { formatToVietnamTime } from "../../utils/validate";
 
 type Props = {};
 
@@ -24,10 +25,13 @@ const CouponScreen = (props: Props) => {
       <ScrollView>
         {listCoupon.map((coupon: any) => {
           return (
-            <Text key={coupon._id}>
+            <View key={coupon._id} style={{ marginVertical: 5 }}>
+            <Text >
               Code: <Text style={{ fontWeight:coupon.isUsed.toString() == "true" ? "normal" : "bold" }}>{coupon.code}</Text> - Discount: {coupon.discountPercentage}% -{" "}
-              {coupon.isUsed.toString() == "true" ? "Used" : "Can use"}
+              {coupon.isUsed.toString() == "true" ? "Used" : "Can use"} 
             </Text>
+            <Text>Expires At: {formatToVietnamTime(coupon.expiresAt)}</Text>
+            </View>
           );
         })}
       </ScrollView>

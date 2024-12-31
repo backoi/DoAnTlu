@@ -19,11 +19,11 @@ const WelcomeScreen = () => {
       <StatusBar></StatusBar>
       <ImageBackground
         resizeMode="cover"
-        source={require("../../assets/images/welcome.png")}
+        source={require("../../assets/images/welcome/welcome.png")}
         style={{ width: "100%", height: "110%",flex:1.7}}
       >
         <HeaderBar
-          onPress={() => navigation.navigate("OnBoarding" as never)} title={""}        ></HeaderBar>
+          onPress={() => navigation.navigate("OnBoarding")} title={""}></HeaderBar>
       </ImageBackground>
       <View style={styles.textContainer}>
         <SpaceComponent height={20}/>

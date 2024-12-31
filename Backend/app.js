@@ -22,7 +22,7 @@ import { Expo } from "expo-server-sdk";
 import { Device } from "./src/models/device.model.js";
 import { deviceRouter } from "./src/route/device.router.js";
 import analyticsRouter from "./src/route/analytic.router.js";
-
+import "./src/jobs/discountScheduler.js";
 const expo = new Expo();
 const app = express();
 const port = 3000;

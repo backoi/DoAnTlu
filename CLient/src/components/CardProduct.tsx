@@ -16,6 +16,8 @@ interface Props {
     backColor: string;
     unit: string;
     stock: number;
+  discountedPrice:number,
+
   };
   onPress?: (id: any) => void;
 }
@@ -27,7 +29,7 @@ interface FavItem{
 }
 const CardProductComponent = ({ item, onPress }: Props) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { cartItems, decreaseQuantity, increaseQuantity, totalPrice, addItem } = useCartStore();
+  const {addItem} = useCartStore();
   const { favItems, toggleFavItem } = useUserStore();
   const [isLike, setIsLike] = useState(false);
   
@@ -81,8 +83,25 @@ const CardProductComponent = ({ item, onPress }: Props) => {
             ></Image>
           </View>
         </View>
-        <Text style={{ color: appColor.primary_dark, fontWeight: "500", alignSelf: 'center', }}>
-          ${item.price}
+        <Text style={{ color: appColor.primary_dark, fontWeight: "500",alignSelf: 'center' }}>
+          {
+            item.discountedPrice ? (
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ textDecorationLine: 'line-through', color: 'red',marginRight:5 }}>
+                  ${item.price}
+                </Text>
+                <Text>${item.discountedPrice.toFixed(2)}</Text>
+              </View>
+            ) : (
+              <Text>${item.price}</Text>
+            )
+            
+            
+          }
+              
+            
+          
+          
         </Text>
 
         <Text style={{ fontSize: 18, fontWeight: "500", alignSelf: 'center', }}>{item.name} </Text>
@@ -102,7 +121,7 @@ const CardProductComponent = ({ item, onPress }: Props) => {
           alignItems: "center",
         }}
         onPress={() => addItem({
-          id: item._id, name: item.name, price: item.price, stock: item.stock, urlImg: item.imgUrl,
+          id: item._id, name: item.name, price:item.discountedPrice ? item.discountedPrice : item.price, stock: item.stock, urlImg: item.imgUrl,
           quantity: 1, unit: item.unit
         }, 1)}
       >

@@ -8,12 +8,14 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   CardProduct,
   CategoryItem,
   InputComponent,
+  SlideShow,
   SpaceComponent,
 } from "../../components";
 import { appColor } from "../../constants/appColor";
@@ -30,8 +32,15 @@ import { productService } from "../../utils/productService";
 import useCartStore from "../../store/cartStore";
 import * as Notifications from "expo-notifications";
 import { deviceService } from "../../utils/deviceService";
-//San pham ban chay nhat
+const { width, height } = Dimensions.get('window');
+
 const HomeScreen = () => {
+  
+  const images=[
+    require('../../assets/images/adver/adv1.png'),
+    require('../../assets/images/adver/adv2.png'),
+    require('../../assets/images/adver/adv3.png'),
+  ]
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
@@ -68,7 +77,7 @@ const HomeScreen = () => {
     registerForPushNotificationsAsync();
     getCategories();
     getBestSellerProducts();
-  }, []);
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -86,10 +95,10 @@ const HomeScreen = () => {
             onChangeText={(text) => setSearchText(text)}
           />
         </View>
-        <Image
-          style={styles.bannerImage}
-          source={require("../../assets/images/adv.png")}
-        />
+        <View style={{height:height*0.3}}>
+
+        <SlideShow images={images}/>
+        </View>
         <View>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Categories</Text>

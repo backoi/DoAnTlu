@@ -66,7 +66,7 @@ const LoginScreen = () => {
       <StatusBar></StatusBar>
       <ImageBackground
         resizeMode="cover"
-        source={require("../../assets/images/welcome1.png")}
+        source={require("../../assets/images/welcome/welcome1.png")}
         style={{ width: "100%", height: "140%", flex: 1 }}
       >
         <HeaderBar onPress={()=>navigation.dispatch(StackActions.replace("Welcome"))} title="Login"></HeaderBar>

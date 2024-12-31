@@ -37,14 +37,14 @@ const DetailScreen = ({route}:any) => {
   const loadQuantityInCart=()=>{
     const item=cartItems.find((item)=>item.id===product?._id)
     if(item){
-      console.log('item la:',item)
+      //console.log('item la:',item)
       //setProduct(item)
       setQuantity(item.quantity)
   }
 }
   const getProduct=async (id:any)=>{
     const res= await productService.getProductWithID(id);
-    console.log('chi tiết:', res?.data)
+    //console.log('chi tiết:', res?.data)
     setProduct(res?.data.product)
     //setReviews(res?.data.reviews)
   }
@@ -81,7 +81,19 @@ const DetailScreen = ({route}:any) => {
       </View>
       <View style={{}}>
         <View style={{flexDirection:'row',justifyContent:'space-between',}}>
-          <Text style={{fontSize:18,fontWeight:'800',color:appColor.primary_dark}}>${product?.price}</Text>
+          <Text style={{fontSize:18,fontWeight:'800',color:appColor.primary_dark}}>
+            
+            {product?.discountedPrice ? (
+              <>
+                <Text style={{textDecorationLine: 'line-through'}}>{product?.price}</Text>
+                <Text> ${product?.discountedPrice}</Text>
+              </>
+            ) : (
+              '$'+product?.price
+            )}
+          
+          </Text>
+
           <TouchableOpacity onPress={handleFavorite}>
 
           {isLike ? (

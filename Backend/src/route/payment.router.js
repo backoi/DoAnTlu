@@ -153,29 +153,37 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
   }
 });
 
-paymentRouter.post('/validate-coupon',authenticateUser,async (req, res) => {
+paymentRouter.post('/validate-coupon', authenticateUser, async (req, res) => {
   try {
     const { couponCode } = req.body;
-    //console.log('nhan dc code',couponCode)
-    //console.log('id',req.user)
+    const currentDate = new Date();
 
     // Kiểm tra mã giảm giá
-    const coupon = await Coupon.findOne({ code: couponCode, userId: req.user.userId, isUsed: false });
+    const coupon = await Coupon.findOne({ 
+      code: couponCode, 
+      userId: req.user.userId, 
+      isUsed: false,
+      expiresAt: { $gt: currentDate } // Kiểm tra xem coupon còn hạn sử dụng hay không
+    });
 
     if (!coupon) {
-     return res.json({ data:{isValid: false}, message: 'Invalid or expired coupon code' });
-    }
-    if (coupon.isUsed) {
-      return res.json({ data:{isValid: false}, message: "Coupon is already used" });
+      return res.json({ data: { isValid: false }, message: 'Invalid, expired or already used coupon code' });
     }
 
-    res.status(200).json({data:{
+    if (coupon.isUsed) {
+      return res.json({ data: { isValid: false }, message: "Coupon is already used" });
+    }
+
+    res.status(200).json({
+      data: {
         isValid: true,
-        discountPercentage: coupon.discountPercentage},message: 'Coupon code is invalid'
+        discountPercentage: coupon.discountPercentage
+      },
+      message: 'Coupon code is valid'
     });
-} catch (error) {
+  } catch (error) {
     res.status(500).json({ message: error.message });
-}
-})
+  }
+});
 
 export { paymentRouter };

@@ -10,6 +10,7 @@ import Quantity from "./Quantity";
 import SpaceComponent from "./SpaceComponent";
 import TextComponent from "./TextComponent";
 import ModalComponent from "./ModalComponent";
+import SlideShow from "./SlideShow";
 export {
     ButtonComponent,
     InputComponent,
@@ -23,5 +24,6 @@ export {
     Loading,
     ItemProduct,
     ModalComponent,
+    SlideShow
     //swipable product item //react-native-image-slider-box
 }

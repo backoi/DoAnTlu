@@ -12,20 +12,20 @@ const OnBoardingScreen = () => {
   id:0,
   title:`Premium Food
   At Yur Doorstep`,
-  img:require('../../assets/images/onboarding1.png'),
+  img:require('../../assets/images/onboard/onboarding1.png'),
   des:`Lorem ipsum dolor sit amet, consetetur 
 sadipscing elitr, sed diam nonumy`,
  },{id:1,
   title:`Premium Food
   At Yur Doorstep`,
-  img:require('../../assets/images/onboarding2.png'),
+  img:require('../../assets/images/onboard/onboarding2.png'),
   des:`Lorem ipsum dolor sit amet, consetetur 
 sadipscing elitr, sed diam nonumy`,
  },{
   id:2,
   title:`Premium Food
   At Yur Doorstep`,
-  img:require('../../assets/images/onboarding3.png'),
+  img:require('../../assets/images/onboard/onboarding3.png'),
   des:`Lorem ipsum dolor sit amet, consetetur 
 sadipscing elitr, sed diam nonumy`,
  },]

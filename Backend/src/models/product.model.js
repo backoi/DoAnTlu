@@ -14,6 +14,8 @@ const ProductSchema = new Schema(
     category:{ type: Schema.Types.ObjectId, require:true,ref:'Category'},
     averageRating: { type: Number, default: 0 }, // Trung bình đánh giá
     reviewsCount: { type: Number, default: 0 }, // Số lượng đánh giá
+    discount: { type: Number, default: 0 }, // Giảm giá (%)
+    discountedPrice: { type: Number }, 
   },  
 )
 

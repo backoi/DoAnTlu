@@ -158,14 +158,9 @@ const useAuthStore = create<AuthState>((set) => ({
       if (!user) {
         throw new Error('User object is null or undefined');
       }
-      console.log('co chay xuong day')
-      console.log('user',JSON.stringify(user))
       await AsyncStorage.setItem('authUser', JSON.stringify(user)); // Lưu user
-      console.log('co chay xuong ca day nua')
   
       // Lấy dữ liệu đã lưu
-      const storedUser = await AsyncStorage.getItem('authUser');
-      console.log('Gia tri user trong async phia tren:', storedUser);
   
       // Cập nhật Zustand store
       set({
