@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Cart, Heart, HeartFill } from "../assets/svg";
 import { appColor } from "../constants/appColor";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -27,7 +27,7 @@ interface FavItem{
   urlImg:string,
   price:number,
 }
-const CardProductComponent = ({ item, onPress }: Props) => {
+const CardProduct = ({ item, onPress }: Props) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const {addItem} = useCartStore();
   const { favItems, toggleFavItem } = useUserStore();
@@ -130,6 +130,7 @@ const CardProductComponent = ({ item, onPress }: Props) => {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
-export default CardProductComponent;
+
+export default CardProduct;

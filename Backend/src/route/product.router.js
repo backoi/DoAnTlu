@@ -6,7 +6,7 @@ import { Review } from '../models/review.model.js';
 const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const {search,category,minPrice,maxPrice,minRate}=req.query //truyền từ params của axios //query là ?=
+  const {search,category,minPrice,maxPrice,minRate, offset, limit}=req.query //truyền từ params của axios //query là ?=
   const query={}
   if(search){
     query.name={$regex:search,$options:'i'} //tim kiem tuong doi, khong phan biet hoa thuong
@@ -17,8 +17,6 @@ productRouter.get('/', async (req, res) => {
   //min max rate
   if (minPrice || maxPrice) {
     query.price = {};
-    //console.log('gia tri min price: ' + minPrice)
-    //console.log('gia tri max price: ' + maxPrice)
     if (minPrice) {
         query.price.$gte = parseFloat(minPrice); // Giá >= minPrice
     }
@@ -32,8 +30,13 @@ productRouter.get('/', async (req, res) => {
       query.averageRating = { $gte: parseFloat(minRate) }; // Đánh giá >= minRate
   }
   try {
+    const totalProducts = await Product.countDocuments(query);
+    const products = await Product.find(query)
+      .skip(parseInt(offset))
+      .limit(parseInt(limit))
+      .lean();
     //console.log('gia trị query',query);
-    const products = await Product.find(query);//.polulate(category)
+    //const products = await Product.find(query);//.polulate(category)
     //console.log('tat ca san pham', products)
     const updatedProducts = products.map(product => {
       if (product.discount > 0) {
@@ -41,7 +44,8 @@ productRouter.get('/', async (req, res) => {
       }
       return product;
     });
-    res.status(200).json({message:'get products success',data:{products:updatedProducts}});
+    res.status(200).json({message:'get products success',data:{products:updatedProducts,totalProducts,
+      hasMore: parseInt(offset) + updatedProducts.length < totalProducts,}});
 
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });

@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -14,67 +16,88 @@ import { useNavigation } from "@react-navigation/native";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { appColor } from "../../constants/appColor";
 import { Rating } from "react-native-ratings";
-//validate
+
 type Props = {};
 
 const SearchScreen = ({ route }: any, props: Props) => {
   const navigation = useNavigation();
   const { text, category } = route?.params || "";
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
   const [minRate, setMinRate] = useState(0);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [offset, setOffset] = useState(0);
+  const limit = 10;
+  const [hasMore, setHasMore] = useState(true);
   const snapPoints = useMemo(() => ["25%", "50%"], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
+
   const handleOpenFIlter = () => {
     bottomSheetRef.current?.expand();
   };
- // console.log('danh sach',data)
-  const getProducts = async (text: string, category: string) => {
-    const res = await productService.getProducts(text, category);
-    //console.log("du lieu", res?.data.products);
-    setData(res?.data.products);
-  };
-  const handleSearch = async () => {
-    
-    const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
-    const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
 
-    {
-      
+  const getProducts = async (text: string, category: string) => {
+    try {
+      setLoading(true);
+      const res = await productService.getProducts(text, category);
+      setData(res?.data.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      // Handle the error appropriately, e.g., show a message to the user
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (loading || !hasMore) return
+    setLoading(true);
+    try {
+      //setLoading(true);
+      const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
+      const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
+
       if (minPrice || maxPrice) {
         const res = await productService.getProducts(
           searchText,
           category,
           minPriceValue,
           maxPriceValue,
-          minRate
+          minRate,
+          offset,
+          limit
         );
-        //console.log("du lieu", res?.data);
-        setData(res?.data.products);
-
-       
+        const { products: newProducts, hasMore: moreData }=res?.data
+        setData( (prev:any)=> [...prev, ...newProducts]);
+        setOffset((prev) => prev + newProducts.length);
+        setHasMore(moreData);
       } else {
-        const res = await productService.getProducts(searchText, category);
-        //console.log("du lieu", res?.data);
-        setData(res?.data.products);
-
-        
+        const res = await productService.getProducts(searchText, category, 0, Infinity,0, offset, limit);
+        const { products: newProducts, hasMore: moreData }=res?.data
+        setData((prev:any)=> [...prev, ...newProducts]);
+        setOffset((prev) => prev + newProducts.length);
+        setHasMore(moreData);
       }
+    } catch (error) {
+      console.error("Error searching products:", error);
+      Alert.alert("Error", "Failed to search products");
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchProducts = async () => {
       if (text || category) {
-        //console.log(category)
         setSearchText(text);
-        getProducts(text, category); // Sử dụng giá trị từ route
+        await getProducts(text, category);
       }
     };
     fetchProducts();
-    //getProducts(searchText)
-  }, []);
+  }, [text, category]);
+
   const handleApplyFilter = () => {
     console.log(
       "gia tri filter min:",
@@ -84,7 +107,6 @@ const SearchScreen = ({ route }: any, props: Props) => {
       "rate:",
       minRate
     );
-
     setMinRate(0);
     bottomSheetRef.current?.close();
   };
@@ -94,53 +116,58 @@ const SearchScreen = ({ route }: any, props: Props) => {
     setMaxPrice("");
     setMinRate(0);
   };
-
+  const renderItem = ({ item }:any) => <CardProduct item={item} />;
   return (
     <View style={{ backgroundColor: "#F4F5F9", flex: 1, marginHorizontal: 5 }}>
-      <View
-        style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
-      >
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ margin: 5 }}
-        >
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ margin: 5 }}>
           <Back height={30}></Back>
         </TouchableOpacity>
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
+          <InputComponent
+            leftIC={
+              <TouchableOpacity onPress={handleSearch}>
+                <Search height={23}></Search>
+              </TouchableOpacity>
+            }
+            value={searchText}
+            placeholder="Search a keyword"
+            onChangeText={(text) => setSearchText(text)}
+            rightIC={
+              <TouchableOpacity onPress={handleOpenFIlter}>
+                <Filter height={23}></Filter>
+              </TouchableOpacity>
+            }
+          ></InputComponent>
+        </View>
+      </View>
+      <View>
+        <View>
 
-        <InputComponent
-          leftIC={
-            <TouchableOpacity onPress={handleSearch}>
-              <Search height={23}></Search>
-            </TouchableOpacity>
+        <FlatList
+          ListFooterComponent={
+            <View>
+              {loading && <ActivityIndicator size="large" color="#0000ff" />}
+            </View>
           }
-          value={searchText}
-          placeholder="Search a keyword"
-          onChangeText={(text) => setSearchText(text)}
-          rightIC={
-            <TouchableOpacity onPress={handleOpenFIlter}>
-              <Filter height={23}></Filter>
-            </TouchableOpacity>
+          keyExtractor={(item) => item._id}
+          style={{height:'95%'}}
+          numColumns={2}
+          data={data}
+          renderItem={renderItem}
+          onEndReached={handleSearch}
+          onEndReachedThreshold={0.5} //ngưỡng kích hoạt tải thêm
+          ListEmptyComponent={
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
+              <NotFound height={70} width={70}></NotFound>
+              <Text style={{ fontSize: 23 }}>Not found product, please change search</Text>
+            </View>
           }
-        ></InputComponent>
+        ></FlatList>
+        
         </View>
 
       </View>
-      <View>
-        
-        <FlatList ListFooterComponent={<SpaceComponent height={100}></SpaceComponent>}
-        style={{}}
-          numColumns={2}
-          data={data}
-          renderItem={({ item }) => <CardProduct item={item}></CardProduct>}
-          ListEmptyComponent={<View style={{justifyContent:'center',alignItems:'center',marginTop:50}}>
-            <NotFound height={70} width={70}></NotFound>
-            <Text style={{fontSize:23}}>Not found product, please change search</Text>
-          </View>}
-        ></FlatList>
-        
-      </View>
-      
       <BottomSheet
         style={{}}
         ref={bottomSheetRef}
@@ -171,9 +198,7 @@ const SearchScreen = ({ route }: any, props: Props) => {
           <View style={{}}>
             <View style={{ padding: 10, backgroundColor: "white" }}>
               <View style={{}}>
-                <Text style={{ fontSize: 18, marginBottom: 10 }}>
-                  Price Range
-                </Text>
+                <Text style={{ fontSize: 18, marginBottom: 10 }}>Price Range</Text>
                 <View style={{ flexDirection: "row", gap: 10 }}>
                   <TextInput
                     value={minPrice?.toString()}
@@ -200,9 +225,7 @@ const SearchScreen = ({ route }: any, props: Props) => {
                 </View>
               </View>
               <View style={{ backgroundColor: "white" }}>
-                <Text style={{ fontSize: 18, marginBottom: 10 }}>
-                  Star Rating
-                </Text>
+                <Text style={{ fontSize: 18, marginBottom: 10 }}>Star Rating</Text>
                 <View
                   style={{
                     flexDirection: "row",
