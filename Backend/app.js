@@ -23,6 +23,7 @@ import { Device } from "./src/models/device.model.js";
 import { deviceRouter } from "./src/route/device.router.js";
 import analyticsRouter from "./src/route/analytic.router.js";
 import "./src/jobs/discountScheduler.js";
+import session from "express-session";
 const expo = new Expo();
 const app = express();
 const port = 3000;
@@ -134,7 +135,26 @@ const adminJs = new AdminJS({
   },
 });
 
-const router = AdminJSExpress.buildRouter(adminJs);
+const sessionOptions = {
+  secret: 'some-secret-password', // Secret key for session encryption
+  resave: false, // Prevents resaving sessions that haven't changed
+  saveUninitialized: true, // Saves new sessions even if they are unmodified
+};
+
+const ADMIN = {
+  email: 'admin@example.com',
+  password: 'password',
+};
+
+const router = AdminJSExpress.buildAuthenticatedRouter(adminJs,{
+  authenticate: async (email, password) => {
+      if (email === ADMIN.email && password === ADMIN.password) {
+          return ADMIN;
+      }
+      return null;
+  },
+  cookiePassword: 'some-secret-password',
+}, null, sessionOptions);
 app.use(cors());
 app.use(express.json()); //để phân tích cú pháp dữ liệu JSON trong body của request.
 app.use(adminJs.options.rootPath, router);
