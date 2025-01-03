@@ -28,7 +28,7 @@ const OderScreen = () => {
         {
           text: "Yes",
           onPress: async () => {
-            await orderService.cancelOrder(id, accessToken);
+            await orderService.cancelOrder(id);
             fetchOrders();
             Alert.alert("Notification", "Order has been cancelled.");
           },

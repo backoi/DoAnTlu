@@ -7,7 +7,6 @@ const ProductSchema = new Schema(
     description: { type: String,},
     price: { type: Number, required: true },
     stock: { type: Number, require: true },
-    isFeatures: { type: Boolean, default: false },
     unit:{type:String,enum: ['1 Kg', '1 Piece', '1 Bottle']},
     imgUrl: { type: String },
     backColor:{type:String},

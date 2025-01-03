@@ -36,6 +36,7 @@ const MainNavigator = () => {
         <Stack.Screen name="TrackOrder" component={TrackOrderScreen} />
         <Stack.Screen name="Coupon" component={CouponScreen} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
+        <Stack.Screen name="BestSeller" component={BestSellerScreen} />
 
       </Stack.Navigator>
   )

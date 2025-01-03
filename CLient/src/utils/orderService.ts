@@ -24,15 +24,10 @@ const updateStatus=async(orderId:string)=>{
         throw error.response.data;
     }
 }
-const cancelOrder=async(orderId:string,accessToken:string)=>{
+const cancelOrder=async(orderId:string)=>{
     try {
         const response = await axios.post(`user/order/cancelOrder`,
-            {orderId},{
-
-                headers:{
-                    Authorization:accessToken,
-                }
-            }
+            {orderId}
         );
         return response.data
     } catch (error:any) {
