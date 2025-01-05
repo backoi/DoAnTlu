@@ -4,7 +4,7 @@ import Swiper from "react-native-swiper";
 import { ButtonComponent, SpaceComponent } from "../../components";
 import { appColor } from "../../constants/appColor";
 import { useNavigation } from "@react-navigation/native";
-import {SwiperScreen} from "../";
+import SwiperScreen from "./SwiperScreen";
 
 
 

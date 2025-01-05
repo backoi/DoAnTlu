@@ -24,6 +24,7 @@ import { authService } from "../../utils/authService";
 import { useToast } from "react-native-toast-notifications";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import useAuthStore from "../../store/authStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const toast = useToast();
@@ -32,7 +33,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toggleSwitch = () => setIsEnabled(!isEnabled);
-  const { user, login, setIsRemember,setDeliveryAddress } = useAuthStore();
+  const { user, login, setIsRemember } = useAuthStore();
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Login failed", "Please enter your email and password !!!");
@@ -47,7 +48,7 @@ const LoginScreen = () => {
       const { username,phone,address, accessToken } = response.data;
       const user={ username,email,phone,address}
       //console.log(response.data)
-      //AsyncStorage.clear()
+      AsyncStorage.clear()
       login( user, accessToken);
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
