@@ -25,5 +25,4 @@ export {
     ItemProduct,
     ModalComponent,
     SlideShow
-    //swipable product item //react-native-image-slider-box
 }

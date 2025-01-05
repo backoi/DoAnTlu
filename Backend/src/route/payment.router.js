@@ -113,7 +113,7 @@ paymentRouter.post("/confirm-payment", authenticateUser, async (req, res) => {
     //thanh toan card thì sẽ paid
     
     else if (paymentMethod == "Stripe Card") {
-      console.log("totalAmount", totalAmount.tofixed(4))
+      console.log("totalAmount", totalAmount.toFixed(4))
       const order = new Order({
         userId,
         items,

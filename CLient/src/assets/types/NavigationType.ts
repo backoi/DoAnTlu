@@ -24,5 +24,5 @@ export type RootStackParamList = {
     Favorite:undefined,
     Coupon:undefined,
     BestSeller:undefined,
-    Notification:undefined
+    Notification:undefined,
   };

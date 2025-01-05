@@ -29,7 +29,7 @@ import useAuthStore from "../../store/authStore";
 const SignUpScreen = () => {
   const toast = useToast();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { user, login, setIsRemember,setDeliveryAddress } = useAuthStore();
+  const { login } = useAuthStore();
 
   const [isLoading, setIsLoading] = useState(false);
   const handleSignUp = async ({ username, email, password }: FormikValues) => {

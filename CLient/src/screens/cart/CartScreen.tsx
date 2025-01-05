@@ -2,18 +2,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Button,
-  ScrollView,
   Alert,
   TextInput,
 } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useAuthStore from "../../store/authStore";
 import useCartStore from "../../store/cartStore";
 import { ButtonComponent, HeaderBar, ItemProduct, SpaceComponent } from "../../components";
-import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import BottomSheet, {
   BottomSheetFlatList, //không mượt
@@ -23,39 +19,34 @@ import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BigCart, Cart, Mark } from "../../assets/svg";
 import { appColor } from "../../constants/appColor";
-import axios from "axios";
 import { paymentService } from "../../utils/paymentService";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
   //useCartStore.getState().loadCartFromStorage()
-  const { logout,user,deliveryAddress ,accessToken} = useAuthStore();
+  const { user,deliveryAddress,setDeliveryAddress, accessToken} = useAuthStore();
   const {
     cartItems,
     totalQuantity,
-    decreaseQuantity,
-    increaseQuantity,
     totalPrice,
-    clearCart,
   } = useCartStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const snapPoints = useMemo(() => ['25%', '40%','50%'], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [coupon,setCoupon] = useState('')
   const [discountPerc,setDiscountPerc] = useState(0)
-  const [address,setAddress]=useState<any>(deliveryAddress)
-  const [listAddress,setListAddress]=useState<any>([])
-  //const [totalAmount,setTotalAmount]=useState(totalPrice)
+  const [addressDelivery,setAddressDelivery]=useState<any>(deliveryAddress)
+  const [listAddress,setListAddress]=useState<any>([deliveryAddress])
   
   const listItemsCart=cartItems.map((item)=>({productId:item.id,quantityPurchased:item.quantity,amountPrice:(item.price*item.quantity)}))
-  const handleOder = () => {
-    //nhu nay hop ly k, bat nguoi dung nhap lai
+  const handleOrder = () => {
     setCoupon('')
     setDiscountPerc(0)
-    if(!address){
+    if(!addressDelivery){
       Alert.alert('Order failed','Please choose delivery address!')
       return;
     }
-    navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:address,coupon});
+    navigation.navigate("Payment",{cartItems: listItemsCart,totalAmount:totalPrice,totalItems:totalQuantity,deliveryAddress:addressDelivery.address+',  '+addressDelivery.district,coupon});
   };
   const handleCoupon =async()=>{
     try {
@@ -87,20 +78,17 @@ const CartScreen = () => {
     bottomSheetRef.current?.expand();
   };
   const handleChangeLocation = (item:any) => {
-    setAddress(item.address)
-    //thay doi o trong store nua
+    setAddressDelivery(item)
+    setDeliveryAddress(item)
+    //kiểm tra xem dia chi này đã được chọn chưa
     bottomSheetRef.current?.close();
   };
-  const fetchAddress = async() => {
-    console.log('mang gia tri dia chi:',user.address);
-    // const res = await getAddresses();
+
+  const fetchListAddress = async() => {
     setListAddress(user.address);
-    const a=await AsyncStorage.getItem('authUser')
-    console.log('kho',a)
   }
-  //console.log('kho',AsyncStorage.getItem('a'))
   useEffect(() => {
-    fetchAddress();
+    fetchListAddress();
   },[user.address]);
   useEffect(() => {
     useCartStore.getState().loadCartFromStorage()
@@ -128,7 +116,7 @@ const CartScreen = () => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View>
           <Text>Delivery location</Text>
-          <Text style={{ fontWeight: 500 }}>{address}</Text>
+          <Text style={{ fontWeight: 500 }}>{addressDelivery.address}</Text>
         </View>
         <View>
           <TouchableOpacity
@@ -213,7 +201,7 @@ const CartScreen = () => {
               </Text> 
           </View>
           <ButtonComponent disabled={!(cartItems.length>0)}
-            onPress={handleOder}
+            onPress={handleOrder}
             title="Oder Now"
           ></ButtonComponent>
         </View>
@@ -243,9 +231,8 @@ const CartScreen = () => {
                     minHeight:100,
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor:(deliveryAddress==item.address)?appColor.primary_dark:'white',
-                    
-                    borderWidth:1,
+                    borderWidth:3,
+                    borderColor:(deliveryAddress.id === item.id)?appColor.primary_dark:appColor.border,
                     marginRight:10,
                     padding:5,
                   }}

@@ -7,10 +7,22 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ButtonComponent, CardProduct, InputComponent, SpaceComponent } from "../../components";
-import { Back, Filter, Heart, NotFound, Reload, Search } from "../../assets/svg";
+import {
+  ButtonComponent,
+  CardProduct,
+  InputComponent,
+} from "../../components";
+import {
+  Back,
+  Filter,
+  NotFound,
+  Reload,
+  Search,
+} from "../../assets/svg";
 import { productService } from "../../utils/productService";
 import { useNavigation } from "@react-navigation/native";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -33,7 +45,8 @@ const SearchScreen = ({ route }: any, props: Props) => {
   const [hasMore, setHasMore] = useState(true);
   const snapPoints = useMemo(() => ["25%", "50%"], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-
+  const minPriceInputRef = useRef<TextInput>(null);
+  const maxPriceInputRef = useRef<TextInput>(null);
   const handleOpenFIlter = () => {
     bottomSheetRef.current?.expand();
   };
@@ -43,16 +56,16 @@ const SearchScreen = ({ route }: any, props: Props) => {
       setLoading(true);
       const res = await productService.getProducts(text, category);
       setData(res?.data.products);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      // Handle the error appropriately, e.g., show a message to the user
+    } catch (error:any) {
+      Alert.alert('Error',error.message);
+      //console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSearch = async () => {
-    if (loading || !hasMore) return
+    if (loading || !hasMore) return;
     setLoading(true);
     try {
       //setLoading(true);
@@ -69,14 +82,22 @@ const SearchScreen = ({ route }: any, props: Props) => {
           offset,
           limit
         );
-        const { products: newProducts, hasMore: moreData }=res?.data
-        setData( (prev:any)=> [...prev, ...newProducts]);
+        const { products: newProducts, hasMore: moreData } = res?.data;
+        setData((prev: any) => [...prev, ...newProducts]);
         setOffset((prev) => prev + newProducts.length);
         setHasMore(moreData);
       } else {
-        const res = await productService.getProducts(searchText, category, 0, Infinity,0, offset, limit);
-        const { products: newProducts, hasMore: moreData }=res?.data
-        setData((prev:any)=> [...prev, ...newProducts]);
+        const res = await productService.getProducts(
+          searchText,
+          category,
+          0,
+          Infinity,
+          0,
+          offset,
+          limit
+        );
+        const { products: newProducts, hasMore: moreData } = res?.data;
+        setData((prev: any) => [...prev, ...newProducts]);
         setOffset((prev) => prev + newProducts.length);
         setHasMore(moreData);
       }
@@ -99,14 +120,6 @@ const SearchScreen = ({ route }: any, props: Props) => {
   }, [text, category]);
 
   const handleApplyFilter = () => {
-    console.log(
-      "gia tri filter min:",
-      minPrice,
-      "max:",
-      maxPrice,
-      "rate:",
-      minRate
-    );
     setMinRate(0);
     bottomSheetRef.current?.close();
   };
@@ -116,11 +129,18 @@ const SearchScreen = ({ route }: any, props: Props) => {
     setMaxPrice("");
     setMinRate(0);
   };
-  const renderItem = ({ item }:any) => <CardProduct item={item} />;
+  const renderItem = ({ item }: any) => <CardProduct item={item} />;
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
     <View style={{ backgroundColor: "#F4F5F9", flex: 1, marginHorizontal: 5 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ margin: 5 }}>
+      <View
+        style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
+      >
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ margin: 5 }}
+        >
           <Back height={30}></Back>
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
@@ -143,30 +163,35 @@ const SearchScreen = ({ route }: any, props: Props) => {
       </View>
       <View>
         <View>
-
-        <FlatList
-          ListFooterComponent={
-            <View>
-              {loading && <ActivityIndicator size="large" color="#0000ff" />}
-            </View>
-          }
-          keyExtractor={(item) => item._id}
-          style={{height:'95%'}}
-          numColumns={2}
-          data={data}
-          renderItem={renderItem}
-          onEndReached={handleSearch}
-          onEndReachedThreshold={0.5} //ngưỡng kích hoạt tải thêm
-          ListEmptyComponent={
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-              <NotFound height={70} width={70}></NotFound>
-              <Text style={{ fontSize: 23 }}>Not found product, please change search</Text>
-            </View>
-          }
-        ></FlatList>
-        
+          <FlatList
+            ListFooterComponent={
+              <View>
+                {loading && <ActivityIndicator size="large" color="#0000ff" />}
+              </View>
+            }
+            keyExtractor={(item) => item._id}
+            style={{ height: "95%" }}
+            numColumns={2}
+            data={data}
+            renderItem={renderItem}
+            onEndReached={handleSearch}
+            onEndReachedThreshold={0.5} //ngưỡng kích hoạt tải thêm
+            ListEmptyComponent={
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 50,
+                }}
+              >
+                <NotFound height={70} width={70}></NotFound>
+                <Text style={{ fontSize: 23 }}>
+                  Not found product, please change search
+                </Text>
+              </View>
+            }
+          ></FlatList>
         </View>
-
       </View>
       <BottomSheet
         style={{}}
@@ -174,6 +199,10 @@ const SearchScreen = ({ route }: any, props: Props) => {
         index={-1}
         snapPoints={snapPoints}
         enablePanDownToClose
+        onClose={() => {
+          minPriceInputRef.current?.blur();
+          maxPriceInputRef.current?.blur();
+        }}
       >
         <BottomSheetView
           style={{
@@ -198,9 +227,13 @@ const SearchScreen = ({ route }: any, props: Props) => {
           <View style={{}}>
             <View style={{ padding: 10, backgroundColor: "white" }}>
               <View style={{}}>
-                <Text style={{ fontSize: 18, marginBottom: 10 }}>Price Range</Text>
+                <Text style={{ fontSize: 18, marginBottom: 10 }}>
+                  Price Range
+                </Text>
                 <View style={{ flexDirection: "row", gap: 10 }}>
                   <TextInput
+                  ref={minPriceInputRef}
+                  keyboardType="phone-pad"
                     value={minPrice?.toString()}
                     onChangeText={setMinPrice}
                     style={{
@@ -212,6 +245,8 @@ const SearchScreen = ({ route }: any, props: Props) => {
                     placeholder="Min."
                   ></TextInput>
                   <TextInput
+                  ref={maxPriceInputRef}
+                  keyboardType="phone-pad"
                     value={maxPrice?.toString()}
                     onChangeText={setMaxPrice}
                     style={{
@@ -225,7 +260,9 @@ const SearchScreen = ({ route }: any, props: Props) => {
                 </View>
               </View>
               <View style={{ backgroundColor: "white" }}>
-                <Text style={{ fontSize: 18, marginBottom: 10 }}>Star Rating</Text>
+                <Text style={{ fontSize: 18, marginBottom: 10 }}>
+                  Star Rating
+                </Text>
                 <View
                   style={{
                     flexDirection: "row",
@@ -244,15 +281,17 @@ const SearchScreen = ({ route }: any, props: Props) => {
               </View>
             </View>
           </View>
-          <View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          
             <ButtonComponent
               onPress={handleApplyFilter}
               title="Apply filter"
             ></ButtonComponent>
-          </View>
+          
         </BottomSheetView>
       </BottomSheet>
     </View>
+    </TouchableWithoutFeedback>
+
   );
 };
 

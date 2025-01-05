@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import { ButtonComponent, HeaderBar } from "../../components";
 import { appColor } from "../../constants/appColor";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -7,32 +7,27 @@ import { useStripe } from "@stripe/stripe-react-native";
 import { paymentService } from "../../utils/paymentService";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
-import useAuthStore from "../../store/authStore";
 
 type Props = {};
-const MethodType={
-  CASH:'Cash',
-  CARD:'Card',
-}
-const PaymentMethodScreen = ({route}:any,props:Props,) => {
-  const totalAmount =parseFloat(route.params.totalAmount.toFixed(2))
-  const coupon =route.params.coupon
-  
-  const deliveryAddress=route.params.deliveryAddress
-  //const {deliveryAddress}=useAuthStore()
-  //const address=(route.params.deliveryAddress=='Home')?:'';
+const MethodType = {
+  CASH: "Cash",
+  CARD: "Card",
+};
+const PaymentMethodScreen = ({ route }: any, props: Props) => {
+  const totalAmount = parseFloat(route.params.totalAmount.toFixed(2));
+  const coupon = route.params.coupon;
+  const deliveryAddress = route.params.deliveryAddress;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const {accessToken}=useAuthStore()
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [method, setMethod] = useState<string>();
-  const items=route.params.cartItems
-  useEffect(() => {
-    console.log('danh sach san pham:',items)
-    console.log('tổng tiền:',totalAmount)
-    console.log('coupon:',coupon)
-  },[])
+  const items = route.params.cartItems;
+  // useEffect(() => {
+  //   console.log('danh sach san pham:',items)
+  //   console.log('tổng tiền:',totalAmount)
+  //   console.log('coupon:',coupon)
+  // },[])
   const createInit = async () => {
-    const res = await paymentService.createPayment(items,accessToken);
+    const res = await paymentService.createPayment(items);
     const { clientSecret } = res.data;
     console.log("key", clientSecret); //doan nay
     const ress = await initPaymentSheet({
@@ -57,10 +52,9 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
         // console.log('confirmPaymentRes',confirmPaymentRes)
         // Alert.alert("Payment successful");
         //Create a intent
-        const res = await paymentService.createPayment(totalAmount,accessToken);
-        console.log('createPayment',res)
+        const res = await paymentService.createPayment(totalAmount);
+        console.log("createPayment", res);
         const { clientSecret } = res.data;
-        //console.log('clientSecret',clientSecret)
         const { error } = await initPaymentSheet({
           merchantDisplayName: "Customer",
           paymentIntentClientSecret: clientSecret,
@@ -71,34 +65,37 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
           Alert.alert("Payment failed", error.message);
         } else {
           //open payment sheet
-          const {error} = await presentPaymentSheet();
+          const { error } = await presentPaymentSheet();
           if (error) {
             Alert.alert(`Error code: ${error.code}`, error.message);
-            
           } else {
-           await paymentService.confirmPayment(items,deliveryAddress,accessToken,coupon,undefined,"Stripe Card",)
-
-            navigation.navigate('OrderSuccess')
-            //Alert.alert("Payment successful");// ko the post them gi o day
+            await paymentService.confirmPayment(
+              items,
+              deliveryAddress,
+              coupon,
+              undefined,
+              "Stripe Card"
+            );
+            navigation.navigate("OrderSuccess");
           }
         }
-        //paymentService.confirmPayment(items,deliveryAddress,accessToken,undefined,"Stripe Card",)
       } catch (error) {
         console.log("error", error);
       }
-    } 
-    else {
-      paymentService.confirmPayment(items,deliveryAddress,accessToken,coupon,undefined,MethodType.CASH)
-      //Alert.alert("Payment cash successful");
-      navigation.navigate('OrderSuccess')
+    } else {
+      paymentService.confirmPayment(
+        items,
+        deliveryAddress,
+        coupon,
+        undefined,
+        MethodType.CASH
+      );
+      navigation.navigate("OrderSuccess");
     }
- 
   };
-  //  useEffect(()=>{
-  //    //setItems(route.params.cartItems);
-  //  },[])
+
   return (
-    <View style={{ backgroundColor: appColor.background, flex: 1 ,margin:10}}>
+    <View style={{ backgroundColor: appColor.background, flex: 1, margin: 10 }}>
       <HeaderBar color="black" title="Payment Mothod"></HeaderBar>
       <View
         style={{
@@ -176,7 +173,7 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setMethod(MethodType.CARD)
+            setMethod(MethodType.CARD);
           }}
           style={{
             flexDirection: "row",
@@ -197,7 +194,11 @@ const PaymentMethodScreen = ({route}:any,props:Props,) => {
         </TouchableOpacity>
       </View>
       <View style={{ bottom: 10, right: 0, left: 0, position: "absolute" }}>
-        <ButtonComponent disabled={!method} onPress={handlePay} title="Next"></ButtonComponent>
+        <ButtonComponent
+          disabled={!method}
+          onPress={handlePay}
+          title="Next"
+        ></ButtonComponent>
       </View>
     </View>
   );

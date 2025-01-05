@@ -9,7 +9,7 @@ const BestSellerScreen = (props: Props) => {
   const [allBestSeller, setAllBestSeller] = useState();
   const getAllBestSeller = async () => {
     const res = await productService.getBestSeller();
-    console.log("du lieu nhan duoc", res?.data);
+    //console.log("du lieu nhan duoc", res?.data);
     setAllBestSeller(res?.data);
   };
   //fetch the best
@@ -21,13 +21,13 @@ const BestSellerScreen = (props: Props) => {
     <View>
       <HeaderBar back color="black" title="Best Seller"></HeaderBar>
       <FlatList
-      ListFooterComponent={<SpaceComponent height={20} />}
+        ListFooterComponent={<SpaceComponent height={20} />}
         numColumns={2}
         keyExtractor={(item) => item._id}
-    showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={allBestSeller}
-        renderItem={({ item }) => <CardProduct item={item}  />} />  
-        
+        renderItem={({ item }) => <CardProduct item={item} />}
+      />
     </View>
   );
 };

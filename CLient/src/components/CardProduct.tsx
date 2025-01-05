@@ -95,13 +95,7 @@ const CardProduct = ({ item, onPress }: Props) => {
             ) : (
               <Text>${item.price}</Text>
             )
-            
-            
           }
-              
-            
-          
-          
         </Text>
 
         <Text style={{ fontSize: 18, fontWeight: "500", alignSelf: 'center', }}>{item.name} </Text>

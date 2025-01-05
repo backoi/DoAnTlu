@@ -6,4 +6,5 @@ export const appColor ={
     primary:'#AEDC81',
     primary_dark:'#6CC51D',
     primary_light:'#EBFFD7',
+    white:'#FFFFFF',
 }

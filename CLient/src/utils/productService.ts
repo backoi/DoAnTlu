@@ -7,7 +7,6 @@ const getAll=async()=>{
         const response = await axios.get(`api/product/`);
         return response.data
     } catch (error:any) {
-        console.log("Lỗi bên service get all product")
         throw error.response.data;
     }
 }
@@ -16,7 +15,6 @@ const getProductWithID= async(id:any)=>{
         const response = await axios.get(`api/product/${id}`);
         return response.data
     } catch (error:any) {
-        console.log("Lỗi bên service get product with id")
         throw error.response.data;
     }
 }
@@ -36,17 +34,14 @@ const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,
         });
         return response.data
     } catch (error:any) {
-        console.log("Lỗi bên service filter")
         throw error.response.data;
     }
 }
 const getBestSeller= async()=>{
     try {
         const response = await axios.get(`analytic/top-selling-products`);
-        //console.log('data',response.data)
         return response.data
     } catch (error:any) {
-        console.log("Lỗi bên service get best seller")
         throw error.response.data;
     }
 }

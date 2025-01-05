@@ -24,8 +24,6 @@ import { authService } from "../../utils/authService";
 import { useToast } from "react-native-toast-notifications";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 import useAuthStore from "../../store/authStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { replace } from "formik";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const toast = useToast();
@@ -49,10 +47,8 @@ const LoginScreen = () => {
       const { username,phone,address, accessToken } = response.data;
       const user={ username,email,phone,address}
       //console.log(response.data)
-      login( user, accessToken);
-      //neu khong luu mat khau thi phai xoa sach, khong la se bi su dung lai du lieu store
       //AsyncStorage.clear()
-      //setDeliveryAddress(response)
+      login( user, accessToken);
       setIsLoading(false);
       toast.show("Login success", { type: "success" });
     } catch (error: any) {

@@ -10,7 +10,7 @@ const CouponScreen = (props: Props) => {
   const [listCoupon, setListCoupon] = useState([]);
   const fetchCoupons = async () => {
     const res = await userService.getCoupon();
-    console.log("coupon:", res?.data.coupons);
+    //console.log("coupon:", res?.data.coupons);
     setListCoupon(res?.data.coupons);
   };
 
@@ -26,11 +26,20 @@ const CouponScreen = (props: Props) => {
         {listCoupon.map((coupon: any) => {
           return (
             <View key={coupon._id} style={{ marginVertical: 5 }}>
-            <Text >
-              Code: <Text style={{ fontWeight:coupon.isUsed.toString() == "true" ? "normal" : "bold" }}>{coupon.code}</Text> - Discount: {coupon.discountPercentage}% -{" "}
-              {coupon.isUsed.toString() == "true" ? "Used" : "Can use"} 
-            </Text>
-            <Text>Expires At: {formatToVietnamTime(coupon.expiresAt)}</Text>
+              <Text>
+                Code:{" "}
+                <Text
+                  style={{
+                    fontWeight:
+                      coupon.isUsed.toString() == "true" ? "normal" : "bold",
+                  }}
+                >
+                  {coupon.code}
+                </Text>{" "}
+                - Discount: {coupon.discountPercentage}% -{" "}
+                {coupon.isUsed.toString() == "true" ? "Used" : "Can use"}
+              </Text>
+              <Text>Expires At: {formatToVietnamTime(coupon.expiresAt)}</Text>
             </View>
           );
         })}

@@ -8,11 +8,9 @@ interface Props{
       _id: number,
       name: string,
       img:string,
-      //svg: React.FC<any>,
       backColor?:string,
     },
     onPress?:()=>void
-
 }
 const CategoryItemComponent = ({item,onPress}:Props) => {
   const navigation= useNavigation<NavigationProp<RootStackParamList>>()
@@ -25,7 +23,6 @@ const CategoryItemComponent = ({item,onPress}:Props) => {
      <View style={{height:50,width:50,borderRadius:100,
        backgroundColor:item.backColor,
       justifyContent:'center',alignItems:'center'}}>
-     {/* <item.svg width={30} height={30} /> */}
      <Image source={{uri:item.img}} style={{width:30,height:30,}} resizeMode='contain'></Image>
      </View>
        <Text>{item.name} </Text>

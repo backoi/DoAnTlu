@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Image,
   FlatList,
   SafeAreaView,
   StatusBar,
@@ -18,34 +17,26 @@ import {
   SlideShow,
   SpaceComponent,
 } from "../../components";
-import { appColor } from "../../constants/appColor";
 import { Right, Search } from "../../assets/svg";
 import { appSize } from "../../constants/appSize";
-import {
-  NavigationProp,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
-import useAuthStore from "../../store/authStore";
 import { categoryService } from "../../utils/categoryService";
 import { productService } from "../../utils/productService";
-import useCartStore from "../../store/cartStore";
 import * as Notifications from "expo-notifications";
 import { deviceService } from "../../utils/deviceService";
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  
-  const images=[
-    require('../../assets/images/adver/adv1.png'),
-    require('../../assets/images/adver/adv2.png'),
-    require('../../assets/images/adver/adv3.png'),
-  ]
+  const images = [
+    require("../../assets/images/adver/adv1.png"),
+    require("../../assets/images/adver/adv2.png"),
+    require("../../assets/images/adver/adv3.png"),
+  ];
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState<any | undefined>();
   const [features, setFeatures] = useState<any | undefined>();
-  const { accessToken } = useAuthStore();
 
   const handleSearch = () => {
     setSearchText("");
@@ -59,17 +50,14 @@ const HomeScreen = () => {
 
   const getBestSellerProducts = async () => {
     const res = await productService.getBestSeller();
-    //console.log("du lieu nhan duoc", res?.data);
-    //chi lay 6 san pham
-    const data= res?.data.slice(0, 6);
+    const data = res?.data.slice(0, 6);
     setFeatures(data);
   };
 
   const registerForPushNotificationsAsync = async () => {
     const projectId = "61d8e604-72a4-4074-8d9d-8dccaa86942b";
-    const token = (
-      await Notifications.getExpoPushTokenAsync({ projectId })
-    ).data;
+    const token = (await Notifications.getExpoPushTokenAsync({ projectId }))
+      .data;
     await deviceService.registerDevice(token);
   };
 
@@ -95,15 +83,14 @@ const HomeScreen = () => {
             onChangeText={(text) => setSearchText(text)}
           />
         </View>
-        <View style={{height:height*0.3}}>
-
-        <SlideShow images={images}/>
+        <View style={{ height: height * 0.3 }}>
+          <SlideShow images={images} />
         </View>
         <View>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Categories</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Category")}>
-              <Right/>
+              <Right />
             </TouchableOpacity>
           </View>
           <FlatList
@@ -117,7 +104,7 @@ const HomeScreen = () => {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Best seller products</Text>
             <TouchableOpacity onPress={() => navigation.navigate("BestSeller")}>
-              <Right/>
+              <Right />
             </TouchableOpacity>
           </View>
           <FlatList

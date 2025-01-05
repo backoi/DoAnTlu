@@ -28,7 +28,7 @@ const ButtonComponent = (props: Props) => {
         colors={disabled?['black','gray']: color?color:[appColor.primary, appColor.primary_dark]}
       >
         {icon}
-        <Text style={[style.text,{color:textColor??'white',marginRight:icon?60:0,}]}>{title}</Text>
+        <Text style={[style.text,{color:textColor??appColor.white,marginRight:icon?60:0,}]}>{title}</Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -40,9 +40,9 @@ const style = StyleSheet.create({
         shadowColor: "#04fa4a",
         shadowOffset: {
           width: 0,
-          height: 12,
+          height: appSize.small,
         },
-        shadowRadius: 16.0,
+        shadowRadius: 16,
         elevation: 4,
         alignSelf:'center',
       },

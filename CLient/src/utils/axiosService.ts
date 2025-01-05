@@ -1,6 +1,6 @@
 import axios from 'axios';
 import useAuthStore from '../store/authStore';
-const url ="http://192.168.1.8:3000/"
+const url ="http://192.168.1.5:3000/"
 
 const useAxiosService = () => {
   const axiosInstance = axios.create({
@@ -11,8 +11,6 @@ const useAxiosService = () => {
     async (config) => {
       try {
         const {accessToken} = useAuthStore.getState()
-        //const accessToken = await AsyncStorage.getItem('authToken'); // Lấy token từ AsyncStorage //chi lay dc khi isremember
-        //console.log('token lay duoc:',accessToken)
         if (accessToken) {
           config.headers.Authorization = accessToken;
         }

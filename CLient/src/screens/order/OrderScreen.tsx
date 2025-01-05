@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, FlatList, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { HeaderBar } from "../../components";
 import { orderService } from "../../utils/orderService";
@@ -11,10 +18,8 @@ import useCartStore from "../../store/cartStore";
 import { formatToVietnamTime } from "../../utils/validate";
 
 const OderScreen = () => {
-  const { accessToken } = useAuthStore();
   const { addItem } = useCartStore();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [orderHistory, setOrderHistory] = useState([]);
   const [activeOrder, setActiveOrder] = useState("On going");
@@ -74,19 +79,13 @@ const OderScreen = () => {
       <View style={styles.tabContainer}>
         <TouchableOpacity
           onPress={() => setActiveOrder("On going")}
-          style={[
-            styles.tab,
-            activeOrder === "On going" && styles.activeTab,
-          ]}
+          style={[styles.tab, activeOrder === "On going" && styles.activeTab]}
         >
           <Text>On going</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setActiveOrder("History")}
-          style={[
-            styles.tab,
-            activeOrder === "History" && styles.activeTab,
-          ]}
+          style={[styles.tab, activeOrder === "History" && styles.activeTab]}
         >
           <Text>History</Text>
         </TouchableOpacity>
@@ -136,9 +135,7 @@ const OderScreen = () => {
                     </View>
                   </View>
                   <Text>Order#{item._id}</Text>
-                  <Text>
-                    Date: {formatToVietnamTime(item.createdAt)}
-                  </Text>
+                  <Text>Date: {formatToVietnamTime(item.createdAt)}</Text>
                   <View style={styles.orderSummary}>
                     <Text>Items: {item.totalItems}</Text>
                     <Text>Price: {item.totalAmount.toFixed(2)}$</Text>

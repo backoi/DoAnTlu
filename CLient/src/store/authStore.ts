@@ -111,6 +111,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 
 interface AddressType {
+  id: number;
   name: string;
   phone: string;
   address: string;
@@ -121,16 +122,17 @@ interface AuthState {
   user: {
     username?: string;
     email?: string;
+    phone?: string;
     address?: AddressType[];
   };
   accessToken: string;
-  deliveryAddress: string;
+  deliveryAddress: AddressType;
   isRemember: boolean;
   isAuth: boolean;
-  login: (user: { username: string; email: string; address: any }, token: string) => Promise<void>;
+  login: (user: { username: string; email: string;phone: string; address: any }, token: string) => Promise<void>;
   logout: () => Promise<void>;
   setIsRemember: (val: boolean) => void;
-  setDeliveryAddress: (adr: string) => void;
+  setDeliveryAddress: (adr: AddressType) => void;
   loadStoredToken: () => Promise<void>;
   addAddress: (newAddress: AddressType) => Promise<void>;
 }
@@ -139,10 +141,17 @@ const useAuthStore = create<AuthState>((set) => ({
   user: {
     username: '',
     email: '',
+    phone: '',
     address: [],
   },
   accessToken: '',
-  deliveryAddress: '',
+  deliveryAddress: {
+    id: 0,
+    name:'',
+    phone: '',
+    address: '',
+    district: '',
+  },
   isRemember: false,
   isAuth: false,
 
@@ -160,13 +169,26 @@ const useAuthStore = create<AuthState>((set) => ({
       }
       await AsyncStorage.setItem('authUser', JSON.stringify(user)); // Lưu user
   
-      // Lấy dữ liệu đã lưu
-  
+      //tach dia chi thanh 2 phan
+      
+       const fullAddress = user.address.split(', ');
+       const address = fullAddress[0];
+       const district = fullAddress[1];
+       const updatedUser = {
+        ...state.user,
+        address:user.address?{address, district}: {address:'', district:'',},
+        //address: state.user.address ? [...state.user.address, { address, district }] : [{ address, district }],
+      };
       // Cập nhật Zustand store
       set({
-        user,
+        user: {
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          address: [{id:0,name:user.username,phone:user.phone,address:address||'', district:district||''}]
+        },
         accessToken,
-        deliveryAddress: user.address?.[0]?.address || '',
+        deliveryAddress: {id:0,name:user.username, phone: user.phone, address: address||'', district: district||'' },
         isAuth: true,
       });
     } catch (error) {
@@ -182,7 +204,7 @@ const useAuthStore = create<AuthState>((set) => ({
       accessToken: '',
       isAuth: false,
       isRemember: false,
-      deliveryAddress: '',
+      deliveryAddress: {id:0,name: '',phone: '', address: '', district: '' },
     });
   },
 
@@ -190,7 +212,7 @@ const useAuthStore = create<AuthState>((set) => ({
     set({ isRemember: val });
   },
 
-  setDeliveryAddress: (adr: string) => {
+  setDeliveryAddress: (adr: AddressType) => {
     set({ deliveryAddress: adr });
   },
 
@@ -204,7 +226,14 @@ const useAuthStore = create<AuthState>((set) => ({
         set({
           accessToken: storedToken,
           user,
-          deliveryAddress: user.address?.[0]?.address || '',
+          //deliveryAddress: user.address?.[0]?.address || '',
+          deliveryAddress: {
+            id: user.address?.[0]?.id || 0,
+            name: user.username || '',
+            phone: user.phone || '',
+            address: user.address?.[0]?.address || '',
+            district: user.address?.[0]?.district || '',
+          },
           isRemember: true,
           isAuth: true,
         });
@@ -216,12 +245,13 @@ const useAuthStore = create<AuthState>((set) => ({
 
   addAddress: async (newAddress: AddressType) => {
     const state = useAuthStore.getState();
-
+    console.log('Add address:', newAddress);
+    console.log('State:', state.user.address);
     const updatedUser = {
       ...state.user,
       address: state.user.address ? [newAddress, ...state.user.address] : [newAddress],
     };
-
+    console.log('Updated user:', updatedUser);
     await AsyncStorage.setItem(
       'authUser',
       JSON.stringify({ ...state.user, address: updatedUser.address })

@@ -4,8 +4,8 @@ import OnBoardingScreen from "./auth/OnBoardingScreen";
 import OTPScreen from "./auth/OTPScreen";
 import ResetPassScreen from "./auth/ResetPassScreen";
 import SignUpScreen from "./auth/SignUpScreen";
-import SwiperScreen from "./auth/SwiperScreen";
 import WelcomeScreen from "./auth/WelcomeScreen";
+import SwiperScreen from "./auth/SwiperScreen";
 import CartScreen from "./cart/CartScreen";
 import OrderSuccessScreen from "./cart/OrderSuccessScreen";
 import PaymentMethodScreen from "./cart/PaymentMethodScreen";
@@ -29,7 +29,7 @@ import NotificationScreen from "./profile/NotificationScreen";
 export{
     HomeScreen,LoginScreen,CategoryScreen,
     CartScreen,SplashScreen,OnBoardingScreen,
-    SwiperScreen,WelcomeScreen,SignUpScreen,
+    WelcomeScreen,SignUpScreen,SwiperScreen,
     DetailScreen,ForgetPassScreen,OTPScreen,
     ResetPassScreen,SearchScreen,ReviewScreen,
     WriteReviewScreen,PaymentMethodScreen,ProfileScreen,

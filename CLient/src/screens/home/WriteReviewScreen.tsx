@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useRef, useState } from "react";
 import {
   ButtonComponent,
@@ -8,7 +8,6 @@ import {
 } from "../../components";
 import { Rating } from "react-native-ratings";
 import { reviewService } from "../../utils/reviewService";
-import useAuthStore from "../../store/authStore";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../assets/types/NavigationType";
 
@@ -18,32 +17,22 @@ const { width, height } = Dimensions.get("window");
 const WriteReviewScreen = ({ route }: any) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const productId = route.params;
-  const { accessToken } = useAuthStore();
   const commentRef = useRef<TextInput>(null); // Correctly type the ref
   const [loading, setLoading] = useState(false);
-
   const [rate, setRate] = useState(3);
   const [comment, setComment] = useState("");
 
   const handlePostReview = async () => {
     try {
       setLoading(true);
-      console.log(
-        "gia tri id",
-        productId,
-        "gai tri rate",
-        rate,
-        "gia tri comment",
-        comment
-      );
       const res = await reviewService.createReview(productId, rate, comment);
-      console.log("gia tri tra ve", res);
+      //console.log("gia tri tra ve", res);
       setRate(3);
       setComment("");
       navigation.goBack();
-    } catch (error) {
+    } catch (error:any) {
       setLoading(false);
-      console.log(error);
+      Alert.alert("Error", error.message);
     }
   };
 

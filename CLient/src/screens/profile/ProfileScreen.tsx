@@ -15,8 +15,6 @@ import { RootStackParamList } from "../../assets/types/NavigationType";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { deviceService } from "../../utils/deviceService";
 
-//có thể, address hiện cái trên sv,và danh sach local để xoá //dí vào ở address ở cart =>xoá
-// có thể có thông báo, thông báo cập nhật thông tin, huỷ đơn...
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [user, setUser] = useState({ username: "", email: "" });

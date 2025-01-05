@@ -19,7 +19,6 @@ const getFavItems = async () => {
     if(jsonValue){
       items.push(...JSON.parse(jsonValue));
       console.log("items", items);
-      // return jsonValue!=null? JSON.parse(jsonValue) : [];
     }
   } catch (e) {
     console.log(e);

@@ -1,17 +1,17 @@
-
-// //neu save thi update thong tin len server, lam profile,favorites
-// //khi nao set default thì mới truyền lên api
-
-
-
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
-import MapView,{ Marker } from 'react-native-maps';
-import Geocoder from 'react-native-geocoding';
-import { ButtonComponent, HeaderBar } from '../../components';
-import useAuthStore from '../../store/authStore';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../assets/types/NavigationType';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Switch,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import Geocoder from "react-native-geocoding";
+import { ButtonComponent, HeaderBar } from "../../components";
+import useAuthStore from "../../store/authStore";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../assets/types/NavigationType";
 // Geocoder.init('AIzaSyAm4HeVm0wc69vvkBbHkNFb2BYuKjhD3hE')
 const AddAddressScreen = () => {
   const [region, setRegion] = useState({
@@ -20,12 +20,14 @@ const AddAddressScreen = () => {
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-   const [name,setName]=useState('')
-   const [phone,setPhone]=useState('')
-  const [address,setAddress]=useState('')
-   const [district,setDistrict]=useState('')
-   const {addAddress}= useAuthStore()
-   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [newAddress, setNewAddress] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    district: "",
+  });
+  const { addAddress } = useAuthStore();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   // const handleRegionChange = (newRegion:any) => {
   //   setRegion(newRegion);
   //   Geocoder.from(newRegion.latitude, newRegion.longitude)
@@ -43,23 +45,18 @@ const AddAddressScreen = () => {
   //     .catch((error) => console.warn(error));
   // };
 
-  const handleAddAddress = async() => {
-    const newAddress ={
-        name,
-        phone,
-        address,
-        district
-    }
-    await addAddress(newAddress)
-    navigation.goBack()
-    //await addAddresses(newAddress)
-    
+  const handleAddAddress = async () => {
+    const newAddr = {
+      id: Date.now(),
+      ...newAddress,
+    };
+    await addAddress(newAddr);
+    navigation.goBack();
   };
-  
 
   return (
     <View style={styles.container}>
-      <HeaderBar color='black' title='Add new address'></HeaderBar>
+      <HeaderBar color="black" title="Add new address"></HeaderBar>
       <MapView
         style={styles.map}
         initialRegion={region}
@@ -68,36 +65,62 @@ const AddAddressScreen = () => {
         <Marker coordinate={region} draggable />
       </MapView>
       <View style={styles.form}>
-        <TextInput onChangeText={setName} style={styles.input} value={name} placeholder="Name" />
-        <TextInput onChangeText={setPhone} style={styles.input} value={phone}  placeholder="Phone" />
-        
-          <TextInput onChangeText={setAddress} style={styles.input} value={address} placeholder="Address" />
-        
+        <TextInput
+          onChangeText={(text) => setNewAddress({ ...newAddress, name: text })}
+          style={styles.input}
+          value={newAddress.name}
+          placeholder="Name"
+        />
+        <TextInput
+          onChangeText={(text) => setNewAddress({ ...newAddress, phone: text })}
+          style={styles.input}
+          value={newAddress.phone}
+          placeholder="Phone"
+        />
+
+        <TextInput
+          onChangeText={(text) =>
+            setNewAddress({ ...newAddress, address: text })
+          }
+          style={styles.input}
+          value={newAddress.address}
+          placeholder="Address"
+        />
         <TextInput
           style={styles.input}
-          value={district}
-          onChangeText={setDistrict}
+          value={newAddress.district}
+          onChangeText={(text) =>
+            setNewAddress({ ...newAddress, district: text })
+          }
           placeholder="District"
         />
         <View style={styles.saveSwitch}>
-        <Switch style={{}}>
-        </Switch>
-        <Text>Set default</Text>
+          <Switch style={{}}></Switch>
+          <Text>Set default</Text>
         </View>
-        
-        <ButtonComponent onPress={handleAddAddress} title='Save Address'></ButtonComponent>
+
+        <ButtonComponent
+          onPress={handleAddAddress}
+          title="Save Address"
+        ></ButtonComponent>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  header: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', margin: 10 },
+  container: { flex: 1, backgroundColor: "#fff" },
+  header: { fontSize: 18, fontWeight: "bold", textAlign: "center", margin: 10 },
   map: { flex: 1 },
-  form: { padding: 20, backgroundColor: '#fff' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 10 },
-  saveSwitch:{flexDirection:'row',alignItems:'center'}
+  form: { padding: 20, backgroundColor: "#fff" },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  saveSwitch: { flexDirection: "row", alignItems: "center" },
 });
 
 export default AddAddressScreen;

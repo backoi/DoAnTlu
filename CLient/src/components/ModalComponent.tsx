@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import React from "react";
+import { Modal, View, Text, Button, StyleSheet } from "react-native";
 
-const ModalComponent = ({ title, message, visible, onDismiss }:any) => {
+const ModalComponent = ({ title, message, visible, onDismiss }: any) => {
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <View style={styles.container}>
@@ -16,23 +16,21 @@ const ModalComponent = ({ title, message, visible, onDismiss }:any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(46, 43, 43, 0.5)', // Transparent background
-    
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(46, 43, 43, 0.5)", // Transparent background
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
-    color: 'white',
+    color: "white",
   },
   message: {
     fontSize: 16,
     marginBottom: 20,
-    color: 'white',
+    color: "white",
   },
 });
-
 
 export default ModalComponent;
