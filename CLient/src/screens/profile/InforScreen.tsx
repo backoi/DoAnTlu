@@ -122,9 +122,9 @@ const InforScreen = ({navigation}:any) => {
         </View>
         <View>
             <Text>Change password</Text>
-            <InputComponent leftIC={<Lock/>} onChangeText={(text)=>setPasswordInfo({...passwordInfo,currentPassword:text})} value={passwordInfo.currentPassword} ></InputComponent>
-            <InputComponent leftIC={<Lock/>} onChangeText={(text)=>setPasswordInfo({...passwordInfo,newPassword:text})} value={passwordInfo.newPassword} ></InputComponent>
-            <InputComponent leftIC={<Lock/>} onChangeText={(text)=>setPasswordInfo({...passwordInfo,confirmPassword:text})} value={passwordInfo.confirmPassword} ></InputComponent>
+            <InputComponent leftIC={<Lock/>} placeholder='Current password' onChangeText={(text)=>setPasswordInfo({...passwordInfo,currentPassword:text})} value={passwordInfo.currentPassword} ></InputComponent>
+            <InputComponent leftIC={<Lock/>} placeholder='New password' onChangeText={(text)=>setPasswordInfo({...passwordInfo,newPassword:text})} value={passwordInfo.newPassword} ></InputComponent>
+            <InputComponent leftIC={<Lock/>} placeholder='Confirm password' onChangeText={(text)=>setPasswordInfo({...passwordInfo,confirmPassword:text})} value={passwordInfo.confirmPassword} ></InputComponent>
         </View>
 
         <ButtonComponent onPress={handleSave} title='Save Change'></ButtonComponent>

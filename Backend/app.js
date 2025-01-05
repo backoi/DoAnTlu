@@ -49,7 +49,12 @@ const adminJs = new AdminJS({
         //   name: 'EcoMarket', // Thay "Test" thành tên bạn muốn
         //    // Tùy chọn: thêm icon nếu muốn
         // },
-
+        actions: {
+          edit: {
+              isVisible: false, // Ẩn nút "Edit"
+              isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
+          },
+      },
         properties: {
           password: { isVisible: { list: true, show: true, edit: false } },
           //name:{isVisible:false},
@@ -64,12 +69,28 @@ const adminJs = new AdminJS({
     },
     {
       resource: Review,
+      options: {
+        actions: {
+            edit: {
+                isVisible: false, // Ẩn nút "Edit"
+                isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
+            },
+        },
+    },
     },
     {
       resource: Order,
     },
     {
       resource: Device,
+      options: {
+        actions: {
+            edit: {
+                isVisible: false, // Ẩn nút "Edit"
+                isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
+            },
+        },
+    },
     },
     {
       resource: Coupon,
@@ -125,6 +146,10 @@ const adminJs = new AdminJS({
               };
             },
           },
+          edit: {
+            isVisible: false, // Ẩn nút "Edit"
+            isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
+        },
         },
       },
     },
