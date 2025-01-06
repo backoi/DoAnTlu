@@ -51,8 +51,8 @@ const adminJs = new AdminJS({
         // },
         actions: {
           edit: {
-              //isVisible: false, // Ẩn nút "Edit"
-              //isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
+              isVisible: false, // Ẩn nút "Edit"
+              isAccessible: false, // Ngăn chặn truy cập hành động "Edit"
           },
       },
         properties: {

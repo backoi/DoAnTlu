@@ -42,15 +42,9 @@ const DetailScreen = ({ route }: any) => {
   const [isLike, setIsLike] = useState(false);
   const [product, setProduct] = useState<any>();
   const [quantity, setQuantity] = useState(1);
-
   const { addItem, cartItems, decreaseQuantity, increaseQuantity } =
     useCartStore();
-  const loadQuantityInCart = () => {
-    const item = cartItems.find((item) => item.id === product?._id);
-    if (item) {
-      setQuantity(item.quantity);
-    }
-  };
+  const isProductInCart = cartItems.some((item) => item.id === product?._id);
   const getProduct = async (id: any) => {
     const res = await productService.getProductWithID(id);
     //console.log('chi tiết:', res?.data)
@@ -65,17 +59,7 @@ const DetailScreen = ({ route }: any) => {
     };
     toggleFavItem(favItem);
   };
-  useEffect(() => {
-    const exists = favItems.some((favItem) => favItem.id === route?.params.id);
-    setIsLike(exists);
-  }, [favItems, route?.params.id]);
 
-  useEffect(() => {
-    getProduct(route?.params.id);
-  }, []);
-  useEffect(() => {
-    loadQuantityInCart();
-  }, [cartItems]);
   const handleAddToCart = () => {
     const item: ItemCart = {
       id: product._id,
@@ -83,14 +67,55 @@ const DetailScreen = ({ route }: any) => {
       price: product.price,
       stock: product.stock,
       urlImg: product.imgUrl,
-      quantity: 1,
+      quantity,
       unit: product.unit,
     };
+
     addItem(item, quantity);
     console.log("đã thêm ", quantity);
   };
+  // Tăng số lượng
+  const handleIncreaseQuantity = () => {
+    if (isProductInCart) {
+      // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng trong giỏ hàng
+      increaseQuantity(product._id);
+    } else {
+      // Nếu sản phẩm chưa có trong giỏ hàng, tăng số lượng trên giao diện
+      setQuantity((prev) => prev + 1);
+    }
+  };
 
-  //console.log('review',reviews)
+  // Giảm số lượng
+  const handleDecreaseQuantity = () => {
+    if (isProductInCart) {
+      // Nếu sản phẩm đã có trong giỏ hàng, giảm số lượng trong giỏ hàng
+      decreaseQuantity(product._id);
+    } else {
+      // Nếu sản phẩm chưa có trong giỏ hàng, giảm số lượng trên giao diện (tối thiểu là 1)
+      if (quantity > 1) {
+        setQuantity((prev) => prev - 1);
+      }
+    }
+  };
+  //yeu thich
+  useEffect(() => {
+    const exists = favItems.some((favItem) => favItem.id === route?.params.id);
+    setIsLike(exists);
+  }, [favItems, route?.params.id]);
+  //load sp
+  useEffect(() => {
+    getProduct(route?.params.id);
+  }, []);
+  //check sp co trong giỏ hàng
+  useEffect(() => {
+    if (isProductInCart) {
+      const item = cartItems.find((item) => item.id === product?._id);
+      if (item) {
+        setQuantity(item.quantity); // Cập nhật số lượng từ giỏ hàng
+      }
+    }
+  }, [cartItems, product?._id, isProductInCart]);
+
   return (
     <View
       style={{
@@ -189,9 +214,7 @@ const DetailScreen = ({ route }: any) => {
                   borderRightColor: appColor.text,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => decreaseQuantity(product?._id)}
-                >
+                <TouchableOpacity onPress={handleDecreaseQuantity}>
                   <Minus height={25} width={25} style={{ marginRight: 5 }} />
                 </TouchableOpacity>
               </View>
@@ -206,9 +229,7 @@ const DetailScreen = ({ route }: any) => {
                   justifyContent: "center",
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => increaseQuantity(product?._id)}
-                >
+                <TouchableOpacity onPress={handleIncreaseQuantity}>
                   <Plus height={25} width={35} />
                 </TouchableOpacity>
               </View>

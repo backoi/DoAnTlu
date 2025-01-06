@@ -109,7 +109,8 @@
 // export default useAuthStore;
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-
+import useUserStore from './userStore';
+const {clearFavItems}=useUserStore.getState()
 interface AddressType {
   id: number;
   name: string;
@@ -198,14 +199,23 @@ const useAuthStore = create<AuthState>((set) => ({
   
 
   logout: async () => {
-    await AsyncStorage.clear(); // Xóa toàn bộ dữ liệu
-    set({
-      user: {},
-      accessToken: '',
-      isAuth: false,
-      isRemember: false,
-      deliveryAddress: {id:0,name: '',phone: '', address: '', district: '' },
-    });
+    try {
+      // Xóa toàn bộ dữ liệu
+    await AsyncStorage.clear();
+
+    // Hoặc chỉ xóa các mục cần thiết
+    await clearFavItems();
+
+      set({
+        user: {},
+        accessToken: '',
+        isAuth: false,
+        isRemember: false,
+        deliveryAddress: { id: 0, name: '', phone: '', address: '', district: '' },
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   },
 
   setIsRemember: (val) => {

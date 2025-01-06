@@ -47,7 +47,6 @@ const LoginScreen = () => {
       const response = await authService.login(email, password);
       const { username,phone,address, accessToken } = response.data;
       const user={ username,email,phone,address}
-      //console.log(response.data)
       AsyncStorage.clear()
       login( user, accessToken);
       setIsLoading(false);

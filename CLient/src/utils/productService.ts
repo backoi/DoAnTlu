@@ -19,7 +19,7 @@ const getProductWithID= async(id:any)=>{
     }
 }
 
-const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,minRate?:number,offset=0,limit=10)=>{
+const getProducts=async(search='',category='',minPrice?:number,maxPrice?:number,minRate?:number,offset?:number,limit?:number)=>{
     try {
         const response = await axios.get(`api/product/`,{
             params:{

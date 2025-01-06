@@ -11,23 +11,12 @@ interface Item {
 interface UserStore {
   favItems: Item[];
   toggleFavItem: (item: Item) => void;
+  loadFavItems: () => Promise<void>;
+  clearFavItems: () => Promise<void>;
 }
-const items: Item[] =[]
-const getFavItems = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem("favItems");
-    if(jsonValue){
-      items.push(...JSON.parse(jsonValue));
-      console.log("items", items);
-    }
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-}
-getFavItems()
+
 const useUserStore = create<UserStore>((set, get) => ({
-  favItems: items,
+  favItems: [],
 
   toggleFavItem: (item: Item) => {
     set((state) => {
@@ -37,11 +26,30 @@ const useUserStore = create<UserStore>((set, get) => ({
         : [...state.favItems, item];
       // Save to local storage
       AsyncStorage.setItem("favItems", JSON.stringify(updatedFavItems));
-      
+      AsyncStorage.getItem("favItems").then((value) => console.log(value));
       console.log(exists ? "Xóa thành công" : "Thêm thành công");
 
-      return { ...state, favItems: updatedFavItems };
+      return {favItems: updatedFavItems };
     });
+  },
+  loadFavItems: async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('favItems');
+      if (jsonValue) {
+        const items = JSON.parse(jsonValue);
+        set({ favItems: items });
+      }
+    } catch (error) {
+      console.error('Error loading favorite items:', error);
+    }
+  },
+  clearFavItems: async () => {
+    try {
+      await AsyncStorage.removeItem('favItems'); // Remove from AsyncStorage
+      set({ favItems: [] }); // Reset Zustand state
+    } catch (error) {
+      console.error('Error clearing favorite items:', error);
+    }
   },
 }));
 

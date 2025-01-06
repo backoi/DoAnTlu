@@ -7,6 +7,7 @@ const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
   const {search,category,minPrice,maxPrice,minRate, offset, limit}=req.query //truyền từ params của axios //query là ?=
+  
   const query={}
   if(search){
     query.name={$regex:search,$options:'i'} //tim kiem tuong doi, khong phan biet hoa thuong
@@ -14,7 +15,7 @@ productRouter.get('/', async (req, res) => {
   if(category){
     query.category=category
   }
-  //min max rate
+  
   if (minPrice || maxPrice) {
     query.price = {};
     if (minPrice) {
@@ -24,8 +25,6 @@ productRouter.get('/', async (req, res) => {
         query.price.$lte = parseFloat(maxPrice); // Giá <= maxPrice
     }
 }
-
-// Lọc theo đánh giá
   if (minRate) {
       query.averageRating = { $gte: parseFloat(minRate) }; // Đánh giá >= minRate
   }
@@ -35,9 +34,7 @@ productRouter.get('/', async (req, res) => {
       .skip(parseInt(offset))
       .limit(parseInt(limit))
       .lean();
-    //console.log('gia trị query',query);
-    //const products = await Product.find(query);//.polulate(category)
-    //console.log('tat ca san pham', products)
+    
     const updatedProducts = products.map(product => {
       if (product.discount > 0) {
         product.discountedPrice = product.price * (1 - product.discount / 100);
@@ -45,7 +42,7 @@ productRouter.get('/', async (req, res) => {
       return product;
     });
     res.status(200).json({message:'get products success',data:{products:updatedProducts,totalProducts,
-      hasMore: parseInt(offset) + updatedProducts.length < totalProducts,}});
+      hasMore: parseInt(offset) + parseInt(limit) < totalProducts}});
 
   } catch (error) {
     res.status(500).json({ message: 'Error fetching product', error });

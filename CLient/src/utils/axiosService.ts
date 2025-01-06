@@ -1,6 +1,6 @@
 import axios from 'axios';
 import useAuthStore from '../store/authStore';
-const url ="http://192.168.1.5:3000/"
+const url ="http://192.168.1.8:3000/"
 
 const useAxiosService = () => {
   const axiosInstance = axios.create({

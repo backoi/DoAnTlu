@@ -25,6 +25,7 @@ import { categoryService } from "../../utils/categoryService";
 import { productService } from "../../utils/productService";
 import * as Notifications from "expo-notifications";
 import { deviceService } from "../../utils/deviceService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = () => {
@@ -39,8 +40,7 @@ const HomeScreen = () => {
   const [features, setFeatures] = useState<any | undefined>();
 
   const handleSearch = () => {
-    setSearchText("");
-    navigation.navigate("Search", { text: searchText });
+    navigation.navigate("Search");
   };
 
   const getCategories = async () => {
@@ -49,7 +49,7 @@ const HomeScreen = () => {
   };
 
   const getBestSellerProducts = async () => {
-    const res = await productService.getBestSeller();
+    const res:any = await productService.getBestSeller();
     const data = res?.data.slice(0, 6);
     setFeatures(data);
   };
@@ -71,18 +71,10 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <InputComponent
-            placeholder="Search keyword..."
-            leftIC={
-              <TouchableOpacity onPress={handleSearch}>
-                <Search height={23} />
-              </TouchableOpacity>
-            }
-            value={searchText}
-            onChangeText={(text) => setSearchText(text)}
-          />
-        </View>
+        <TouchableOpacity style={{flexDirection:'row',alignItems:'center',marginBottom:10,borderColor:'black',padding:10,gap:10}} onPress={handleSearch}>
+          <Search/>
+          <Text>Search a key word</Text>
+        </TouchableOpacity>
         <View style={{ height: height * 0.3 }}>
           <SlideShow images={images} />
         </View>

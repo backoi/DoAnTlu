@@ -8,15 +8,22 @@ type Props = {};
 
 const CouponScreen = (props: Props) => {
   const [listCoupon, setListCoupon] = useState([]);
+
   const fetchCoupons = async () => {
     const res = await userService.getCoupon();
-    //console.log("coupon:", res?.data.coupons);
     setListCoupon(res?.data.coupons);
   };
 
   useEffect(() => {
     fetchCoupons();
   }, []);
+
+  const isCouponExpired = (expiresAt: string) => {
+    const currentTime = new Date();
+    const expireTime = new Date(expiresAt);
+    return currentTime > expireTime;
+  };
+
   return (
     <View style={{ marginHorizontal: 10 }}>
       <HeaderBar back color="black" title="Coupon"></HeaderBar>
@@ -24,20 +31,22 @@ const CouponScreen = (props: Props) => {
       <Text>List Coupons:</Text>
       <ScrollView>
         {listCoupon.map((coupon: any) => {
+          const isExpired = isCouponExpired(coupon.expiresAt);
+          const canUse = !coupon.isUsed && !isExpired;
+
           return (
             <View key={coupon._id} style={{ marginVertical: 5 }}>
               <Text>
                 Code:{" "}
                 <Text
                   style={{
-                    fontWeight:
-                      coupon.isUsed.toString() == "true" ? "normal" : "bold",
+                    fontWeight: canUse ? "bold" : "normal",
                   }}
                 >
                   {coupon.code}
                 </Text>{" "}
                 - Discount: {coupon.discountPercentage}% -{" "}
-                {coupon.isUsed.toString() == "true" ? "Used" : "Can use"}
+                {coupon.isUsed ? "Used" : isExpired ? <Text style={{ color: "red" }}>Can't use</Text> : <Text style={{ color: "green" }}>Can use </Text>}
               </Text>
               <Text>Expires At: {formatToVietnamTime(coupon.expiresAt)}</Text>
             </View>
